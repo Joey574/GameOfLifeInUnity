@@ -3,7 +3,7 @@ using UnityEditor.SceneManagement;
 
 public class AdvanceToGame : MonoBehaviour
 {
-    void Awake()
+    void onClick()
     {
         EditorSceneManager.LoadScene("Game", UnityEngine.SceneManagement.LoadSceneMode.Single);
     }
