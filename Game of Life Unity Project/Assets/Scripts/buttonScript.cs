@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class buttonScript : MonoBehaviour
 {
@@ -16,11 +17,13 @@ public class buttonScript : MonoBehaviour
 
     void startGame()
     {
+        SceneManager.LoadScene("Game", LoadSceneMode.Single);
         Debug.Log("Start game");
     }
 
     void exitGame()
     {
+        Application.Quit();
         Debug.Log("Exit game");
     }
 
