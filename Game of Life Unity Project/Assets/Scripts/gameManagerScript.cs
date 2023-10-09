@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Linq;
 
 public class gameManagerScript : MonoBehaviour
 {
@@ -12,7 +13,7 @@ public class gameManagerScript : MonoBehaviour
     public GameObject cellPrefab;
     public GameObject canvas;
     public GameObject background;
-    public GameObject startButton;
+    public Button startButton;
 
     [Header("Cell Info")]
     public int cellWidth = 10;
@@ -22,6 +23,10 @@ public class gameManagerScript : MonoBehaviour
     [Header("Button Adjustments")]
     public float xButtonOffset;
     public float yButtonOffset;
+
+    [Header("Sim info")]
+    public float simSteps;
+    public int generation = 0;
 
     private settingsManager settings;
     private int width;
@@ -45,6 +50,8 @@ public class gameManagerScript : MonoBehaviour
     private int maxY;
 
     private Cell t;
+
+    private bool beginSim = false;
 
     void Awake()
     {
@@ -84,7 +91,112 @@ public class gameManagerScript : MonoBehaviour
 
     void Update()
     {
-       
+        startButton.onClick.AddListener(startSim);
+
+        if (beginSim)
+        {
+            Invoke(nameof(simStep), (1.0f));
+        }
+    }
+
+    private void startSim()
+    {
+        beginSim = true;
+    }
+
+    private void simStep()
+    {
+        generation++;
+
+        for (int i = 0; i < cells.Count(); i++)
+        {
+            int neighbors = 0;
+            try
+            {
+                if (cells[i - 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            } catch { }
+
+            try
+            {
+                if (cells[i + 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            } catch { }
+
+            try
+            {
+                if (cells[i - xCount] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (cells[i + xCount] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (cells[i - xCount + 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (cells[i - xCount - 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (cells[i + xCount - 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            }
+            catch { }
+
+            try
+            {
+                if (cells[i + xCount + 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
+                {
+                    neighbors++;
+                }
+            }
+            catch { }
+
+            if (neighbors == 2) 
+            {
+                cells[i].GetComponent<Cell>().setNext(cells[i].GetComponent<Cell>().getStatus());
+            } else if (neighbors == 3)
+            {
+                cells[i].GetComponent<Cell>().setNext(true);
+            } else
+            {
+                cells[i].GetComponent<Cell>().setNext(false);
+            }
+        }
+
+        for (int i = 0; i < cells.Count(); i++)
+        {
+            cells[i].GetComponent<Cell>().updateStatus();
+        }
     }
 
     private void getCanvasInfo()

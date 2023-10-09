@@ -638,12 +638,14 @@ MonoBehaviour:
   cellPrefab: {fileID: 1216612509322789517, guid: 2acfc39a1f539ad4681942778fa4737d, type: 3}
   canvas: {fileID: 1281614328}
   background: {fileID: 1105043119}
-  startButton: {fileID: 1950720528}
+  startButton: {fileID: 1950720530}
   cellWidth: 10
   cellHeight: 10
   yOffset: 50
   xButtonOffset: 45
   yButtonOffset: 25
+  simSteps: 0.06
+  generation: 0
 --- !u!1 &2004253541
 GameObject:
   m_ObjectHideFlags: 0

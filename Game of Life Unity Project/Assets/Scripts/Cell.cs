@@ -8,7 +8,7 @@ public class Cell : MonoBehaviour
     public int x;
     public int y;
 
-    private bool currentStatus = false;
+    public bool currentStatus = false;
     private bool nextStatus;
 
     private Image cellState;
@@ -19,15 +19,12 @@ public class Cell : MonoBehaviour
     }
     void Update()
     {
-        if (currentStatus)
-        {
-            cellState.enabled = false;
-        }
-        else
-        {
-            cellState.enabled = true;
+        cellState.enabled = currentStatus;
+    }
 
-        }
+    public void updateStatus()
+    {
+        currentStatus = nextStatus;
     }
 
     public bool getStatus()
