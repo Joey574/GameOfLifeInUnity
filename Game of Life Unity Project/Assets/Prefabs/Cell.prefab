@@ -47,6 +47,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   x: 0
   y: 0
+  currentStatus: 0
+  nextStatus: 0
+  cellState: {fileID: 871970911159010473}
 --- !u!1 &2720477796385903931
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +117,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 0}
-  m_Type: 0
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4

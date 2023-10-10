@@ -12,15 +12,17 @@ public class Cell : MonoBehaviour
     public bool currentStatus;
     public bool nextStatus;
 
-    private Image cellState;
+    public Image cellState;
 
-    void Awake()
+    public void kill()
     {
-        cellState = gameObject.GetComponentInChildren<Image>();
+        cellState.color = Color.black;
+        currentStatus = false;
     }
 
-    public void applyTexture()
+    public void born()
     {
-        cellState.enabled = currentStatus;
+        cellState.color = Color.white;
+        currentStatus = true;
     }
 }

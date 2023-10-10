@@ -42,6 +42,10 @@ public class gameManagerScript : MonoBehaviour
     private bool beginSim = false;
     private bool stepCalled = false;
 
+    private int same = 0;
+    private int died = 0;
+    private int born = 0;
+
     void Awake()
     {
         getCanvasInfo();
@@ -51,16 +55,15 @@ public class gameManagerScript : MonoBehaviour
         Ycount = (int) ((canvasSize.rect.height / cellHeight) - (yOffset / cellHeight));
 
         cells = new List<List<GameObject>>();
-        row = new List<GameObject>();
-
-        for (int x = 0; x < Xcount; x++)
-        {
-            GameObject temp = cellPrefab;
-            row.Add(temp);
-        }
 
         for (int y = 0; y < Ycount; y++)
         {
+            row = new List<GameObject>();
+            for (int x = 0; x < Xcount; x++)
+            {
+                GameObject temp = cellPrefab;
+                row.Add(temp);
+            }
             cells.Add(row);
         }
 
@@ -76,13 +79,21 @@ public class gameManagerScript : MonoBehaviour
                 Cell t = temp.GetComponent<Cell>();
                 t.x = x; t.y = y;
                 t.currentStatus = randVal();
-                t.applyTexture();
+
+                if (t.currentStatus)
+                {
+                    t.born();
+                }
+                else
+                {
+                    t.kill();
+                }
 
                 cells[y][x] = temp;
             }
         }      
 
-        startButton.onClick.AddListener(startSim);
+        startButton.onClick.AddListener(() => beginSim = true);
 
         Debug.Log("Cells: " + (Xcount * Ycount));
     }
@@ -103,11 +114,22 @@ public class gameManagerScript : MonoBehaviour
 
     private void simStep()
     {
-        int same = 0;
-        int died = 0;
-        int born = 0;
-
         generation++;
+
+        calculateCells();
+
+        updateCells();
+
+        //Debug.Log("Born: " + born + " Same: " + same + " Died: " + died);
+
+        stepCalled = false;
+    }
+
+    private void calculateCells()
+    {
+        born = 0;
+        died = 0;
+        same = 0;
 
         for (int y = 0; y < Ycount; y++)
         {
@@ -131,21 +153,30 @@ public class gameManagerScript : MonoBehaviour
                     born++;
                     cell.nextStatus = true;
                 }
+            }
+        }
+    }
+
+    private void updateCells()
+    {
+        for (int y = 0; y < Ycount; y++)
+        {
+            for (int x =  0; x < Xcount; x++)
+            {
+                Cell c = cells[y][x].GetComponent<Cell>();
+
+                if (c.nextStatus)
+                {
+                    c.born();
+                }
                 else
                 {
-                    died++;
-                    cell.nextStatus = false;
+                    c.kill();
                 }
             }
         }
 
-        updateCells();
-
-        Debug.Log("Born: " + born + " Same: " + same + " Died: " + died);
-
-        stepCalled = false;
     }
-
     private int getNeighbors(int x, int y)
     {
         int output = 0;
@@ -159,27 +190,7 @@ public class gameManagerScript : MonoBehaviour
         try { if (cells[y][x - 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
         try { if (cells[y][x + 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
 
-        //Debug.Log("X: " + x + " Y: " + y + " Active: " + output);
-
         return output;
-    }
-
-    private void updateCells()
-    {
-        for (int y = 0; y < Ycount; y++)
-        {
-            for (int x = 0; x < Xcount; x++)
-            {
-                Cell cell = cells[y][x].GetComponent<Cell>();
-                cell.currentStatus = cell.nextStatus;
-                cell.applyTexture();
-            }
-        }
-    }
-
-    private void startSim()
-    {
-        beginSim = true;
     }
 
     private void getCanvasInfo()

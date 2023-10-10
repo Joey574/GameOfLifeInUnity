@@ -645,7 +645,7 @@ MonoBehaviour:
   button: {fileID: 7713692816873554199, guid: f78b46381758e794aae27258c94bd12c, type: 3}
   xButtonOffset: 45
   yButtonOffset: 25
-  simSteps: 1
+  simSteps: 5
   generation: 0
 --- !u!1 &2004253541
 GameObject:
