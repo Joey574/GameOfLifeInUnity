@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class Cell : MonoBehaviour
 {
+    [Header("Location")]
     public int x;
     public int y;
 
-    public bool currentStatus = false;
-    private bool nextStatus;
+    public bool currentStatus;
+    public bool nextStatus;
 
     private Image cellState;
 
@@ -17,24 +18,9 @@ public class Cell : MonoBehaviour
     {
         cellState = gameObject.GetComponentInChildren<Image>();
     }
-    void Update()
+
+    public void applyTexture()
     {
         cellState.enabled = currentStatus;
     }
-
-    public void updateStatus()
-    {
-        currentStatus = nextStatus;
-    }
-
-    public bool getStatus()
-    {
-        return currentStatus;
-    }
-
-    public void setNext(bool next)
-    {
-        nextStatus = next;
-    }
-
 }

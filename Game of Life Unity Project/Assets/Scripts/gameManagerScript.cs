@@ -4,21 +4,26 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class gameManagerScript : MonoBehaviour
 {
-
     [Header("Gameobjects")]
     public GameObject gameManager;
-    public GameObject cellPrefab;
     public GameObject canvas;
     public GameObject background;
     public Button startButton;
 
+    private RectTransform canvasSize;
+
     [Header("Cell Info")]
+    public GameObject cellPrefab;
     public int cellWidth = 10;
     public int cellHeight = 10;
     public float yOffset;
+
+    [Header("Button prefab")]
+    public Button button;
 
     [Header("Button Adjustments")]
     public float xButtonOffset;
@@ -28,175 +33,153 @@ public class gameManagerScript : MonoBehaviour
     public float simSteps;
     public int generation = 0;
 
-    private settingsManager settings;
-    private int width;
-    private int height;
+    private int Xcount;
+    private int Ycount;
 
-    private float xStart;
-    private float yStart;
-
-    private List<GameObject> cells;
-    private GameObject temp;
-
-    private RectTransform canvasSize;
-
-    private float xAdjust;
-    private float yAdjust;
-
-    private int xCount = -1;
-    private int yCount;
-
-    private int maxX;
-    private int maxY;
-
-    private Cell t;
+    private List<GameObject> row;
+    private List<List<GameObject>> cells;
 
     private bool beginSim = false;
+    private bool stepCalled = false;
 
     void Awake()
     {
         getCanvasInfo();
         setLocations();
 
-        xStart = -(canvasSize.rect.width / 2);
-        yStart = -(canvasSize.rect.height / 2);
+        Xcount = (int) (canvasSize.rect.width / cellWidth) + 1;
+        Ycount = (int) ((canvasSize.rect.height / cellHeight) - (yOffset / cellHeight));
 
-        cells = new List<GameObject>();
+        cells = new List<List<GameObject>>();
+        row = new List<GameObject>();
 
-        xAdjust = (canvasSize.rect.width / 2);
-        yAdjust = (canvasSize.rect.height / 2);
-
-        for (float i = yStart; i < ((canvasSize.rect.height / 2) - yOffset); i = i + cellHeight)
+        for (int x = 0; x < Xcount; x++)
         {
-            if (xCount != -1)
-            {
-                maxX = xCount - 1;
-            }
-            xCount = 0;
-            for (float x = xStart; x < (canvasSize.rect.width / 2); x = x + cellWidth)
-            {
-                temp = Instantiate(cellPrefab, new Vector3(x + xAdjust, i + yAdjust, 0), Quaternion.identity);
-                temp.transform.SetParent(canvas.transform);
-                t = temp.GetComponent<Cell>();
-                t.x = xCount; t.y = yCount;
-                cells.Add(temp);
-
-                xCount++;
-            }
-            yCount++;
+            GameObject temp = cellPrefab;
+            row.Add(temp);
         }
-        maxY = yCount - 1;
-        Debug.Log("Cells: " + cells.Count);
+
+        for (int y = 0; y < Ycount; y++)
+        {
+            cells.Add(row);
+        }
+
+        Debug.Log("Xcount: " + Xcount);
+        Debug.Log("Ycount: " + Ycount);
+
+        for (int y = 0; y < Ycount; y++)
+        {
+            for (int x = 0; x < Xcount; x++)
+            {
+                GameObject temp = Instantiate(cellPrefab, new Vector3((x * cellWidth) + 5, (y * cellHeight) + 5, 0), Quaternion.identity);
+                temp.transform.SetParent(canvasSize.transform, true);
+                Cell t = temp.GetComponent<Cell>();
+                t.x = x; t.y = y;
+                t.currentStatus = randVal();
+                t.applyTexture();
+
+                cells[y][x] = temp;
+            }
+        }      
+
+        startButton.onClick.AddListener(startSim);
+
+        Debug.Log("Cells: " + (Xcount * Ycount));
+    }
+
+    private bool randVal()
+    {
+        return (Random.Range(0f, 1.0f) > 0.7f);
     }
 
     void Update()
     {
-        startButton.onClick.AddListener(startSim);
-
-        if (beginSim)
+        if (beginSim && !stepCalled)
         {
-            Invoke(nameof(simStep), (1.0f));
+            stepCalled = true;
+            Invoke(nameof(simStep), (1.0f / simSteps));
+        }
+    }
+
+    private void simStep()
+    {
+        int same = 0;
+        int died = 0;
+        int born = 0;
+
+        generation++;
+
+        for (int y = 0; y < Ycount; y++)
+        {
+            for (int x = 0; x < Xcount; x++)
+            {
+                int i = getNeighbors(x, y);
+                Cell cell = cells[y][x].GetComponent<Cell>();
+
+                if (i < 2 || i >= 4)
+                {
+                    died++;
+                    cell.nextStatus = false;
+                }
+                else if (i == 2)
+                {
+                    same++;
+                    cell.nextStatus = cell.currentStatus;
+                }
+                else if (i == 3)
+                {
+                    born++;
+                    cell.nextStatus = true;
+                }
+                else
+                {
+                    died++;
+                    cell.nextStatus = false;
+                }
+            }
+        }
+
+        updateCells();
+
+        Debug.Log("Born: " + born + " Same: " + same + " Died: " + died);
+
+        stepCalled = false;
+    }
+
+    private int getNeighbors(int x, int y)
+    {
+        int output = 0;
+
+        try { if (cells[y - 1][x].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        try { if (cells[y + 1][x].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        try { if (cells[y - 1][x - 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        try { if (cells[y - 1][x + 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        try { if (cells[y + 1][x - 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        try { if (cells[y + 1][x + 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        try { if (cells[y][x - 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        try { if (cells[y][x + 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+
+        //Debug.Log("X: " + x + " Y: " + y + " Active: " + output);
+
+        return output;
+    }
+
+    private void updateCells()
+    {
+        for (int y = 0; y < Ycount; y++)
+        {
+            for (int x = 0; x < Xcount; x++)
+            {
+                Cell cell = cells[y][x].GetComponent<Cell>();
+                cell.currentStatus = cell.nextStatus;
+                cell.applyTexture();
+            }
         }
     }
 
     private void startSim()
     {
         beginSim = true;
-    }
-
-    private void simStep()
-    {
-        generation++;
-
-        for (int i = 0; i < cells.Count(); i++)
-        {
-            int neighbors = 0;
-            try
-            {
-                if (cells[i - 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            } catch { }
-
-            try
-            {
-                if (cells[i + 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            } catch { }
-
-            try
-            {
-                if (cells[i - xCount] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            }
-            catch { }
-
-            try
-            {
-                if (cells[i + xCount] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            }
-            catch { }
-
-            try
-            {
-                if (cells[i - xCount + 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            }
-            catch { }
-
-            try
-            {
-                if (cells[i - xCount - 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            }
-            catch { }
-
-            try
-            {
-                if (cells[i + xCount - 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            }
-            catch { }
-
-            try
-            {
-                if (cells[i + xCount + 1] != null && cells[i - 1].GetComponent<Cell>().getStatus())
-                {
-                    neighbors++;
-                }
-            }
-            catch { }
-
-            if (neighbors == 2) 
-            {
-                cells[i].GetComponent<Cell>().setNext(cells[i].GetComponent<Cell>().getStatus());
-            } else if (neighbors == 3)
-            {
-                cells[i].GetComponent<Cell>().setNext(true);
-            } else
-            {
-                cells[i].GetComponent<Cell>().setNext(false);
-            }
-        }
-
-        for (int i = 0; i < cells.Count(); i++)
-        {
-            cells[i].GetComponent<Cell>().updateStatus();
-        }
     }
 
     private void getCanvasInfo()
