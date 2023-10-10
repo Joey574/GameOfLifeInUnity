@@ -22,14 +22,13 @@ public class gameManagerScript : MonoBehaviour
     public int cellHeight = 10;
     public float yOffset;
 
-    [Header("Button prefab")]
-    public Button button;
-
     [Header("Button Adjustments")]
     public float xButtonOffset;
     public float yButtonOffset;
 
     [Header("Sim info")]
+    public bool randStart;
+    public float fillValue;
     public float simSteps;
     public int generation = 0;
 
@@ -78,16 +77,17 @@ public class gameManagerScript : MonoBehaviour
                 temp.transform.SetParent(canvasSize.transform, true);
                 Cell t = temp.GetComponent<Cell>();
                 t.x = x; t.y = y;
-                t.currentStatus = randVal();
 
-                if (t.currentStatus)
+                if (randStart)
                 {
-                    t.born();
-                }
+                    t.nextStatus = randVal();
+                } 
                 else
                 {
-                    t.kill();
+                    t.currentStatus = false;
                 }
+
+                t.applyState();
 
                 cells[y][x] = temp;
             }
@@ -100,7 +100,7 @@ public class gameManagerScript : MonoBehaviour
 
     private bool randVal()
     {
-        return (Random.Range(0f, 1.0f) > 0.7f);
+        return (Random.Range(0f, 1.0f) < fillValue);
     }
 
     void Update()
@@ -114,6 +114,8 @@ public class gameManagerScript : MonoBehaviour
 
     private void simStep()
     {
+        long start = System.DateTime.Now.Ticks;
+
         generation++;
 
         calculateCells();
@@ -122,15 +124,15 @@ public class gameManagerScript : MonoBehaviour
 
         //Debug.Log("Born: " + born + " Same: " + same + " Died: " + died);
 
+        long end = System.DateTime.Now.Ticks;
+
+        Debug.Log("Step time: " + ((end - start) / 1000) + " microseconds");
+
         stepCalled = false;
     }
 
     private void calculateCells()
     {
-        born = 0;
-        died = 0;
-        same = 0;
-
         for (int y = 0; y < Ycount; y++)
         {
             for (int x = 0; x < Xcount; x++)
@@ -138,20 +140,17 @@ public class gameManagerScript : MonoBehaviour
                 int i = getNeighbors(x, y);
                 Cell cell = cells[y][x].GetComponent<Cell>();
 
-                if (i < 2 || i >= 4)
+                switch (i)
                 {
-                    died++;
-                    cell.nextStatus = false;
-                }
-                else if (i == 2)
-                {
-                    same++;
-                    cell.nextStatus = cell.currentStatus;
-                }
-                else if (i == 3)
-                {
-                    born++;
-                    cell.nextStatus = true;
+                    case 2:
+                        cell.nextStatus = cell.currentStatus;
+                        break;
+                    case 3:
+                        cell.nextStatus = true;
+                        break;
+                    default:
+                        cell.nextStatus = false;
+                        break;
                 }
             }
         }
@@ -159,23 +158,13 @@ public class gameManagerScript : MonoBehaviour
 
     private void updateCells()
     {
-        for (int y = 0; y < Ycount; y++)
+        foreach (var cell in cells)
         {
-            for (int x =  0; x < Xcount; x++)
+            foreach (GameObject c in cell)
             {
-                Cell c = cells[y][x].GetComponent<Cell>();
-
-                if (c.nextStatus)
-                {
-                    c.born();
-                }
-                else
-                {
-                    c.kill();
-                }
+                c.GetComponent<Cell>().applyState();
             }
         }
-
     }
     private int getNeighbors(int x, int y)
     {

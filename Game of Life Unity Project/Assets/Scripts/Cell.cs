@@ -13,16 +13,27 @@ public class Cell : MonoBehaviour
     public bool nextStatus;
 
     public Image cellState;
+    public Button toggleButton;
 
-    public void kill()
+
+    private void Awake()
     {
-        cellState.color = Color.black;
-        currentStatus = false;
+        toggleButton.onClick.AddListener(() => currentStatus = !currentStatus);
     }
 
-    public void born()
+    void Update()
     {
-        cellState.color = Color.white;
-        currentStatus = true;
+        if (currentStatus)
+        {
+            cellState.color = Color.white;
+        }
+        else
+        {
+            cellState.color = Color.black;
+        }
+    }
+    public void applyState()
+    {
+        currentStatus = nextStatus;
     }
 }
