@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Linq;
 using static UnityEngine.RuleTile.TilingRuleOutput;
+using Unity.Jobs;
+using Unity.Collections;
 
 public class gameManagerScript : MonoBehaviour
 {
@@ -13,6 +15,7 @@ public class gameManagerScript : MonoBehaviour
     public GameObject canvas;
     public GameObject background;
     public Button startButton;
+    public Button stopButton;
 
     private RectTransform canvasSize;
 
@@ -25,6 +28,8 @@ public class gameManagerScript : MonoBehaviour
     [Header("Button Adjustments")]
     public float xButtonOffset;
     public float yButtonOffset;
+    public float xStopButtonOffset;
+    public float yStopButtonOffset;
 
     [Header("Sim info")]
     public bool randStart;
@@ -94,6 +99,7 @@ public class gameManagerScript : MonoBehaviour
         }      
 
         startButton.onClick.AddListener(() => beginSim = true);
+        stopButton.onClick.AddListener(() => beginSim = false);
 
         Debug.Log("Cells: " + (Xcount * Ycount));
     }
@@ -105,6 +111,8 @@ public class gameManagerScript : MonoBehaviour
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
+
         if (beginSim && !stepCalled)
         {
             stepCalled = true;
@@ -166,7 +174,7 @@ public class gameManagerScript : MonoBehaviour
             }
         }
     }
-    private int getNeighbors(int x, int y)
+    public int getNeighbors(int x, int y)
     {
         int output = 0;
 
@@ -192,6 +200,8 @@ public class gameManagerScript : MonoBehaviour
         background.transform.localPosition = new Vector3(0, 0, 0);
         startButton.transform.localPosition = new Vector3(-(canvasSize.rect.width / 2) + xButtonOffset,
             (canvasSize.rect.height / 2) - yButtonOffset, 0);
+        stopButton.transform.localPosition = new Vector3(-(canvasSize.rect.width / 2) + xStopButtonOffset,
+            (canvasSize.rect.height / 2) - yStopButtonOffset, 0);
     }
 
 }
