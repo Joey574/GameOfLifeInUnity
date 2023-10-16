@@ -36,6 +36,7 @@ public class gameManagerScript : MonoBehaviour
     public float fillValue;
     public float simSteps;
     public int generation = 0;
+    public bool gpuCompute;
 
     private int Xcount;
     private int Ycount;
@@ -144,6 +145,12 @@ public class gameManagerScript : MonoBehaviour
             stepCalled = true;
             Invoke(nameof(simStep), (1.0f / simSteps));
         }
+
+    }
+
+    private void gpuSimStep()
+    {
+
     }
 
     private void simStep()

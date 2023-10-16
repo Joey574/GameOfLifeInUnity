@@ -5,6 +5,14 @@
 // with cs.SetTexture
 RWTexture2D<float4> Result;
 
+struct cell
+{
+    float2 position;
+    float3x3 neighbors;
+    
+    bool state;
+};
+
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
