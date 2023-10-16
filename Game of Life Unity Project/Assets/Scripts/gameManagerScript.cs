@@ -111,11 +111,6 @@ public class gameManagerScript : MonoBehaviour
         Debug.Log("Cells: " + (Xcount * Ycount));
     }
 
-    private bool randVal()
-    {
-        return (Random.Range(0f, 1.0f) < fillValue);
-    }
-
     private void setNeighbors()
     {
         int i = 0;
@@ -160,8 +155,6 @@ public class gameManagerScript : MonoBehaviour
         calculateCells();
 
         updateCells();
-
-        //Debug.Log("Born: " + born + " Same: " + same + " Died: " + died);
 
         long end = System.DateTime.Now.Ticks;
 
@@ -235,4 +228,26 @@ public class gameManagerScript : MonoBehaviour
             (canvasSize.rect.height / 2) - yStopButtonOffset, 0);
     }
 
+    private bool randVal()
+    {
+        return (Random.Range(0f, 1.0f) < fillValue);
+    }
+
 }
+
+/*
+First we check if simStep has been called already, if not, call it
+
+    SIMSTEP:
+Get system time
+
+calculateCells
+
+updateCells
+
+output time
+
+    CALCULATE CELLS:
+
+
+ */
