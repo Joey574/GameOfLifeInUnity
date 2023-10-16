@@ -39,9 +39,11 @@ public class gameManagerScript : MonoBehaviour
 
     private int Xcount;
     private int Ycount;
+    private int count = 0;
 
     private List<GameObject> row;
     private List<List<GameObject>> cells;
+    private Hashtable neighbors;
 
     private bool beginSim = false;
     private bool stepCalled = false;
@@ -59,6 +61,7 @@ public class gameManagerScript : MonoBehaviour
         Ycount = (int) ((canvasSize.rect.height / cellHeight) - (yOffset / cellHeight));
 
         cells = new List<List<GameObject>>();
+        neighbors = new Hashtable();
 
         for (int y = 0; y < Ycount; y++)
         {
@@ -74,6 +77,7 @@ public class gameManagerScript : MonoBehaviour
         Debug.Log("Xcount: " + Xcount);
         Debug.Log("Ycount: " + Ycount);
 
+
         for (int y = 0; y < Ycount; y++)
         {
             for (int x = 0; x < Xcount; x++)
@@ -81,7 +85,8 @@ public class gameManagerScript : MonoBehaviour
                 GameObject temp = Instantiate(cellPrefab, new Vector3((x * cellWidth) + 5, (y * cellHeight) + 5, 0), Quaternion.identity);
                 temp.transform.SetParent(canvasSize.transform, true);
                 Cell t = temp.GetComponent<Cell>();
-                t.x = x; t.y = y;
+                t.x = x; t.y = y; t.index = count;
+                count++;
 
                 if (randStart)
                 {
@@ -101,12 +106,38 @@ public class gameManagerScript : MonoBehaviour
         startButton.onClick.AddListener(() => beginSim = true);
         stopButton.onClick.AddListener(() => beginSim = false);
 
+        setNeighbors();
+
         Debug.Log("Cells: " + (Xcount * Ycount));
     }
 
     private bool randVal()
     {
         return (Random.Range(0f, 1.0f) < fillValue);
+    }
+
+    private void setNeighbors()
+    {
+        int i = 0;
+
+        for (int y = 0; y < Ycount; y++)
+        {
+            for (int x = 0; x < Xcount; x++, i++)
+            {
+                List<Cell> temp = new List<Cell>();
+
+                try { temp.Add(cells[y][x - 1].GetComponent<Cell>()); } catch { }
+                try { temp.Add(cells[y][x + 1].GetComponent<Cell>()); } catch { }
+                try { temp.Add(cells[y - 1][x].GetComponent<Cell>()); } catch { }
+                try { temp.Add(cells[y + 1][x].GetComponent<Cell>()); } catch { }
+                try { temp.Add(cells[y + 1][x - 1].GetComponent<Cell>()); } catch { }
+                try { temp.Add(cells[y + 1][x + 1].GetComponent<Cell>()); } catch { }
+                try { temp.Add(cells[y - 1][x - 1].GetComponent<Cell>()); } catch { }
+                try { temp.Add(cells[y - 1][x + 1].GetComponent<Cell>()); } catch { }
+
+                neighbors.Add(i, temp);
+            }
+        }
     }
 
     void Update()
@@ -145,8 +176,8 @@ public class gameManagerScript : MonoBehaviour
         {
             for (int x = 0; x < Xcount; x++)
             {
-                int i = getNeighbors(x, y);
                 Cell cell = cells[y][x].GetComponent<Cell>();
+                int i = getNeighbors(cell.index);
 
                 switch (i)
                 {
@@ -174,18 +205,18 @@ public class gameManagerScript : MonoBehaviour
             }
         }
     }
-    public int getNeighbors(int x, int y)
+
+    public int getNeighbors(int i)
     {
         int output = 0;
 
-        try { if (cells[y - 1][x].GetComponent<Cell>().currentStatus) { output++; } } catch { }
-        try { if (cells[y + 1][x].GetComponent<Cell>().currentStatus) { output++; } } catch { }
-        try { if (cells[y - 1][x - 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
-        try { if (cells[y - 1][x + 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
-        try { if (cells[y + 1][x - 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
-        try { if (cells[y + 1][x + 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
-        try { if (cells[y][x - 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
-        try { if (cells[y][x + 1].GetComponent<Cell>().currentStatus) { output++; } } catch { }
+        List<Cell> temp = new List<Cell>();
+        temp = (List<Cell>) neighbors[i];
+
+        for (int x = 0; x < temp.Count() && output < 4; x++)
+        {
+            if (temp[x].currentStatus) { output++; }
+        }
 
         return output;
     }

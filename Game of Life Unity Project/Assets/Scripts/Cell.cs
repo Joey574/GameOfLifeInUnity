@@ -8,6 +8,7 @@ public class Cell : MonoBehaviour
     [Header("Location")]
     public int x;
     public int y;
+    public int index;
 
     public bool currentStatus;
     public bool nextStatus;

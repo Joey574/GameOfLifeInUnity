@@ -906,7 +906,7 @@ MonoBehaviour:
   xStopButtonOffset: 145
   yStopButtonOffset: 25
   randStart: 1
-  fillValue: 0.1
+  fillValue: 0.3
   simSteps: 10
   generation: 0
 --- !u!1 &2004253541
