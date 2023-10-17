@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 1164858415}
   - component: {fileID: 1164858414}
   - component: {fileID: 1164858413}
+  - component: {fileID: 1164858416}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -207,3 +208,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1164858416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1164858412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18d0f24366bc8ff42af9655649cd5bb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setCurrentTexture: {fileID: 7200000, guid: 7eb80a3e503572f45975b7031ee440e4, type: 3}
+  setPreTexture: {fileID: 7200000, guid: 4165ba133e4ec574aa6a4bc57bea1a6c, type: 3}
+  toggleCellState: {fileID: 7200000, guid: 50336efa24b6c6e4092c6f219ef88bf6, type: 3}
+  currentTexture: {fileID: 0}
+  lastTexture: {fileID: 0}
+  paint: 1
+  alive: 1
+  radius: 10

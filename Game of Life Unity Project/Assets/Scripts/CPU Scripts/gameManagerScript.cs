@@ -148,11 +148,6 @@ public class gameManagerScript : MonoBehaviour
 
     }
 
-    private void gpuSimStep()
-    {
-
-    }
-
     private void simStep()
     {
         long start = System.DateTime.Now.Ticks;
@@ -163,9 +158,7 @@ public class gameManagerScript : MonoBehaviour
 
         updateCells();
 
-        long end = System.DateTime.Now.Ticks;
-
-        Debug.Log("Step time: " + ((end - start) / 1000) + " microseconds");
+        Debug.Log("Step time: " + ((System.DateTime.Now.Ticks - start) / 1000) + " microseconds");
 
         stepCalled = false;
     }
