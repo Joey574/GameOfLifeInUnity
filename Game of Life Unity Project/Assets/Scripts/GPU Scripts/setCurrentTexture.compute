@@ -16,6 +16,10 @@ void CSMain (uint3 id : SV_DispatchThreadID)
             if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].r > 0.8)
             {
                 n++;
+                if (n > 3)
+                {
+                    break;
+                }
             }
         }
     }

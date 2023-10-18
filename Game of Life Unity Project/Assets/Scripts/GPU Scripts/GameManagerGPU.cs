@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Jobs;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class GameManagerGPU : MonoBehaviour
 {
@@ -29,6 +31,8 @@ public class GameManagerGPU : MonoBehaviour
     private bool beginSim;
     private bool stepCalled;
 
+    private IEnumerator coroutine;
+
     void Awake()
     {
         currentTexture = new RenderTexture(textureWidth, textureHeight, 0);
@@ -45,29 +49,36 @@ public class GameManagerGPU : MonoBehaviour
         setPreTexture.SetTexture(0, "PreResult", lastTexture);
         setPreTexture.SetTexture(0, "Result", currentTexture);
 
-        toggleCellState.SetTexture(0, "Result", currentTexture);      
+        toggleCellState.SetTexture(0, "Result", currentTexture);
     }
 
     void Update()
-    { 
+    {
         paint = Input.GetMouseButton(0);
-
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
-
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
 
         if (beginSim && !stepCalled)
         {
             stepCalled = true;
-            Invoke(nameof(simStep), (1.0f / simSteps));
+            simStep();
         }
     }
 
     private void simStep()
     {
-        setPreTexture.Dispatch(0, lastTexture.width / coreGroupSize, lastTexture.height / coreGroupSize, 1);
-        setCurrentTexture.Dispatch(0, currentTexture.width / coreGroupSize, currentTexture.height / coreGroupSize, 1);
+        coroutine = dispatchKernals(1.0f / simSteps);
+        StartCoroutine(coroutine);
+    }
 
+    private IEnumerator dispatchKernals(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        setPreTexture.Dispatch(0, lastTexture.width / coreGroupSize, 
+            lastTexture.height / coreGroupSize, 1);
+        setCurrentTexture.Dispatch(0, currentTexture.width / coreGroupSize, 
+            currentTexture.height / coreGroupSize, 1);
         stepCalled = false;
     }
 

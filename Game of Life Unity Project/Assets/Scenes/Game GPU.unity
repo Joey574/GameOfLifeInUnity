@@ -227,7 +227,7 @@ MonoBehaviour:
   lastTexture: {fileID: 0}
   paint: 1
   alive: 1
-  radius: 10
-  textureWidth: 1600
-  textureHeight: 1200
-  simSteps: 15
+  radius: 50
+  textureWidth: 3840
+  textureHeight: 2160
+  simSteps: 25
