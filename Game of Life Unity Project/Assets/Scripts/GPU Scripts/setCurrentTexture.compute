@@ -4,7 +4,7 @@
 RWTexture2D<float4> PreResult;
 RWTexture2D<float4> Result;
 
-[numthreads(8,8,1)]
+[numthreads(16,16,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     int n = 0;
@@ -20,20 +20,6 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         }
     }
     
-    if (n == 2)
-    {
-        Result[id.xy] = PreResult[id.xy];
-    }
-    else if (n == 3)
-    {
-        Result[id.xy] = float4(1, 1, 1, 1);
-    }
-    else
-    {
-        Result[id.xy] = float4(0, 0, 0, 1);
-    }
-    
-    /*
     switch (n)
     {
         case 2:
@@ -46,5 +32,4 @@ void CSMain (uint3 id : SV_DispatchThreadID)
             Result[id.xy] = float4(0, 0, 0, 1);
             break;               
     }
-*/
 }

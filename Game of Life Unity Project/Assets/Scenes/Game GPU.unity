@@ -228,3 +228,6 @@ MonoBehaviour:
   paint: 1
   alive: 1
   radius: 10
+  textureWidth: 1600
+  textureHeight: 1200
+  simSteps: 15
