@@ -225,9 +225,11 @@ MonoBehaviour:
   toggleCellState: {fileID: 7200000, guid: 50336efa24b6c6e4092c6f219ef88bf6, type: 3}
   currentTexture: {fileID: 0}
   lastTexture: {fileID: 0}
+  gameBaord: {fileID: 2100000, guid: 577484530b173be47853d0e80e956644, type: 2}
   paint: 1
   alive: 1
   radius: 50
   textureWidth: 3840
   textureHeight: 2160
-  simSteps: 25
+  simSteps: 50
+  scale: {x: 0, y: 0}

@@ -6,7 +6,11 @@ using UnityEngine.SceneManagement;
 
 public class buttonScript : MonoBehaviour
 {
+    [Header("Button")]
     public Button startButton, exitButton;
+
+    [Header("Button Position")]
+    public int startX, startY, exitX, exitY;
 
     // Start is called before the first frame update
     void Start()
@@ -15,9 +19,14 @@ public class buttonScript : MonoBehaviour
         exitButton.onClick.AddListener(exitGame);
     }
 
+    private void Update()
+    {
+        
+    }
+
     void startGame()
     {
-        SceneManager.LoadScene("Game", LoadSceneMode.Single);
+        SceneManager.LoadScene("Game GPU", LoadSceneMode.Single);
         Debug.Log("Start game");
     }
 
@@ -25,6 +34,11 @@ public class buttonScript : MonoBehaviour
     {
         Application.Quit();
         Debug.Log("Exit game");
+    }
+
+    void setPos()
+    {
+
     }
 
 }

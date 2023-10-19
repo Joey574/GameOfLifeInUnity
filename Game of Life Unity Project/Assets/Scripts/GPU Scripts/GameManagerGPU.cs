@@ -23,13 +23,23 @@ public class GameManagerGPU : MonoBehaviour
     public float radius;
 
     [Header("Game Data")]
-    public int textureWidth = 512;
-    public int textureHeight = 512;
-    public int simSteps = 15;
+    public int simSteps;   
+
+    [Header("Private states")]
+    private int textureWidth = 3840;
+    private int textureHeight = 2160;
 
     private int coreGroupSize = 16;
     private bool beginSim;
     private bool stepCalled;
+
+    public Vector2 scale;
+    private Vector2 offset;
+
+    private float lastScale = 1;
+    private float lastOffset = 0;
+
+    private float mouseSensitivity = 0.1f;
 
     private IEnumerator coroutine;
 
@@ -54,6 +64,10 @@ public class GameManagerGPU : MonoBehaviour
 
     void Update()
     {
+        scale.y = lastScale - (Input.mouseScrollDelta.y * mouseSensitivity);
+        scale.y = Mathf.Clamp(scale.y, 0.5f, 1.0f);
+        scale.x = scale.y;
+
         paint = Input.GetMouseButton(0);
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
@@ -63,6 +77,9 @@ public class GameManagerGPU : MonoBehaviour
             stepCalled = true;
             simStep();
         }
+
+        lastScale = scale.y;
+        lastOffset = offset.x;
     }
 
     private void simStep()
@@ -82,16 +99,21 @@ public class GameManagerGPU : MonoBehaviour
         stepCalled = false;
     }
 
+    private void OnGUI()
+    {
+        simSteps = (int)GUI.VerticalSlider(new Rect(25, (textureHeight / 2), 150, 300), simSteps, 1000.0f, 1.0f);
+    }
+
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
         toggleCellState.SetBool("paint", paint);
         toggleCellState.SetBool("alive", alive);
         toggleCellState.SetFloat("radius", radius);
-        toggleCellState.SetFloat("mousePosX", Input.mousePosition.x);
-        toggleCellState.SetFloat("mousePosY", Input.mousePosition.y);
+        toggleCellState.SetFloat("mousePosX", (Input.mousePosition.x * (textureWidth / Screen.currentResolution.width)));
+        toggleCellState.SetFloat("mousePosY", (Input.mousePosition.y * (textureHeight / Screen.currentResolution.height)));
 
         toggleCellState.Dispatch(0, currentTexture.width / coreGroupSize, currentTexture.height / coreGroupSize, 1);
             
-        Graphics.Blit(currentTexture, destination);
+        Graphics.Blit(currentTexture, destination, scale, offset);
     }
 }
