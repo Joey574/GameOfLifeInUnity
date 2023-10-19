@@ -28,20 +28,24 @@ public class GameManagerGPU : MonoBehaviour
     [Header("Private states")]
     private int textureWidth = 3840;
     private int textureHeight = 2160;
-    private float screenAdjustX;
-    private float screenAdjustY;
+    public float screenAdjustX;
+    public float screenAdjustY;
 
     private int coreGroupSize = 16;
     private bool beginSim;
     private bool stepCalled;
 
     public Vector2 scale;
-    private Vector2 offset;
+    public Vector2 offset;
 
     private float lastScale = 1;
     private Vector2 lastOffset;
 
-    private float mouseSensitivity = 0.1f;
+    private float offsetInc = 0.005f;
+    private float zoomSensitivity = 0.05f;
+
+    private float zoomMin = 0.01f;
+    private float zoomMax = 1.0f;
 
     private IEnumerator coroutine;
 
@@ -50,12 +54,17 @@ public class GameManagerGPU : MonoBehaviour
         lastOffset.x = 0;
         lastOffset.y = 0;
 
+        scale.x = 1;
+        scale.y = 1;
+
         screenAdjustX = (float)textureWidth / (float)Screen.currentResolution.width;
         screenAdjustY = (float)textureHeight / (float) Screen.currentResolution.height;
 
         currentTexture = new RenderTexture(textureWidth, textureHeight, 0);
         currentTexture.enableRandomWrite = true;
         currentTexture.Create();
+
+        currentTexture.filterMode = FilterMode.Point;
 
         lastTexture = new RenderTexture(textureWidth, textureHeight, 0);
         lastTexture.enableRandomWrite = true;
@@ -72,38 +81,7 @@ public class GameManagerGPU : MonoBehaviour
 
     void Update()
     {
-        scale.y = lastScale - (Input.mouseScrollDelta.y * mouseSensitivity);
-        scale.y = Mathf.Clamp(scale.y, 0.5f, 1.0f);
-        scale.x = scale.y;
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            offset.x = lastOffset.x - 0.01f;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            offset.x = lastOffset.x + 0.01f;
-        }
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            offset.y = lastOffset.y + 0.01f;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            offset.y = lastOffset.y - 0.01f;
-        }
-
-        //offset.x = Mathf.Clamp(offset.x, (-textureWidth / 2), (textureWidth / 2));
-        //offset.y = Mathf.Clamp(offset.y, (-textureHeight / 2), (textureHeight / 2));
-
-        paint = Input.GetMouseButton(0);
-
-        if (Input.GetKey(KeyCode.Escape)) { Application.Quit(); }
-        if (Input.GetMouseButtonDown(1)) { alive = !alive; }
-        if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
+        inputHandler();   
 
         if (beginSim && !stepCalled)
         {
@@ -114,6 +92,53 @@ public class GameManagerGPU : MonoBehaviour
         lastScale = scale.y;
         lastOffset.x = offset.x;
         lastOffset.y = offset.y;
+    }
+
+    private void inputHandler()
+    {
+        if (Input.mouseScrollDelta.y != 0)
+        {
+            scale.y = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
+            scale.x = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
+
+            scale.x = Mathf.Clamp(scale.x, zoomMin, zoomMax);
+            scale.y = Mathf.Clamp(scale.y, zoomMin, zoomMax);
+
+            if (scale.y != lastScale)
+            {
+                offset.x = (0.5f - scale.x);
+                offset.y = (0.5f - scale.y);
+            }
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            offset.x = lastOffset.x - (offsetInc * scale.x);
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            offset.x = lastOffset.x + (offsetInc * scale.x);
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            offset.y = lastOffset.y + (offsetInc * scale.y);
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            offset.y = lastOffset.y - (offsetInc * scale.y);
+        }
+
+        offset.x = Mathf.Clamp(offset.x, 0, (-scale.x + 1));
+        offset.y = Mathf.Clamp(offset.y, 0, (-scale.y + 1));
+
+        paint = Input.GetMouseButton(0);
+
+        if (Input.GetKey(KeyCode.Escape)) { Application.Quit(); }
+        if (Input.GetMouseButtonDown(1)) { alive = !alive; }
+        if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
     }
 
     private void simStep()
@@ -140,8 +165,8 @@ public class GameManagerGPU : MonoBehaviour
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        float mouseX = (Input.mousePosition.x + (offset.x * screenAdjustX)) * screenAdjustX;
-        float mouseY = (Input.mousePosition.y + (offset.y * screenAdjustY)) * screenAdjustY;
+        float mouseX = ((Input.mousePosition.x * screenAdjustX) * scale.x) + (offset.x * textureWidth);
+        float mouseY = ((Input.mousePosition.y * screenAdjustY) * scale.y) + (offset.y * textureHeight);
 
         toggleCellState.SetBool("paint", paint);
         toggleCellState.SetBool("alive", alive);

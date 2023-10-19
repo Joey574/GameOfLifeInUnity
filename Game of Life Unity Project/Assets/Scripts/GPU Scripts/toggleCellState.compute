@@ -13,6 +13,8 @@ float radius;
 [numthreads(16,16,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
+    radius -= 0.5f;
+    
     if (paint)
     {
         if (id.x >= mousePosX - radius && id.x <= mousePosX + radius
