@@ -96,6 +96,9 @@ public class GameManagerGPU : MonoBehaviour
 
     private void inputHandler()
     {
+        // offset -1 to 1
+        // scale 0.001 to 1
+
         if (Input.mouseScrollDelta.y != 0)
         {
             scale.y = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
@@ -106,8 +109,9 @@ public class GameManagerGPU : MonoBehaviour
 
             if (scale.y != lastScale)
             {
-                offset.x = (0.5f - scale.x);
-                offset.y = (0.5f - scale.y);
+                //Debug.Log("Adjusted");
+                offset.x += (1 / scale.x) / 4;
+                offset.y += (1 / scale.y) / 4;
             }
         }
 
