@@ -28,6 +28,8 @@ public class GameManagerGPU : MonoBehaviour
     [Header("Private states")]
     private int textureWidth = 3840;
     private int textureHeight = 2160;
+    private float screenAdjustX;
+    private float screenAdjustY;
 
     private int coreGroupSize = 16;
     private bool beginSim;
@@ -37,7 +39,7 @@ public class GameManagerGPU : MonoBehaviour
     private Vector2 offset;
 
     private float lastScale = 1;
-    private float lastOffset = 0;
+    private Vector2 lastOffset;
 
     private float mouseSensitivity = 0.1f;
 
@@ -45,6 +47,12 @@ public class GameManagerGPU : MonoBehaviour
 
     void Awake()
     {
+        lastOffset.x = 0;
+        lastOffset.y = 0;
+
+        screenAdjustX = (float)textureWidth / (float)Screen.currentResolution.width;
+        screenAdjustY = (float)textureHeight / (float) Screen.currentResolution.height;
+
         currentTexture = new RenderTexture(textureWidth, textureHeight, 0);
         currentTexture.enableRandomWrite = true;
         currentTexture.Create();
@@ -68,7 +76,32 @@ public class GameManagerGPU : MonoBehaviour
         scale.y = Mathf.Clamp(scale.y, 0.5f, 1.0f);
         scale.x = scale.y;
 
+        if (Input.GetKey(KeyCode.A))
+        {
+            offset.x = lastOffset.x - 0.01f;
+        }
+
+        if (Input.GetKey(KeyCode.D))
+        {
+            offset.x = lastOffset.x + 0.01f;
+        }
+
+        if (Input.GetKey(KeyCode.W))
+        {
+            offset.y = lastOffset.y + 0.01f;
+        }
+
+        if (Input.GetKey(KeyCode.S))
+        {
+            offset.y = lastOffset.y - 0.01f;
+        }
+
+        //offset.x = Mathf.Clamp(offset.x, (-textureWidth / 2), (textureWidth / 2));
+        //offset.y = Mathf.Clamp(offset.y, (-textureHeight / 2), (textureHeight / 2));
+
         paint = Input.GetMouseButton(0);
+
+        if (Input.GetKey(KeyCode.Escape)) { Application.Quit(); }
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
 
@@ -79,7 +112,8 @@ public class GameManagerGPU : MonoBehaviour
         }
 
         lastScale = scale.y;
-        lastOffset = offset.x;
+        lastOffset.x = offset.x;
+        lastOffset.y = offset.y;
     }
 
     private void simStep()
@@ -106,11 +140,14 @@ public class GameManagerGPU : MonoBehaviour
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
+        float mouseX = (Input.mousePosition.x + (offset.x * screenAdjustX)) * screenAdjustX;
+        float mouseY = (Input.mousePosition.y + (offset.y * screenAdjustY)) * screenAdjustY;
+
         toggleCellState.SetBool("paint", paint);
         toggleCellState.SetBool("alive", alive);
         toggleCellState.SetFloat("radius", radius);
-        toggleCellState.SetFloat("mousePosX", (Input.mousePosition.x * (textureWidth / Screen.currentResolution.width)));
-        toggleCellState.SetFloat("mousePosY", (Input.mousePosition.y * (textureHeight / Screen.currentResolution.height)));
+        toggleCellState.SetFloat("mousePosX", mouseX);
+        toggleCellState.SetFloat("mousePosY", mouseY);
 
         toggleCellState.Dispatch(0, currentTexture.width / coreGroupSize, currentTexture.height / coreGroupSize, 1);
             
