@@ -13,6 +13,7 @@ public class GameManagerGPU : MonoBehaviour
     public ComputeShader setCurrentTexture;
     public ComputeShader setPreTexture;
     public ComputeShader toggleCellState;
+    public ComputeShader setColor;
 
     public RenderTexture currentTexture;
     public RenderTexture lastTexture;
@@ -32,7 +33,7 @@ public class GameManagerGPU : MonoBehaviour
     private float screenAdjustX;
     private float screenAdjustY;
 
-    private int coreGroupSize = 16;
+    private int coreGroupSize = 8;
     private bool beginSim;
     private bool stepCalled;
     private bool menuCalled = false;
@@ -82,9 +83,7 @@ public class GameManagerGPU : MonoBehaviour
         setPreTexture.SetTexture(0, "PreResult", lastTexture);
         setPreTexture.SetTexture(0, "Result", currentTexture);
 
-        toggleCellState.SetTexture(0, "Result", currentTexture);
-
-        escMenu = gameObject.AddComponent<ESCMenu>();
+        toggleCellState.SetTexture(0, "Result", currentTexture);   
     }
 
     void Update()
@@ -139,17 +138,14 @@ public class GameManagerGPU : MonoBehaviour
         {
             offset.x = lastOffset.x - (offsetInc * scale.x);
         }
-
         if (Input.GetKey(KeyCode.D))
         {
             offset.x = lastOffset.x + (offsetInc * scale.x);
         }
-
         if (Input.GetKey(KeyCode.W))
         {
             offset.y = lastOffset.y + (offsetInc * scale.y);
         }
-
         if (Input.GetKey(KeyCode.S))
         {
             offset.y = lastOffset.y - (offsetInc * scale.y);
@@ -159,10 +155,11 @@ public class GameManagerGPU : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Escape))
         {
+            escMenu = gameObject.AddComponent<ESCMenu>();
+
             beginSim = false;
             menuCalled = true;
-            escMenu.begin(gameObject.GetComponent<GameManagerGPU>());
-
+            escMenu.begin(gameObject.GetComponent<GameManagerGPU>(), currentTexture, scale, offset, setColor, simSteps);
         }
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
@@ -180,8 +177,10 @@ public class GameManagerGPU : MonoBehaviour
 
         setPreTexture.Dispatch(0, lastTexture.width / coreGroupSize, 
             lastTexture.height / coreGroupSize, 1);
+
         setCurrentTexture.Dispatch(0, currentTexture.width / coreGroupSize, 
             currentTexture.height / coreGroupSize, 1);
+
         stepCalled = false;
     }
 
@@ -204,17 +203,20 @@ public class GameManagerGPU : MonoBehaviour
     {
         if (!menuCalled)
         {
-            float mouseX = ((Input.mousePosition.x * screenAdjustX) * scale.x) + (offset.x * textureWidth);
-            float mouseY = ((Input.mousePosition.y * screenAdjustY) * scale.y) + (offset.y * textureHeight);
+            if(paint)
+            {
+                float mouseX = Input.mousePosition.x * screenAdjustX * scale.x + (offset.x * textureWidth);
+                float mouseY = Input.mousePosition.y * screenAdjustY * scale.y + (offset.y * textureHeight);
 
-            toggleCellState.SetBool("paint", paint);
-            toggleCellState.SetBool("alive", alive);
-            toggleCellState.SetFloat("radius", radius);
-            toggleCellState.SetFloat("mousePosX", mouseX);
-            toggleCellState.SetFloat("mousePosY", mouseY);
+                toggleCellState.SetBool("paint", paint);
+                toggleCellState.SetBool("alive", alive);
+                toggleCellState.SetFloat("radius", radius);
+                toggleCellState.SetFloat("mousePosX", mouseX);
+                toggleCellState.SetFloat("mousePosY", mouseY);
 
-            toggleCellState.Dispatch(0, currentTexture.width / coreGroupSize, currentTexture.height / coreGroupSize, 1);
+                toggleCellState.Dispatch(0, currentTexture.width / coreGroupSize, currentTexture.height / coreGroupSize, 1);
 
+            }
             Graphics.Blit(currentTexture, destination, scale, offset);
         }
     }
@@ -222,5 +224,10 @@ public class GameManagerGPU : MonoBehaviour
     public void setMenuCalled(bool menuCalled)
     {
         this.menuCalled = menuCalled;
+    }
+
+    public void setSimSteps(int simSteps)
+    {
+        this.simSteps = simSteps;
     }
 }

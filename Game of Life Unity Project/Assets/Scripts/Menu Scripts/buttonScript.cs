@@ -27,13 +27,11 @@ public class buttonScript : MonoBehaviour
     void startGame()
     {
         SceneManager.LoadScene("Classic Mode", LoadSceneMode.Single);
-        Debug.Log("Start game");
     }
 
     void exitGame()
     {
         Application.Quit();
-        Debug.Log("Exit game");
     }
 
     void setPos()
