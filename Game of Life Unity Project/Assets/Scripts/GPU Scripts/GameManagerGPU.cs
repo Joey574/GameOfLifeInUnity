@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.Jobs;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -28,24 +29,30 @@ public class GameManagerGPU : MonoBehaviour
     [Header("Private states")]
     private int textureWidth = 3840;
     private int textureHeight = 2160;
-    public float screenAdjustX;
-    public float screenAdjustY;
+    private float screenAdjustX;
+    private float screenAdjustY;
 
     private int coreGroupSize = 16;
     private bool beginSim;
     private bool stepCalled;
 
-    public Vector2 scale;
-    public Vector2 offset;
+    private Vector2 scale;
+    private Vector2 offset;
 
     private float lastScale = 1;
     private Vector2 lastOffset;
 
     private float offsetInc = 0.005f;
     private float zoomSensitivity = 0.05f;
+    private float radiusInc = 5;
 
     private float zoomMin = 0.01f;
     private float zoomMax = 1.0f;
+
+    float offsetScaleX;
+    float offsetScaleY;
+
+    private Thread handleAdjustmentsThread;
 
     private IEnumerator coroutine;
 
@@ -81,7 +88,14 @@ public class GameManagerGPU : MonoBehaviour
 
     void Update()
     {
-        inputHandler();   
+        handleAdjustmentsThread = new Thread(handleAdjustements) { Name = "adjustmentThread" };
+
+        if (!handleAdjustmentsThread.IsAlive)
+        {
+            handleAdjustmentsThread.Start();
+        }
+
+        inputHandler();
 
         if (beginSim && !stepCalled)
         {
@@ -92,27 +106,33 @@ public class GameManagerGPU : MonoBehaviour
         lastScale = scale.y;
         lastOffset.x = offset.x;
         lastOffset.y = offset.y;
+
+        handleAdjustmentsThread.Join();
     }
 
     private void inputHandler()
     {
-        // offset -1 to 1
-        // scale 0.001 to 1
+        if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftShift))
+        {
+            if (Input.mouseScrollDelta.y > 0)
+            {
+                radius += radiusInc;
+            }
+            else
+            {
+                radius -= radiusInc;
+            }
 
-        if (Input.mouseScrollDelta.y != 0)
+            if (radius <= 0)
+            {
+                radius = 1;
+            }
+
+        }
+        else if (Input.mouseScrollDelta.y != 0)
         {
             scale.y = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
-            scale.x = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
-
-            scale.x = Mathf.Clamp(scale.x, zoomMin, zoomMax);
-            scale.y = Mathf.Clamp(scale.y, zoomMin, zoomMax);
-
-            if (scale.y != lastScale)
-            {
-                //Debug.Log("Adjusted");
-                offset.x += (1 / scale.x) / 4;
-                offset.y += (1 / scale.y) / 4;
-            }
+            scale.x = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);           
         }
 
         if (Input.GetKey(KeyCode.A))
@@ -135,12 +155,12 @@ public class GameManagerGPU : MonoBehaviour
             offset.y = lastOffset.y - (offsetInc * scale.y);
         }
 
-        offset.x = Mathf.Clamp(offset.x, 0, (-scale.x + 1));
-        offset.y = Mathf.Clamp(offset.y, 0, (-scale.y + 1));
-
         paint = Input.GetMouseButton(0);
 
-        if (Input.GetKey(KeyCode.Escape)) { Application.Quit(); }
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
     }
@@ -160,6 +180,21 @@ public class GameManagerGPU : MonoBehaviour
         setCurrentTexture.Dispatch(0, currentTexture.width / coreGroupSize, 
             currentTexture.height / coreGroupSize, 1);
         stepCalled = false;
+    }
+
+    private void handleAdjustements()
+    {
+        scale.x = Mathf.Clamp(scale.x, zoomMin, zoomMax);
+        scale.y = Mathf.Clamp(scale.y, zoomMin, zoomMax);
+
+        if (scale.y != lastScale)
+        {
+            offset.x += (lastScale - scale.x) / 2;
+            offset.y += (lastScale - scale.y) / 2;
+        }
+
+        offset.x = Mathf.Clamp(offset.x, 0, (-scale.x + 1));
+        offset.y = Mathf.Clamp(offset.y, 0, (-scale.y + 1));
     }
 
     private void OnGUI()

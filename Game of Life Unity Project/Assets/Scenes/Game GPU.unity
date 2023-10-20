@@ -228,7 +228,7 @@ MonoBehaviour:
   paint: 1
   alive: 1
   radius: 50
-  simSteps: 10
+  simSteps: 1000
   screenAdjustX: 0
   screenAdjustY: 0
   scale: {x: 0, y: 0}
