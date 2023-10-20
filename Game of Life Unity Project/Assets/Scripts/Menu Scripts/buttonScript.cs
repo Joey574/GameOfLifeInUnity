@@ -26,7 +26,7 @@ public class buttonScript : MonoBehaviour
 
     void startGame()
     {
-        SceneManager.LoadScene("Game GPU", LoadSceneMode.Single);
+        SceneManager.LoadScene("Classic Mode", LoadSceneMode.Single);
         Debug.Log("Start game");
     }
 

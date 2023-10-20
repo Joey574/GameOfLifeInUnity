@@ -161,7 +161,7 @@ public class GameManagerGPU : MonoBehaviour
         {
             beginSim = false;
             menuCalled = true;
-            escMenu.begin();
+            escMenu.begin(gameObject.GetComponent<GameManagerGPU>());
 
         }
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
@@ -217,5 +217,10 @@ public class GameManagerGPU : MonoBehaviour
 
             Graphics.Blit(currentTexture, destination, scale, offset);
         }
+    }
+
+    public void setMenuCalled(bool menuCalled)
+    {
+        this.menuCalled = menuCalled;
     }
 }
