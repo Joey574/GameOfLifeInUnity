@@ -229,7 +229,5 @@ MonoBehaviour:
   alive: 1
   radius: 50
   simSteps: 1000
-  screenAdjustX: 0
-  screenAdjustY: 0
   scale: {x: 0, y: 0}
   offset: {x: 0, y: 0}

@@ -35,9 +35,10 @@ public class GameManagerGPU : MonoBehaviour
     private int coreGroupSize = 16;
     private bool beginSim;
     private bool stepCalled;
+    private bool menuCalled = false;
 
-    private Vector2 scale;
-    private Vector2 offset;
+    public Vector2 scale;
+    public Vector2 offset;
 
     private float lastScale = 1;
     private Vector2 lastOffset;
@@ -49,10 +50,8 @@ public class GameManagerGPU : MonoBehaviour
     private float zoomMin = 0.01f;
     private float zoomMax = 1.0f;
 
-    float offsetScaleX;
-    float offsetScaleY;
-
     private Thread handleAdjustmentsThread;
+    private ESCMenu escMenu;
 
     private IEnumerator coroutine;
 
@@ -84,30 +83,31 @@ public class GameManagerGPU : MonoBehaviour
         setPreTexture.SetTexture(0, "Result", currentTexture);
 
         toggleCellState.SetTexture(0, "Result", currentTexture);
+
+        escMenu = gameObject.AddComponent<ESCMenu>();
     }
 
     void Update()
     {
-        handleAdjustmentsThread = new Thread(handleAdjustements) { Name = "adjustmentThread" };
-
-        if (!handleAdjustmentsThread.IsAlive)
+        if (!menuCalled)
         {
+            inputHandler();
+
+            handleAdjustmentsThread = new Thread(() => handleAdjustements(lastScale));
             handleAdjustmentsThread.Start();
+
+            if (beginSim && !stepCalled)
+            {
+                stepCalled = true;
+                simStep();
+            }
+
+            lastScale = scale.y;
+            lastOffset.x = offset.x;
+            lastOffset.y = offset.y;
+
+            handleAdjustmentsThread.Join();
         }
-
-        inputHandler();
-
-        if (beginSim && !stepCalled)
-        {
-            stepCalled = true;
-            simStep();
-        }
-
-        lastScale = scale.y;
-        lastOffset.x = offset.x;
-        lastOffset.y = offset.y;
-
-        handleAdjustmentsThread.Join();
     }
 
     private void inputHandler()
@@ -159,7 +159,10 @@ public class GameManagerGPU : MonoBehaviour
 
         if (Input.GetKey(KeyCode.Escape))
         {
-            Application.Quit();
+            beginSim = false;
+            menuCalled = true;
+            escMenu.begin();
+
         }
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
@@ -182,39 +185,37 @@ public class GameManagerGPU : MonoBehaviour
         stepCalled = false;
     }
 
-    private void handleAdjustements()
+    private void handleAdjustements(float last)
     {
         scale.x = Mathf.Clamp(scale.x, zoomMin, zoomMax);
         scale.y = Mathf.Clamp(scale.y, zoomMin, zoomMax);
 
-        if (scale.y != lastScale)
+        if (scale.y != last)
         {
-            offset.x += (lastScale - scale.x) / 2;
-            offset.y += (lastScale - scale.y) / 2;
+            offset.x += (last - scale.x) / 2;
+            offset.y += (last - scale.y) / 2;
         }
 
         offset.x = Mathf.Clamp(offset.x, 0, (-scale.x + 1));
         offset.y = Mathf.Clamp(offset.y, 0, (-scale.y + 1));
     }
 
-    private void OnGUI()
-    {
-        simSteps = (int)GUI.VerticalSlider(new Rect(25, (textureHeight / 2), 150, 300), simSteps, 1000.0f, 1.0f);
-    }
-
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        float mouseX = ((Input.mousePosition.x * screenAdjustX) * scale.x) + (offset.x * textureWidth);
-        float mouseY = ((Input.mousePosition.y * screenAdjustY) * scale.y) + (offset.y * textureHeight);
+        if (!menuCalled)
+        {
+            float mouseX = ((Input.mousePosition.x * screenAdjustX) * scale.x) + (offset.x * textureWidth);
+            float mouseY = ((Input.mousePosition.y * screenAdjustY) * scale.y) + (offset.y * textureHeight);
 
-        toggleCellState.SetBool("paint", paint);
-        toggleCellState.SetBool("alive", alive);
-        toggleCellState.SetFloat("radius", radius);
-        toggleCellState.SetFloat("mousePosX", mouseX);
-        toggleCellState.SetFloat("mousePosY", mouseY);
+            toggleCellState.SetBool("paint", paint);
+            toggleCellState.SetBool("alive", alive);
+            toggleCellState.SetFloat("radius", radius);
+            toggleCellState.SetFloat("mousePosX", mouseX);
+            toggleCellState.SetFloat("mousePosY", mouseY);
 
-        toggleCellState.Dispatch(0, currentTexture.width / coreGroupSize, currentTexture.height / coreGroupSize, 1);
-            
-        Graphics.Blit(currentTexture, destination, scale, offset);
+            toggleCellState.Dispatch(0, currentTexture.width / coreGroupSize, currentTexture.height / coreGroupSize, 1);
+
+            Graphics.Blit(currentTexture, destination, scale, offset);
+        }
     }
 }
