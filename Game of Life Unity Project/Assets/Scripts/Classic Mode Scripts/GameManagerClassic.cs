@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -6,7 +7,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class GameManagerGPU : MonoBehaviour
+public class GameManagerClassic : MonoBehaviour
 {
 
     [Header("Gameobjects")]
@@ -28,8 +29,8 @@ public class GameManagerGPU : MonoBehaviour
     public int simSteps;   
 
     [Header("Private states")]
-    private int textureWidth = 3840;
-    private int textureHeight = 2160;
+    private int textureWidth;
+    private int textureHeight;
     private float screenAdjustX;
     private float screenAdjustY;
 
@@ -54,11 +55,17 @@ public class GameManagerGPU : MonoBehaviour
 
     private Thread handleAdjustmentsThread;
     private ESCMenu escMenu;
+    private GameValues gameValues;
 
     private IEnumerator coroutine;
 
     void Awake()
     {
+        gameValues = GameObject.Find("gameValues").GetComponent<GameValues>();
+
+        textureWidth = (int) gameValues.gameBoardSize.x;
+        textureHeight = (int) gameValues.gameBoardSize.y;
+
         lastOffset.x = 0;
         lastOffset.y = 0;
 
@@ -88,6 +95,8 @@ public class GameManagerGPU : MonoBehaviour
 
         handleAdjustmentsThread = new Thread(() => handleAdjustements());
         handleAdjustmentsThread.Start();
+
+        Destroy(GameObject.Find("gameValues"));
     }
 
     void Update()
@@ -185,7 +194,7 @@ public class GameManagerGPU : MonoBehaviour
 
         beginSim = false;
         menuCalled = true;
-        escMenu.begin(gameObject.GetComponent<GameManagerGPU>(), currentTexture, scale, offset, setColor, simSteps);
+        escMenu.begin(gameObject.GetComponent<GameManagerClassic>(), currentTexture, scale, offset, setColor, simSteps);
     }
 
     private void handleAdjustements()

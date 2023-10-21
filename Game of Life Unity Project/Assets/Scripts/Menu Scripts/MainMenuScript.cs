@@ -14,12 +14,13 @@ public class MainMenuScript : MonoBehaviour
 
     [Header("Private data")]
     private Vector2 screenResolution;
-    private Vector2 textureSize;
 
-    private string x = "";
-    private string y = "";
+    private string x = "3840";
+    private string y = "2160";
 
     private bool inSettings;
+
+    private GameValues gameValues;
 
     private void Awake()
     {
@@ -30,7 +31,7 @@ public class MainMenuScript : MonoBehaviour
         buttonSize.y = screenResolution.y / 15;
 
         textBoxSize.x = screenResolution.x / 5;
-        textBoxSize.x = screenResolution.y / 15;
+        textBoxSize.y = screenResolution.y / 15;
 
         start.width = buttonSize.x; start.height = buttonSize.y;
         settings.width = buttonSize.x; settings.height = buttonSize.y;
@@ -43,6 +44,8 @@ public class MainMenuScript : MonoBehaviour
         exit.y = 2 * buttonSize.y;
 
         textureHTextBox.y = textBoxSize.y;
+
+        gameValues = GameObject.Find("gameValues").GetComponent<GameValues>();
     }
 
     private void OnGUI()
@@ -71,9 +74,13 @@ public class MainMenuScript : MonoBehaviour
 
             try
             {
-                textureSize.x = Int32.Parse(x);
-                textureSize.y = Int32.Parse(y);
-            } catch { }
+                gameValues.gameBoardSize.x = Int32.Parse(x);
+                gameValues.gameBoardSize.y = Int32.Parse(y);
+            } catch 
+            {
+                x = "3840";
+                y = "2160";
+            }
 
             if (GUI.Button(exit, "Back", style)) { inSettings = false; }
         }
@@ -83,9 +90,6 @@ public class MainMenuScript : MonoBehaviour
 
     private void startGame()
     {
-        GameValues temp = GameObject.Find("gameValues").GetComponent<GameValues>();
-        temp.gameBoardSize = textureSize;
-
         SceneManager.LoadScene("Classic Mode", LoadSceneMode.Single);
     }
 

@@ -48,7 +48,7 @@ public class ESCMenu : MonoBehaviour
         public GUIContent simStepContent;
     }
 
-    private GameManagerGPU gameManagerGPU;
+    private GameManagerClassic gameManagerClassic;
 
     private void initialize ()
     {
@@ -119,11 +119,11 @@ public class ESCMenu : MonoBehaviour
         buttons.simStepContent.text = "Sim steps / second";
     }
 
-    public void begin(GameManagerGPU gameManagerGPU, Texture current, Vector2 scale, Vector2 offset, ComputeShader setColor, int simSteps)
+    public void begin(GameManagerClassic gameManagerClassic, Texture current, Vector2 scale, Vector2 offset, ComputeShader setColor, int simSteps)
     {
         this.setColor = setColor;
 
-        this.gameManagerGPU = gameManagerGPU;
+        this.gameManagerClassic = gameManagerClassic;
         this.current = current;
 
         this.simSteps = simSteps; 
@@ -217,9 +217,9 @@ public class ESCMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(0);
 
-        gameManagerGPU.setSimSteps(simSteps);
+        gameManagerClassic.setSimSteps(simSteps);
         render = false;
-        gameManagerGPU.setMenuCalled(false);
+        gameManagerClassic.setMenuCalled(false);
         Destroy(gameObject.GetComponent<ESCMenu>());
     }
 
