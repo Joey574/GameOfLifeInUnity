@@ -146,52 +146,81 @@ public class ESCMenu : MonoBehaviour
 
             GUI.DrawTexture(buttons.backgroundPos, buttons.background, ScaleMode.StretchToFill);
 
-            GUI.Label(new Rect(100, 100, 500, 400), GUI.tooltip);
+            GUI.Label(new Rect(Input.mousePosition.x, Input.mousePosition.y, 500, 400), GUI.tooltip);
+
+            if (GUI.tooltip.Length > 0 )
+            {
+                Application.Quit();
+            }
 
             if (settings)
             {
-                string simString;
-
-                if (GUI.Button(buttons.fourthPos, "Back")) { settings = false; updated = false; }
-
-                GUI.Box(buttons.simStep, buttons.simStepContent);
-
-                simSteps = (int) GUI.HorizontalSlider(buttons.simStepSlider, simSteps, 1, 1000);
-
-                simString = GUI.TextField(buttons.simStepBox, simSteps.ToString());
-
-                try
-                {
-                    simSteps = Int32.Parse(simString);
-                } catch { }
-
-                Mathf.Clamp(simSteps, 1, 1000);
+                settingsMenu();
             }
             else
             {
-                if (GUI.Button(buttons.fistPos, "Resume"))
-                {
-                    gameManagerGPU.setSimSteps(simSteps);
-
-                    gameManagerGPU.setMenuCalled(false);
-                    render = false;
-                    Destroy(gameObject.GetComponent<ESCMenu>());
-                }
-                if (GUI.Button(buttons.secondPos, "Settings"))
-                {
-                    settings = true;
-                    updated = false;
-                }
-                if (GUI.Button(buttons.thirdPos, "Exit to Menu"))
-                {
-                    SceneManager.LoadScene("Menu", LoadSceneMode.Single);
-                }
-                if (GUI.Button(buttons.fourthPos, "Exit Game"))
-                {
-                    Application.Quit();
-                }
-            }         
+                escMenu();
+            }  
+            
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                StartCoroutine(returnToGame());
+            }
         }
+    }
+
+    private void settingsMenu()
+    {
+        string simString;
+
+        if (GUI.Button(buttons.fourthPos, "Back")) { settings = false; updated = false; }
+
+        GUI.Box(buttons.simStep, buttons.simStepContent);
+
+        simSteps = (int)GUI.HorizontalSlider(buttons.simStepSlider, simSteps, 1, 1000);
+
+        simString = simSteps.ToString();
+
+        simString = GUI.TextField(buttons.simStepBox, simString);
+
+        try
+        {
+            simSteps = Int32.Parse(simString);
+        }
+        catch { }
+
+        simSteps = Mathf.Clamp(simSteps, 1, 1000);
+    }
+
+    private void escMenu()
+    {
+        if (GUI.Button(buttons.fistPos, "Resume"))
+        {
+            StartCoroutine(returnToGame());
+        }
+        if (GUI.Button(buttons.secondPos, "Settings"))
+        {
+            settings = true;
+            updated = false;
+        }
+        if (GUI.Button(buttons.thirdPos, "Exit to Menu"))
+        {
+            SceneManager.LoadScene("Menu", LoadSceneMode.Single);
+        }
+        if (GUI.Button(buttons.fourthPos, "Exit Game"))
+        {
+            Application.Quit();
+        }
+    }
+
+     private IEnumerator returnToGame()
+    {
+        yield return new WaitForSeconds(0);
+
+        gameManagerGPU.setSimSteps(simSteps);
+        render = false;
+        gameManagerGPU.setMenuCalled(false);
+        Destroy(gameObject.GetComponent<ESCMenu>());
     }
 
     public void OnRenderImage(RenderTexture source, RenderTexture destination)

@@ -37,9 +37,10 @@ public class GameManagerGPU : MonoBehaviour
     private bool beginSim;
     private bool stepCalled;
     private bool menuCalled = false;
+    private bool shouldUpdate;
 
-    public Vector2 scale;
-    public Vector2 offset;
+    private Vector2 scale;
+    private Vector2 offset;
 
     private float lastScale = 1;
     private Vector2 lastOffset;
@@ -83,7 +84,10 @@ public class GameManagerGPU : MonoBehaviour
         setPreTexture.SetTexture(0, "PreResult", lastTexture);
         setPreTexture.SetTexture(0, "Result", currentTexture);
 
-        toggleCellState.SetTexture(0, "Result", currentTexture);   
+        toggleCellState.SetTexture(0, "Result", currentTexture);
+
+        handleAdjustmentsThread = new Thread(() => handleAdjustements());
+        handleAdjustmentsThread.Start();
     }
 
     void Update()
@@ -92,20 +96,13 @@ public class GameManagerGPU : MonoBehaviour
         {
             inputHandler();
 
-            handleAdjustmentsThread = new Thread(() => handleAdjustements(lastScale));
-            handleAdjustmentsThread.Start();
+            shouldUpdate = true;
 
             if (beginSim && !stepCalled)
             {
                 stepCalled = true;
                 simStep();
             }
-
-            lastScale = scale.y;
-            lastOffset.x = offset.x;
-            lastOffset.y = offset.y;
-
-            handleAdjustmentsThread.Join();
         }
     }
 
@@ -153,13 +150,9 @@ public class GameManagerGPU : MonoBehaviour
 
         paint = Input.GetMouseButton(0);
 
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            escMenu = gameObject.AddComponent<ESCMenu>();
-
-            beginSim = false;
-            menuCalled = true;
-            escMenu.begin(gameObject.GetComponent<GameManagerGPU>(), currentTexture, scale, offset, setColor, simSteps);
+            StartCoroutine(callMenu());
         }
         if (Input.GetMouseButtonDown(1)) { alive = !alive; }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
@@ -184,19 +177,42 @@ public class GameManagerGPU : MonoBehaviour
         stepCalled = false;
     }
 
-    private void handleAdjustements(float last)
+    private IEnumerator callMenu() 
     {
-        scale.x = Mathf.Clamp(scale.x, zoomMin, zoomMax);
-        scale.y = Mathf.Clamp(scale.y, zoomMin, zoomMax);
+        yield return new WaitForSeconds(0);
 
-        if (scale.y != last)
+        escMenu = gameObject.AddComponent<ESCMenu>();
+
+        beginSim = false;
+        menuCalled = true;
+        escMenu.begin(gameObject.GetComponent<GameManagerGPU>(), currentTexture, scale, offset, setColor, simSteps);
+    }
+
+    private void handleAdjustements()
+    {
+        while(true)
         {
-            offset.x += (last - scale.x) / 2;
-            offset.y += (last - scale.y) / 2;
-        }
+            if (shouldUpdate)
+            {
+                scale.x = Mathf.Clamp(scale.x, zoomMin, zoomMax);
+                scale.y = Mathf.Clamp(scale.y, zoomMin, zoomMax);
 
-        offset.x = Mathf.Clamp(offset.x, 0, (-scale.x + 1));
-        offset.y = Mathf.Clamp(offset.y, 0, (-scale.y + 1));
+                if (scale.y != lastScale)
+                {
+                    offset.x += (lastScale - scale.x) / 2;
+                    offset.y += (lastScale - scale.y) / 2;
+                }
+
+                offset.x = Mathf.Clamp(offset.x, 0, (-scale.x + 1));
+                offset.y = Mathf.Clamp(offset.y, 0, (-scale.y + 1));
+
+                lastScale = scale.y;
+                lastOffset.x = offset.x;
+                lastOffset.y = offset.y;
+
+                shouldUpdate = false;
+            }
+        }
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
