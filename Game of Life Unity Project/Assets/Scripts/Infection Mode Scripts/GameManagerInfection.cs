@@ -1,14 +1,13 @@
-using Mono.Cecil;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Unity.Jobs;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class GameManagerClassic : GameManagerTemplate
+public class GameManagerInfection : GameManagerTemplate
 {
+    [Header("Infection States")]
+    public bool infected;
+
     protected override void inputHandler()
     {
         if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftShift))
@@ -57,7 +56,22 @@ public class GameManagerClassic : GameManagerTemplate
         {
             StartCoroutine(callMenu());
         }
-        if (Input.GetMouseButtonDown(1)) { alive = !alive; }
+        if (Input.GetMouseButtonDown(1)) 
+        {
+            if (alive)
+            {
+                alive = false;
+                infected = true;
+            }
+            else if (infected)
+            {
+                infected = false;
+            }
+            else
+            {
+                alive = true;
+            }
+        }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
     }
 
@@ -72,6 +86,7 @@ public class GameManagerClassic : GameManagerTemplate
 
                 toggleCellState.SetBool("paint", paint);
                 toggleCellState.SetBool("alive", alive);
+                toggleCellState.SetBool("infected", infected);
                 toggleCellState.SetFloat("radius", radius);
                 toggleCellState.SetFloat("mousePosX", mouseX);
                 toggleCellState.SetFloat("mousePosY", mouseY);

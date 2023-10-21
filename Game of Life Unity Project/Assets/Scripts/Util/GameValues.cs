@@ -8,8 +8,8 @@ public class GameValues : MonoBehaviour
 
     private void Awake()
     {
-        gameBoardSize.x = 3840;
-        gameBoardSize.y = 2160;
+        gameBoardSize.x = Screen.currentResolution.width;
+        gameBoardSize.y = Screen.currentResolution.height;
 
         DontDestroyOnLoad(gameObject);
     }

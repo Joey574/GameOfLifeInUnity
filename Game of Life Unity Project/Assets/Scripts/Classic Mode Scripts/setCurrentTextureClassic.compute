@@ -7,15 +7,18 @@ RWTexture2D<float4> Result;
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    int n = 0;
+    //int n = 0;
     
+    float test = 0;
+    
+    /*
     for (int x = -1; x < 2; x++)
     {
         for (int y = -1; y < 2; y++)
         {
             if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].r > 0.8)
             {
-                n++;
+                n++;   
                 if (n > 3)
                 {
                     Result[id.xy] = float4(0, 0, 0, 1);
@@ -25,7 +28,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         }
     }
     
-    switch (n)
+     switch (n)
     {
         case 2:
             Result[id.xy] = PreResult[id.xy];
@@ -36,5 +39,28 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         default:
             Result[id.xy] = float4(0, 0, 0, 1);
             break;          
+    }
+*/
+    
+    test += PreResult[int2(id.x + 1, id.y + 1)].r;
+    test += PreResult[int2(id.x + 1, id.y - 1)].r;
+    test += PreResult[int2(id.x - 1, id.y + 1)].r;
+    test += PreResult[int2(id.x - 1, id.y - 1)].r;
+    test += PreResult[int2(id.x + 1, id.y)].r;
+    test += PreResult[int2(id.x - 1, id.y)].r;
+    test += PreResult[int2(id.x, id.y + 1)].r;
+    test += PreResult[int2(id.x, id.y - 1)].r;
+    
+    if (test > 1.5 && test < 2.5)
+    {
+        Result[id.xy] = PreResult[id.xy];
+    }
+    else if (test > 2.5 && test < 3.5)
+    {
+        Result[id.xy] = float4(1, 1, 1, 1);
+    }
+    else
+    {
+        Result[id.xy] = float4(0, 0, 0, 1);
     }
 }

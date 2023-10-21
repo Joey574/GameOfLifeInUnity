@@ -15,8 +15,8 @@ public class MainMenuScript : MonoBehaviour
     [Header("Private data")]
     private Vector2 screenResolution;
 
-    private string x = "3840";
-    private string y = "2160";
+    private string x = "";
+    private string y = "";
 
     private bool inSettings;
 
@@ -76,10 +76,22 @@ public class MainMenuScript : MonoBehaviour
             {
                 gameValues.gameBoardSize.x = Int32.Parse(x);
                 gameValues.gameBoardSize.y = Int32.Parse(y);
+
+                /*if (gameValues.gameBoardSize.x % 8 != 0)
+                {
+
+                }
+
+                if (gameValues.gameBoardSize.y % 8 != 0)
+                {
+
+                }
+                */
+
             } catch 
             {
-                x = "3840";
-                y = "2160";
+                x = screenResolution.x.ToString();
+                y = screenResolution.y.ToString();
             }
 
             if (GUI.Button(exit, "Back", style)) { inSettings = false; }

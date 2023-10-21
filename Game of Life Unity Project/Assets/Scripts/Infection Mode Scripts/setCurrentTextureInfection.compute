@@ -1,0 +1,82 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+RWTexture2D<float4> PreResult;
+RWTexture2D<float4> Result;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    int n = 0;
+    
+    if (PreResult[id.xy].g > 0.5 && PreResult[id.xy].r < 0.5)
+    {
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].r > 0.8)
+                {
+                    n++;
+                    
+                }
+            }
+            
+            if (n > 3)
+            {
+                break;
+            }
+        }
+        
+        switch (n)
+        {
+            case 1:
+                Result[id.xy] = PreResult[id.xy];
+                break;            
+            case 2:
+                Result[id.xy] = PreResult[id.xy];
+                break;
+            case 3:
+                Result[id.xy] = PreResult[id.xy];
+                break;
+            default:
+                Result[id.xy] = float4(0, 0, 0, 1);
+                break;
+        }
+    }
+    else
+    {
+        for (int x = -1; x < 2; x++)
+        {
+            for (int y = -1; y < 2; y++)
+            {
+                if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].g > 0.5 && PreResult[int2(id.x + x, id.y + y)].r > 0.5)
+                {
+                    Result[id.xy] = float4(0, 1, 0, 1);
+                    return;
+                }
+                if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].r > 0.8)
+                {
+                    n++;
+                }
+            }
+            if (n > 3)
+            {
+                break;
+            }
+        }
+        
+        switch (n)
+        {
+            case 2:
+                Result[id.xy] = PreResult[id.xy];
+                break;
+            case 3:
+                Result[id.xy] = float4(1, 1, 1, 1);
+                break;
+            default:
+                Result[id.xy] = float4(0, 0, 0, 1);
+                break;
+        }
+    }
+}   

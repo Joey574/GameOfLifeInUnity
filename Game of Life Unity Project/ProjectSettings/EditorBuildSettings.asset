@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Classic Mode.unity
     guid: 3c42df7da3e08b64cbc6d1e15b6d7cbc
+  - enabled: 1
+    path: Assets/Scenes/Infection Mode.unity
+    guid: 65bf19c008c5226469ca165ce4a22dd7
   m_configObjects: {}
