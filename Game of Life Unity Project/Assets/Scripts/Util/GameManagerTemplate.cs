@@ -44,7 +44,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected float lastScale = 1;
     protected Vector2 lastOffset;
 
-    protected float offsetInc = 0.005f;
+    protected float offsetInc = 0.5f;
     protected float zoomSensitivity = 0.05f;
     protected float radiusInc = 5;
 

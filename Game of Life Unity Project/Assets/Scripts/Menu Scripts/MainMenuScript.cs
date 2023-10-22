@@ -76,19 +76,8 @@ public class MainMenuScript : MonoBehaviour
             {
                 gameValues.gameBoardSize.x = Int32.Parse(x);
                 gameValues.gameBoardSize.y = Int32.Parse(y);
-
-                /*if (gameValues.gameBoardSize.x % 8 != 0)
-                {
-
-                }
-
-                if (gameValues.gameBoardSize.y % 8 != 0)
-                {
-
-                }
-                */
-
-            } catch 
+            } 
+            catch 
             {
                 x = screenResolution.x.ToString();
                 y = screenResolution.y.ToString();
@@ -102,7 +91,7 @@ public class MainMenuScript : MonoBehaviour
 
     private void startGame()
     {
-        SceneManager.LoadScene("Classic Mode", LoadSceneMode.Single);
+        SceneManager.LoadScene("Infection Mode", LoadSceneMode.Single);
     }
 
 }

@@ -35,19 +35,19 @@ public class GameManagerInfection : GameManagerTemplate
 
         if (Input.GetKey(KeyCode.A))
         {
-            offset.x = lastOffset.x - (offsetInc * scale.x);
+            offset.x = lastOffset.x - (offsetInc * scale.x) * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            offset.x = lastOffset.x + (offsetInc * scale.x);
+            offset.x = lastOffset.x + (offsetInc * scale.x) * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.W))
         {
-            offset.y = lastOffset.y + (offsetInc * scale.y);
+            offset.y = lastOffset.y + (offsetInc * scale.y) * Time.deltaTime;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            offset.y = lastOffset.y - (offsetInc * scale.y);
+            offset.y = lastOffset.y - (offsetInc * scale.y) * Time.deltaTime;
         }
 
         paint = Input.GetMouseButton(0);

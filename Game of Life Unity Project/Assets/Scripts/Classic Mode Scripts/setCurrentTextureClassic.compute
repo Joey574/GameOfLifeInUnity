@@ -7,8 +7,6 @@ RWTexture2D<float4> Result;
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    //int n = 0;
-    
     float test = 0;
     
     /*
@@ -51,16 +49,16 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     test += PreResult[int2(id.x, id.y + 1)].r;
     test += PreResult[int2(id.x, id.y - 1)].r;
     
-    if (test > 1.5 && test < 2.5)
+    switch ((int)test)
     {
-        Result[id.xy] = PreResult[id.xy];
-    }
-    else if (test > 2.5 && test < 3.5)
-    {
-        Result[id.xy] = float4(1, 1, 1, 1);
-    }
-    else
-    {
-        Result[id.xy] = float4(0, 0, 0, 1);
+        case 2:
+            Result[id.xy] = PreResult[id.xy];
+            break;
+        case 3:
+            Result[id.xy] = float4(1, 1, 1, 1);
+            break;
+        default:
+            Result[id.xy] = float4(0, 0, 0, 1);
+            break;
     }
 }

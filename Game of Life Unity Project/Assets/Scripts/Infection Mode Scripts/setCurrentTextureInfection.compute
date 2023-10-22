@@ -7,32 +7,22 @@ RWTexture2D<float4> Result;
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-    int n = 0;
+    float r = 0;
+    float g = 0;
+    
+    g += PreResult[int2(id.x + 1, id.y + 1)].g;
+    g += PreResult[int2(id.x + 1, id.y - 1)].g;
+    g += PreResult[int2(id.x - 1, id.y + 1)].g;
+    g += PreResult[int2(id.x - 1, id.y - 1)].g;
+    g += PreResult[int2(id.x + 1, id.y)].g;
+    g += PreResult[int2(id.x - 1, id.y)].g;
+    g += PreResult[int2(id.x, id.y + 1)].g;
+    g += PreResult[int2(id.x, id.y - 1)].g;
     
     if (PreResult[id.xy].g > 0.5 && PreResult[id.xy].r < 0.5)
     {
-        for (int x = -1; x < 2; x++)
+        switch ((int) g)
         {
-            for (int y = -1; y < 2; y++)
-            {
-                if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].r > 0.8)
-                {
-                    n++;
-                    
-                }
-            }
-            
-            if (n > 3)
-            {
-                break;
-            }
-        }
-        
-        switch (n)
-        {
-            case 1:
-                Result[id.xy] = PreResult[id.xy];
-                break;            
             case 2:
                 Result[id.xy] = PreResult[id.xy];
                 break;
@@ -44,29 +34,18 @@ void CSMain(uint3 id : SV_DispatchThreadID)
                 break;
         }
     }
-    else
+    else if (PreResult[id.xy].r > 0.5)
     {
-        for (int x = -1; x < 2; x++)
-        {
-            for (int y = -1; y < 2; y++)
-            {
-                if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].g > 0.5 && PreResult[int2(id.x + x, id.y + y)].r > 0.5)
-                {
-                    Result[id.xy] = float4(0, 1, 0, 1);
-                    return;
-                }
-                if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].r > 0.8)
-                {
-                    n++;
-                }
-            }
-            if (n > 3)
-            {
-                break;
-            }
-        }
+        r += PreResult[int2(id.x + 1, id.y + 1)].r;
+        r += PreResult[int2(id.x + 1, id.y - 1)].r;
+        r += PreResult[int2(id.x - 1, id.y + 1)].r;
+        r += PreResult[int2(id.x - 1, id.y - 1)].r;
+        r += PreResult[int2(id.x + 1, id.y)].r;
+        r += PreResult[int2(id.x - 1, id.y)].r;
+        r += PreResult[int2(id.x, id.y + 1)].r;
+        r += PreResult[int2(id.x, id.y - 1)].r;
         
-        switch (n)
+        switch ((int) r)
         {
             case 2:
                 Result[id.xy] = PreResult[id.xy];
@@ -78,5 +57,42 @@ void CSMain(uint3 id : SV_DispatchThreadID)
                 Result[id.xy] = float4(0, 0, 0, 1);
                 break;
         }
+        
+        if ((int) g > (int) r)
+        {
+            Result[id.xy] = float4(0, 1, 0, 1);
+        }
+
     }
-}   
+    else
+    {
+        r += PreResult[int2(id.x + 1, id.y + 1)].r;
+        r += PreResult[int2(id.x + 1, id.y - 1)].r;
+        r += PreResult[int2(id.x - 1, id.y + 1)].r;
+        r += PreResult[int2(id.x - 1, id.y - 1)].r;
+        r += PreResult[int2(id.x + 1, id.y)].r;
+        r += PreResult[int2(id.x - 1, id.y)].r;
+        r += PreResult[int2(id.x, id.y + 1)].r;
+        r += PreResult[int2(id.x, id.y - 1)].r;
+        
+        if ((int) g - (int) r == 3)
+        {
+            Result[id.xy] = float4(0, 1, 0, 1);
+        }
+        else
+        {
+            switch ((int) r)
+            {
+                case 2:
+                    Result[id.xy] = PreResult[id.xy];
+                    break;
+                case 3:
+                    Result[id.xy] = float4(1, 1, 1, 1);
+                    break;
+                default:
+                    Result[id.xy] = float4(0, 0, 0, 1);
+                    break;
+            }
+        }
+    }
+}
