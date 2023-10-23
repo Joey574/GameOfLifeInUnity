@@ -75,7 +75,7 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         r += PreResult[int2(id.x, id.y + 1)].r;
         r += PreResult[int2(id.x, id.y - 1)].r;
         
-        if ((int) g - (int) r == 3)
+        if ((int) g == 3 && (int) g > (int) r)
         {
             Result[id.xy] = float4(0, 1, 0, 1);
         }

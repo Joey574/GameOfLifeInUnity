@@ -19,6 +19,7 @@ public class MainMenuScript : MonoBehaviour
     private string y = "";
 
     private bool inSettings;
+    private bool inStart;
 
     private GameValues gameValues;
 
@@ -60,38 +61,56 @@ public class MainMenuScript : MonoBehaviour
             buttonSize.x,
             (buttonSize.y * 3)));
 
-        if (!inSettings)
+        if (!inSettings && !inStart)
         {
-            if (GUI.Button(start, "Start", style)) { startGame(); }
-            if (GUI.Button(settings, "Settings", style)) { inSettings = true; }
-            if (GUI.Button(exit, "Exit", style)) { Application.Quit(); }
-
+            mainMenu(style);
+        }
+        else if (inSettings && !inStart)
+        {
+            settingsMenu(styleText, style);
         }
         else
         {
-            x = GUI.TextField(textureWTextBox, x, styleText);
-            y = GUI.TextField(textureHTextBox, y, styleText);
-
-            try
-            {
-                gameValues.gameBoardSize.x = Int32.Parse(x);
-                gameValues.gameBoardSize.y = Int32.Parse(y);
-            } 
-            catch 
-            {
-                x = screenResolution.x.ToString();
-                y = screenResolution.y.ToString();
-            }
-
-            if (GUI.Button(exit, "Back", style)) { inSettings = false; }
+            startMenu(styleText, style);
         }
 
         GUI.EndGroup();
     }
 
-    private void startGame()
+    private void mainMenu(GUIStyle style)
     {
-        SceneManager.LoadScene("Infection Mode", LoadSceneMode.Single);
+        if (GUI.Button(start, "Start", style)) { inStart = true; }
+        if (GUI.Button(settings, "Settings", style)) { inSettings = true; }
+        if (GUI.Button(exit, "Exit", style)) { Application.Quit(); }
     }
 
-}
+    private void settingsMenu(GUIStyle styleText, GUIStyle style)
+    {
+        x = GUI.TextField(textureWTextBox, x, styleText);
+        y = GUI.TextField(textureHTextBox, y, styleText);
+
+        try
+        {
+            gameValues.gameBoardSize.x = Int32.Parse(x);
+            gameValues.gameBoardSize.y = Int32.Parse(y);
+        }
+        catch
+        {
+            x = screenResolution.x.ToString();
+            y = screenResolution.y.ToString();
+        }
+
+        if (GUI.Button(exit, "Back", style)) { inSettings = false; }
+    }
+
+
+    private void startMenu(GUIStyle styleText, GUIStyle style)
+    {
+
+    }
+
+    private void startGame(string gameMode)
+    {
+        SceneManager.LoadScene(gameMode, LoadSceneMode.Single);
+    }
+}  
