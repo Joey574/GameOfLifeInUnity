@@ -7,7 +7,7 @@ RWTexture2D<float4> Result;
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    float test = 0;
+    float r = 0;
     
     /*
     for (int x = -1; x < 2; x++)
@@ -40,16 +40,16 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     }
 */
     
-    test += PreResult[int2(id.x + 1, id.y + 1)].r;
-    test += PreResult[int2(id.x + 1, id.y - 1)].r;
-    test += PreResult[int2(id.x - 1, id.y + 1)].r;
-    test += PreResult[int2(id.x - 1, id.y - 1)].r;
-    test += PreResult[int2(id.x + 1, id.y)].r;
-    test += PreResult[int2(id.x - 1, id.y)].r;
-    test += PreResult[int2(id.x, id.y + 1)].r;
-    test += PreResult[int2(id.x, id.y - 1)].r;
+    r += PreResult[int2(id.x + 1, id.y + 1)].r;
+    r += PreResult[int2(id.x + 1, id.y - 1)].r;
+    r += PreResult[int2(id.x - 1, id.y + 1)].r;
+    r += PreResult[int2(id.x - 1, id.y - 1)].r;
+    r += PreResult[int2(id.x + 1, id.y)].r;
+    r += PreResult[int2(id.x - 1, id.y)].r;
+    r += PreResult[int2(id.x, id.y + 1)].r;
+    r += PreResult[int2(id.x, id.y - 1)].r;
     
-    switch ((int)test)
+    switch ((int)r)
     {
         case 2:
             Result[id.xy] = PreResult[id.xy];
