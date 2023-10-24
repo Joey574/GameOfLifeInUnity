@@ -106,7 +106,7 @@ public class MainMenuScript : MonoBehaviour
 
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
-        startGame("Neumann Mode");
+        startGame("Highlife Mode");
     }
 
     private void startGame(string gameMode)

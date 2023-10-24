@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Neumann Mode.unity
     guid: 6789a8cfee48d0444822720967b8e193
+  - enabled: 1
+    path: Assets/Scenes/HIghlife Mode.unity
+    guid: a7b5b277be4fa1d46964de803b207733
   m_configObjects: {}

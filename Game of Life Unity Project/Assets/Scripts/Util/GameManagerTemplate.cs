@@ -134,7 +134,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
         setCurrentTexture.Dispatch(0, threadDispatchX,
             threadDispatchY, 1);
 
-        stepCalled = false;
+        stepCalled = false;  
     }
 
     protected IEnumerator callMenu()
