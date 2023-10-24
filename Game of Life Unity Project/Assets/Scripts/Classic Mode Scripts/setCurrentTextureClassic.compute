@@ -4,50 +4,30 @@
 RWTexture2D<float4> PreResult;
 RWTexture2D<float4> Result;
 
+float rVal;
+
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     float r = 0;
-    
-    /*
-    for (int x = -1; x < 2; x++)
-    {
-        for (int y = -1; y < 2; y++)
-        {
-            if (!(x == 0 && y == 0) && PreResult[int2(id.x + x, id.y + y)].r > 0.8)
-            {
-                n++;   
-                if (n > 3)
-                {
-                    Result[id.xy] = float4(0, 0, 0, 1);
-                    return;
-                }
-            }
-        }
-    }
-    
-     switch (n)
-    {
-        case 2:
-            Result[id.xy] = PreResult[id.xy];
-            break;
-        case 3:
-            Result[id.xy] = float4(1, 1, 1, 1);
-            break;
-        default:
-            Result[id.xy] = float4(0, 0, 0, 1);
-            break;          
-    }
-*/
-    
-    r += PreResult[int2(id.x + 1, id.y + 1)].r;
-    r += PreResult[int2(id.x + 1, id.y - 1)].r;
-    r += PreResult[int2(id.x - 1, id.y + 1)].r;
-    r += PreResult[int2(id.x - 1, id.y - 1)].r;
-    r += PreResult[int2(id.x + 1, id.y)].r;
-    r += PreResult[int2(id.x - 1, id.y)].r;
-    r += PreResult[int2(id.x, id.y + 1)].r;
-    r += PreResult[int2(id.x, id.y - 1)].r;
+
+    r += PreResult[int2(id.x + 1, id.y + 1)].r / rVal;
+    r += PreResult[int2(id.x + 1, id.y - 1)].r / rVal;
+    r += PreResult[int2(id.x - 1, id.y + 1)].r / rVal;
+    r += PreResult[int2(id.x - 1, id.y - 1)].r / rVal;
+    r += PreResult[int2(id.x + 1, id.y)].r / rVal;
+    r += PreResult[int2(id.x - 1, id.y)].r / rVal;
+    r += PreResult[int2(id.x, id.y + 1)].r / rVal;
+    r += PreResult[int2(id.x, id.y - 1)].r / rVal;
+
+    //r += PreResult[int2(id.x + 1, id.y + 1)].r;
+    //r += PreResult[int2(id.x + 1, id.y - 1)].r;
+    //r += PreResult[int2(id.x - 1, id.y + 1)].r;
+    //r += PreResult[int2(id.x - 1, id.y - 1)].r;
+    //r += PreResult[int2(id.x + 1, id.y)].r;
+    //r += PreResult[int2(id.x - 1, id.y)].r;
+    //r += PreResult[int2(id.x, id.y + 1)].r;
+    //r += PreResult[int2(id.x, id.y - 1)].r;
       
     switch ((int)r)
     {
@@ -55,7 +35,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
             Result[id.xy] = PreResult[id.xy];
             break;
         case 3:
-            Result[id.xy] = float4(1, 1, 1, 1);
+            Result[id.xy] = float4(0.5f, 1, 1, 1);
             break;
         default:
             Result[id.xy] = float4(0, 0, 0, 1);

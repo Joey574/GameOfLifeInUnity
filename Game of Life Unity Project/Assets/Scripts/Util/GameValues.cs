@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameValues : MonoBehaviour
 {
     public Vector2 gameBoardSize;
+    public Color liveCell;
 
     private void Awake()
     {

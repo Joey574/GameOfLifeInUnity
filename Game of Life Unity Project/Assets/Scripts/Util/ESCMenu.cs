@@ -11,7 +11,6 @@ public class ESCMenu : MonoBehaviour
 
     public bool render = false;
     private bool settings = false;
-    private bool updated = false;
 
     private Texture current;
 
@@ -108,7 +107,7 @@ public class ESCMenu : MonoBehaviour
         buttons.background.enableRandomWrite = true;
         buttons.background.Create();
 
-        Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.1f);
+        Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.5f);
 
         setColor.SetVector("color", backgroundColor);
         setColor.SetTexture(0, "Result", buttons.background);
@@ -140,13 +139,16 @@ public class ESCMenu : MonoBehaviour
     {
         if (render)
         {
+            GUIStyle style = new GUIStyle(GUI.skin.button);
+            style.fontSize = 28;
+
             GUI.color = Color.white;
             GUI.backgroundColor = new Color(256, 0, 0);
             GUI.contentColor = Color.white;
 
             GUI.DrawTexture(buttons.backgroundPos, buttons.background, ScaleMode.StretchToFill);
 
-            GUI.Label(new Rect(Input.mousePosition.x, Input.mousePosition.y, 500, 400), GUI.tooltip);
+            GUI.Label(new Rect(Input.mousePosition.x, (Screen.currentResolution.height) - Input.mousePosition.y, 500, 400), GUI.tooltip, style);
 
             if (GUI.tooltip.Length > 0 )
             {
@@ -155,11 +157,11 @@ public class ESCMenu : MonoBehaviour
 
             if (settings)
             {
-                settingsMenu();
+                settingsMenu(style);
             }
             else
             {
-                escMenu();
+                escMenu(style);
             }  
             
             if (Input.GetKeyDown(KeyCode.Escape))
@@ -169,11 +171,11 @@ public class ESCMenu : MonoBehaviour
         }
     }
 
-    private void settingsMenu()
+    private void settingsMenu(GUIStyle style)
     {
         string simString;
 
-        if (GUI.Button(buttons.fourthPos, "Back")) { settings = false; updated = false; }
+        if (GUI.Button(buttons.fourthPos, "Back", style)) { settings = false; }
 
         GUI.Box(buttons.simStep, buttons.simStepContent);
 
@@ -187,27 +189,29 @@ public class ESCMenu : MonoBehaviour
         {
             simSteps = Int32.Parse(simString);
         }
-        catch { }
+        catch 
+        {
+            simSteps = 1;
+        }
 
         simSteps = Mathf.Clamp(simSteps, 1, 1000);
     }
 
-    private void escMenu()
+    private void escMenu(GUIStyle style)
     {
-        if (GUI.Button(buttons.fistPos, "Resume"))
+        if (GUI.Button(buttons.fistPos, "Resume", style))
         {
             StartCoroutine(returnToGame());
         }
-        if (GUI.Button(buttons.secondPos, "Settings"))
+        if (GUI.Button(buttons.secondPos, "Settings", style))
         {
             settings = true;
-            updated = false;
         }
-        if (GUI.Button(buttons.thirdPos, "Exit to Menu"))
+        if (GUI.Button(buttons.thirdPos, "Exit to Menu", style))
         {
             SceneManager.LoadScene("Menu", LoadSceneMode.Single);
         }
-        if (GUI.Button(buttons.fourthPos, "Exit Game"))
+        if (GUI.Button(buttons.fourthPos, "Exit Game", style))
         {
             Application.Quit();
         }
@@ -225,10 +229,6 @@ public class ESCMenu : MonoBehaviour
 
     public void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        if (!updated)
-        {
-            Graphics.Blit(current, destination, scale, offset);
-            updated = true;
-        }
+        Graphics.Blit(current, destination, scale, offset);
     }
 }

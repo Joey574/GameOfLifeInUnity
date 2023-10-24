@@ -76,6 +76,8 @@ public class GameManagerClassic : GameManagerTemplate
                 toggleCellState.SetFloat("mousePosX", mouseX);
                 toggleCellState.SetFloat("mousePosY", mouseY);
 
+                setCurrentTexture.SetFloat("rVal", 0.5f);
+
                 toggleCellState.Dispatch(0, threadDispatchX, threadDispatchY, 1);
 
             }

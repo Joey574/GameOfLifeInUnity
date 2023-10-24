@@ -8,6 +8,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 {
     float r = 0;
     
+    r += PreResult[int2(id.x, id.y)].r;
     r += PreResult[int2(id.x + 1, id.y)].r;
     r += PreResult[int2(id.x - 1, id.y)].r;
     r += PreResult[int2(id.x, id.y + 1)].r;

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using UnityEngine.UIElements;
 
 public class MainMenuScript : MonoBehaviour
 {
@@ -56,6 +57,7 @@ public class MainMenuScript : MonoBehaviour
         style.fontSize = 28;
         styleText.fontSize = 28;
 
+
         GUI.BeginGroup(new Rect((screenResolution.x / 2) - (buttonSize.x / 2),
             (screenResolution.y / 2) - (buttonSize.y * 2),
             buttonSize.x,
@@ -106,7 +108,9 @@ public class MainMenuScript : MonoBehaviour
 
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
-        startGame("Highlife Mode");
+        ScrollView scrollView = new ScrollView();
+
+        startGame("Classic Mode");
     }
 
     private void startGame(string gameMode)
