@@ -265,3 +265,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameBoardSize: {x: 0, y: 0}
+  liveCell: {r: 0.14297791, g: 0.58502084, b: 0.5943396, a: 0}
+  rand: 0
+  randFil: 0

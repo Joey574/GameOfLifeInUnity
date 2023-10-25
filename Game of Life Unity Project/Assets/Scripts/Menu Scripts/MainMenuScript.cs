@@ -8,14 +8,6 @@ using UnityEngine.UIElements;
 
 public class MainMenuScript : MonoBehaviour
 {
-    [Header("Button")]
-    private Rect start, settings, info, exit, exit2, textureWTextBox, textureHTextBox;
-    private Vector2 buttonSize;
-    private Vector2 textBoxSize;
-
-    [Header("Private data")]
-    private Vector2 screenResolution;
-
     private string x = "";
     private string y = "";
 
@@ -25,31 +17,12 @@ public class MainMenuScript : MonoBehaviour
 
     private GameValues gameValues;
 
+    private MainMenuGUIData gui;
+
     private void Awake()
     {
-        screenResolution.x = Screen.currentResolution.width;
-        screenResolution.y = Screen.currentResolution.height;
-
-        buttonSize.x = screenResolution.x / 5;
-        buttonSize.y = screenResolution.y / 15;
-
-        textBoxSize.x = screenResolution.x / 5;
-        textBoxSize.y = screenResolution.y / 15;
-
-        start.width = buttonSize.x; start.height = buttonSize.y;
-        settings.width = buttonSize.x; settings.height = buttonSize.y;
-        info.width = buttonSize.x; info.height = buttonSize.y;
-        exit.width = buttonSize.x; exit.height = buttonSize.y;
-        exit2.width = buttonSize.x; exit2.height = buttonSize.y;
-
-        textureWTextBox.width = textBoxSize.x; textureWTextBox.height = textBoxSize.y;
-        textureHTextBox.width = textBoxSize.x; textureHTextBox.height = textBoxSize.y;
-
-        settings.y = buttonSize.y;
-        info.y = 2 * buttonSize.y;
-        exit.y = 3 * buttonSize.y;
-
-        textureHTextBox.y = textBoxSize.y;
+        gui = new MainMenuGUIData();
+        gui.Initialize();
 
         gameValues = GameObject.Find("gameValues").GetComponent<GameValues>();
     }
@@ -61,11 +34,10 @@ public class MainMenuScript : MonoBehaviour
         style.fontSize = 28;
         styleText.fontSize = 28;
 
-
-        GUI.BeginGroup(new Rect((screenResolution.x / 2) - (buttonSize.x / 2),
-            (screenResolution.y / 2) - (buttonSize.y * 2),
-            buttonSize.x,
-            (buttonSize.y * 4)));
+        GUI.BeginGroup(new Rect((gui.screenResolution.x / 2) - (gui.buttonSize.x / 2),
+            (gui.screenResolution.y / 2) - (gui.buttonSize.y * 2),
+            gui.screenResolution.x,
+            (gui.screenResolution.y)));
 
         if (!inSettings && !inStart && !inInfo)
         {
@@ -89,16 +61,16 @@ public class MainMenuScript : MonoBehaviour
 
     private void mainMenu(GUIStyle style)
     {
-        if (GUI.Button(start, "Start", style)) { inStart = true; }
-        if (GUI.Button(settings, "Settings", style)) { inSettings = true; }
-        if (GUI.Button(info, "Info", style)) { inInfo = true; }
-        if (GUI.Button(exit, "Exit", style)) { Application.Quit(); }
+        if (GUI.Button(gui.start, "Start", style)) { inStart = true; }
+        if (GUI.Button(gui.settings, "Settings", style)) { inSettings = true; }
+        if (GUI.Button(gui.info, "Info", style)) { inInfo = true; }
+        if (GUI.Button(gui.exit, "Exit", style)) { Application.Quit(); }
     }
 
     private void settingsMenu(GUIStyle styleText, GUIStyle style)
     {
-        x = GUI.TextField(textureWTextBox, x, styleText);
-        y = GUI.TextField(textureHTextBox, y, styleText);
+        x = GUI.TextField(gui.textureWTextBox, x, styleText);
+        y = GUI.TextField(gui.textureHTextBox, y, styleText);
 
         try
         {
@@ -107,11 +79,11 @@ public class MainMenuScript : MonoBehaviour
         }
         catch
         {
-            x = screenResolution.x.ToString();
-            y = screenResolution.y.ToString();
+            x = gui.screenResolution.x.ToString();
+            y = gui.screenResolution.y.ToString();
         }
 
-        if (GUI.Button(exit, "Back", style)) { inSettings = false; }
+        if (GUI.Button(gui.exit, "Back", style)) { inSettings = false; }
     }
 
 
@@ -123,8 +95,20 @@ public class MainMenuScript : MonoBehaviour
 
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
-        ScrollView scrollView = new ScrollView();
-        startGame("Classic Mode");
+        gui.scroller = GUI.BeginScrollView(gui.scrollView, gui.scroller, gui.viewRect, true, true);
+
+        string game = null;
+
+        GUI.Button(new Rect(10, 10, 10, 10), "TestFFS", style);
+
+        if (GUI.Button(gui.firstGame, "Classic", style)) { }
+
+        if (game != null)
+        {
+            startGame(game);
+        }
+
+        GUI.EndScrollView();
     }
 
     private void startGame(string gameMode)
