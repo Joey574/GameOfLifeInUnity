@@ -8,7 +8,7 @@ public class MainMenuGUIData
     public Vector2 screenResolution;
 
     public Rect start, settings, info, exit, exit2, textureWTextBox, textureHTextBox, scrollView, viewRect;
-    public Rect firstGame, secondGame, thirdGame;
+    public Rect firstGame, secondGame, thirdGame, fourthGame, fifthGame;
 
     public Vector2 buttonSize;
     public Vector2 textBoxSize;
@@ -43,12 +43,13 @@ public class MainMenuGUIData
 
         textureHTextBox.y = textBoxSize.y;
 
-        scrollView.x = 10; scrollView.y = 10; scrollView.width = buttonSize.x; scrollView.height = buttonSize.y;
-        viewRect.x = 0; viewRect.y = 0; viewRect.width = buttonSize.x; viewRect.y = buttonSize.y;
-        viewRect.x = 0; viewRect.y = 0; viewRect.width = buttonSize.x; viewRect.y = buttonSize.y;
+        scrollView.x = 10; scrollView.y = 10; scrollView.width = buttonSize.x; scrollView.height = buttonSize.y * 3;
+        viewRect.x = 0; viewRect.y = 0; viewRect.width = 100; viewRect.height = buttonSize.y * 5;
 
         firstGame.x = 0; firstGame.y = 0; firstGame.width = buttonSize.x; firstGame.height = buttonSize.y;
         secondGame.x = 0; secondGame.y = buttonSize.y; secondGame.width = buttonSize.x; secondGame.height = buttonSize.y;
         thirdGame.x = 0; thirdGame.y = buttonSize.y * 2; thirdGame.width = buttonSize.x; thirdGame.height = buttonSize.y;
+        fourthGame.x = 0; fourthGame.y = buttonSize.y * 3; fourthGame.width = buttonSize.x; fourthGame.height = buttonSize.y;
+        fifthGame.x = 0; fifthGame.y = buttonSize.y * 4; fifthGame.width = buttonSize.x; fifthGame.height = buttonSize.y;
     }
 }

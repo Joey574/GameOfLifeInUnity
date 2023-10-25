@@ -95,13 +95,15 @@ public class MainMenuScript : MonoBehaviour
 
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
-        gui.scroller = GUI.BeginScrollView(gui.scrollView, gui.scroller, gui.viewRect, true, true);
-
         string game = null;
 
-        GUI.Button(new Rect(10, 10, 10, 10), "TestFFS", style);
+        gui.scroller = GUI.BeginScrollView(gui.scrollView, gui.scroller, gui.viewRect);
 
-        if (GUI.Button(gui.firstGame, "Classic", style)) { }
+        if (GUI.Button(gui.firstGame, "Classic", style)) { game = "Classic mode";  }
+        if (GUI.Button(gui.secondGame, "Infection", style)) { game = "Infection mode";  }
+        if (GUI.Button(gui.thirdGame, "Neumann", style)) { game = "Neumann mode";  }
+        if (GUI.Button(gui.fourthGame, "Highlife", style)) { game = "Highlife mode";  }
+        if (GUI.Button(gui.fifthGame, "Battle", style)) { game = "Battle mode";  }
 
         if (game != null)
         {
