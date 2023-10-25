@@ -9,6 +9,12 @@ using UnityEngine.UIElements;
 
 public class GameManagerClassic : GameManagerTemplate
 {
+    protected override void setCellColor()
+    {
+        setCurrentTexture.SetVector("color", liveCell);
+        toggleCellState.SetVector("color", liveCell);
+    }
+
     protected override void inputHandler()
     {
         if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftShift))
@@ -76,12 +82,12 @@ public class GameManagerClassic : GameManagerTemplate
                 toggleCellState.SetFloat("mousePosX", mouseX);
                 toggleCellState.SetFloat("mousePosY", mouseY);
 
-                setCurrentTexture.SetFloat("rVal", 0.5f);
-
                 toggleCellState.Dispatch(0, threadDispatchX, threadDispatchY, 1);
 
             }
             Graphics.Blit(currentTexture, destination, scale, offset);
         }
     }
+
+   
 }

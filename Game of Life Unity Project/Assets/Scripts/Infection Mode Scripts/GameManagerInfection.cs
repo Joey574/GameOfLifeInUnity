@@ -8,6 +8,10 @@ public class GameManagerInfection : GameManagerTemplate
     [Header("Infection States")]
     public bool infected;
 
+    protected override void setCellColor()
+    {
+    }
+
     protected override void inputHandler()
     {
         if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftShift))

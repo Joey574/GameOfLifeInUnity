@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using Unity.Mathematics;
 using UnityEngine;
 
 public abstract class GameManagerTemplate : MonoBehaviour
@@ -22,6 +23,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
     [Header("Game Data")]
     public int simSteps;
+    protected Color liveCell;
 
     [Header("Private states")]
     protected int textureWidth;
@@ -64,6 +66,8 @@ public abstract class GameManagerTemplate : MonoBehaviour
         textureWidth = (int)gameValues.gameBoardSize.x;
         textureHeight = (int)gameValues.gameBoardSize.y;
 
+        liveCell = gameValues.liveCell;
+
         lastOffset.x = 0;
         lastOffset.y = 0;
 
@@ -97,8 +101,12 @@ public abstract class GameManagerTemplate : MonoBehaviour
         threadDispatchX = Mathf.CeilToInt((float)currentTexture.width / (float)threadGroupSize);
         threadDispatchY = Mathf.CeilToInt((float)currentTexture.height / (float)threadGroupSize);
 
+        setCellColor();
+
         Destroy(GameObject.Find("gameValues"));
     }
+
+    protected abstract void setCellColor();
 
     void Update()
     {

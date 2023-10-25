@@ -123,11 +123,7 @@ public class MainMenuScript : MonoBehaviour
 
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
-<<<<<<< Updated upstream
         ScrollView scrollView = new ScrollView();
-
-=======
->>>>>>> Stashed changes
         startGame("Classic Mode");
     }
 
