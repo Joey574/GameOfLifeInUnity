@@ -9,7 +9,7 @@ using UnityEngine.UIElements;
 public class MainMenuScript : MonoBehaviour
 {
     [Header("Button")]
-    private Rect start, settings, exit, textureWTextBox, textureHTextBox;
+    private Rect start, settings, info, exit, exit2, textureWTextBox, textureHTextBox;
     private Vector2 buttonSize;
     private Vector2 textBoxSize;
 
@@ -21,6 +21,7 @@ public class MainMenuScript : MonoBehaviour
 
     private bool inSettings;
     private bool inStart;
+    private bool inInfo;
 
     private GameValues gameValues;
 
@@ -37,13 +38,16 @@ public class MainMenuScript : MonoBehaviour
 
         start.width = buttonSize.x; start.height = buttonSize.y;
         settings.width = buttonSize.x; settings.height = buttonSize.y;
+        info.width = buttonSize.x; info.height = buttonSize.y;
         exit.width = buttonSize.x; exit.height = buttonSize.y;
+        exit2.width = buttonSize.x; exit2.height = buttonSize.y;
 
         textureWTextBox.width = textBoxSize.x; textureWTextBox.height = textBoxSize.y;
         textureHTextBox.width = textBoxSize.x; textureHTextBox.height = textBoxSize.y;
 
         settings.y = buttonSize.y;
-        exit.y = 2 * buttonSize.y;
+        info.y = 2 * buttonSize.y;
+        exit.y = 3 * buttonSize.y;
 
         textureHTextBox.y = textBoxSize.y;
 
@@ -61,15 +65,19 @@ public class MainMenuScript : MonoBehaviour
         GUI.BeginGroup(new Rect((screenResolution.x / 2) - (buttonSize.x / 2),
             (screenResolution.y / 2) - (buttonSize.y * 2),
             buttonSize.x,
-            (buttonSize.y * 3)));
+            (buttonSize.y * 4)));
 
-        if (!inSettings && !inStart)
+        if (!inSettings && !inStart && !inInfo)
         {
             mainMenu(style);
         }
-        else if (inSettings && !inStart)
+        else if (inSettings)
         {
             settingsMenu(styleText, style);
+        }
+        else if (inInfo)
+        {
+            infoMenu();
         }
         else
         {
@@ -83,6 +91,7 @@ public class MainMenuScript : MonoBehaviour
     {
         if (GUI.Button(start, "Start", style)) { inStart = true; }
         if (GUI.Button(settings, "Settings", style)) { inSettings = true; }
+        if (GUI.Button(info, "Info", style)) { inInfo = true; }
         if (GUI.Button(exit, "Exit", style)) { Application.Quit(); }
     }
 
@@ -106,10 +115,19 @@ public class MainMenuScript : MonoBehaviour
     }
 
 
+    private void infoMenu()
+    {
+
+    }
+
+
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
+<<<<<<< Updated upstream
         ScrollView scrollView = new ScrollView();
 
+=======
+>>>>>>> Stashed changes
         startGame("Classic Mode");
     }
 
