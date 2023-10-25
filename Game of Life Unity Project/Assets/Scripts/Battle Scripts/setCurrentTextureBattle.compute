@@ -1,14 +1,61 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel CSMain
 
-// Create a RenderTexture with enableRandomWrite flag and set it
-// with cs.SetTexture
+RWTexture2D<float4> PreResult;
 RWTexture2D<float4> Result;
 
-[numthreads(8,8,1)]
-void CSMain (uint3 id : SV_DispatchThreadID)
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
 {
-    // TODO: insert actual code here!
-
-    Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+    float b = 0;
+    float r = 0;
+    
+    float4 color;
+    
+    b += PreResult[int2(id.x + 1, id.y + 1)].b;
+    b += PreResult[int2(id.x + 1, id.y - 1)].b;
+    b += PreResult[int2(id.x - 1, id.y + 1)].b;
+    b += PreResult[int2(id.x - 1, id.y - 1)].b;
+    b += PreResult[int2(id.x + 1, id.y)].b;
+    b += PreResult[int2(id.x - 1, id.y)].b;
+    b += PreResult[int2(id.x, id.y + 1)].b;
+    b += PreResult[int2(id.x, id.y - 1)].b;
+    
+    r += PreResult[int2(id.x + 1, id.y + 1)].r;
+    r += PreResult[int2(id.x + 1, id.y - 1)].r;
+    r += PreResult[int2(id.x - 1, id.y + 1)].r;
+    r += PreResult[int2(id.x - 1, id.y - 1)].r;
+    r += PreResult[int2(id.x + 1, id.y)].r;
+    r += PreResult[int2(id.x - 1, id.y)].r;
+    r += PreResult[int2(id.x, id.y + 1)].r;
+    r += PreResult[int2(id.x, id.y - 1)].r;
+    
+    if (r > b)
+    {
+        color = (1, 0, 0, 1);
+    }
+    else
+    {
+        color = (0, 0, 1, 1);
+    }
+    
+    switch ((int) r + (int) b)
+    {
+        case 2:
+            if (PreResult[int2(id.x, id.y)].r > 0 || PreResult[int2(id.x, id.y)].b > 0) 
+            {
+                Result[id.xy] = color;
+            }
+            else
+            {
+                Result[id.xy] = float4(0, 0, 0, 1);
+            }
+            break;
+        case 3:
+            Result[id.xy] = color;
+            break;
+        default:
+            Result[id.xy] = float4(0, 0, 0, 1);
+            break;
+    }
 }

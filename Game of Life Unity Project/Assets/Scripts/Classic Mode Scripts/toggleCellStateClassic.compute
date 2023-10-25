@@ -5,12 +5,12 @@ RWTexture2D<float4> Result;
 bool paint;
 bool alive;
 
+float4 color;
+
 float mousePosX;
 float mousePosY;
 
 float radius;
-
-float4 color;
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)

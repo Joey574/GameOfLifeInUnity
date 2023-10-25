@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/HIghlife Mode.unity
     guid: a7b5b277be4fa1d46964de803b207733
+  - enabled: 1
+    path: Assets/Scenes/Battle Mode.unity
+    guid: 9172234e423700142adac525a65a6b72
   m_configObjects: {}
