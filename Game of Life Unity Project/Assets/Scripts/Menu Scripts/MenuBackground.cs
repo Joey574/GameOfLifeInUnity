@@ -39,14 +39,15 @@ public class MenuBackground : MonoBehaviour
 
     private bool initialized = false;
     private bool backgroundDrawn = false;
+    private bool stepCalled = false;
 
     void Awake()
     {
         screen.x = Screen.currentResolution.width;
         screen.y = Screen.currentResolution.height;
 
-        gameSize.x = screen.x / 8;
-        gameSize.y = screen.y / 8;
+        gameSize.x = screen.x / 18;
+        gameSize.y = screen.y / 18;
 
         initializeTextures();
 
@@ -97,11 +98,27 @@ public class MenuBackground : MonoBehaviour
 
     private void initializeLocations()
     {
-        TopLeft.x = 0; TopLeft.y = 0; TopLeft.width = screen.x / 2 - 1; TopLeft.height = screen.y / 2 - 1;
-        TopRight.x = screen.x / 2; TopRight.y = 0; TopRight.width = TopLeft.width; TopRight.height = TopLeft.height;
+        // location and size values of the different games
 
-        BottomLeft.x = 0; BottomLeft.y = screen.y / 2; BottomLeft.width = TopLeft.width; BottomLeft.height = TopLeft.height;
-        BottomRight.x = screen.x / 2; BottomRight.y = screen.y / 2; BottomRight.width = TopLeft.width; BottomRight.height = TopLeft.height;
+        // Top left values
+        TopLeft.x = 1; TopLeft.y = 1; 
+        TopLeft.width = screen.x / 2 - 2; 
+        TopLeft.height = screen.y / 2 - 2;
+
+        // Top right values
+        TopRight.x = screen.x / 2 + 1; TopRight.y = 1; 
+        TopRight.width = TopLeft.width; 
+        TopRight.height = TopLeft.height;
+
+        // Bottom left values
+        BottomLeft.x = 1; BottomLeft.y = screen.y / 2 + 1; 
+        BottomLeft.width = TopLeft.width; 
+        BottomLeft.height = TopLeft.height;
+
+        // Bottom right values
+        BottomRight.x = screen.x / 2; BottomRight.y = screen.y / 2 + 1; 
+        BottomRight.width = TopLeft.width; 
+        BottomRight.height = TopLeft.height;
     }
 
     private void initializeKernals()
@@ -118,10 +135,25 @@ public class MenuBackground : MonoBehaviour
 
         setCurrentTextureBottomRight.SetTexture(0, "Result", bottomRightCurrent);
         setCurrentTextureBottomRight.SetTexture(0, "PreResult", bottomRightLast);
+
+        Brushes[0].SetFloat("xPos", gameSize.x / 2);
+        Brushes[0].SetFloat("yPos", gameSize.y / 2);
+        Brushes[0].Dispatch(0, 1, 1, 1);
+
+        Brushes[0].SetFloat("xPos", gameSize.x / 2 );
+        Brushes[0].SetFloat("yPos", gameSize.y / 2 + 15);
+        Brushes[0].Dispatch(0, 1, 1, 1);
+
+        Brushes[0].SetFloat("xPos", gameSize.x / 2);
+        Brushes[0].SetFloat("yPos", gameSize.y / 2 - 15);
+        Brushes[0].Dispatch(0, 1, 1, 1);
+        
     }
 
-    private void dispatchKernals()
+    private IEnumerator dispatchKernals(float waitTime)
     {
+        yield return new WaitForSeconds(waitTime);
+
         setPreTexture.SetTexture(0, "Result", topLeftCurrent);
         setPreTexture.SetTexture(0, "PreResult", topLeftLast);
 
@@ -158,9 +190,7 @@ public class MenuBackground : MonoBehaviour
         setCurrentTextureBottomRight.Dispatch(0, threadDispatchX,
            threadDispatchY, 1);
 
-        Brushes[0].SetFloat("x", gameSize.x);
-        Brushes[0].SetFloat("y", gameSize.y);
-        Brushes[0].Dispatch(0, 1, 1, 1);
+        stepCalled = false;
     }
 
     public void DrawGUI()
@@ -173,7 +203,12 @@ public class MenuBackground : MonoBehaviour
 
         if (initialized)
         {
-            dispatchKernals();
+            if (!stepCalled)
+            {
+                stepCalled = true;
+                IEnumerator coroutine = dispatchKernals(1.0f / 8);
+                StartCoroutine(coroutine);
+            }
 
             GUI.DrawTexture(TopLeft, topLeftCurrent, ScaleMode.ScaleToFit);
             GUI.DrawTexture(TopRight, topRightCurrent, ScaleMode.ScaleToFit);
