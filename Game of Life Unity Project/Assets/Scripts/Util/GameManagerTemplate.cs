@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class GameManagerTemplate : MonoBehaviour
 {
-    [Header("Gameobjects")]
+    [Header("Public Scripts")]
     public ComputeShader setCurrentTexture;
     public ComputeShader setPreTexture;
     public ComputeShader toggleCellState;

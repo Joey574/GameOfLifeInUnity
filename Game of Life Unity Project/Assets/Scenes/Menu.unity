@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420033}
+  - component: {fileID: 519420034}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -220,6 +221,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b722597b99114ee394a1a9e5d05c6f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menu: {fileID: 519420034}
+--- !u!114 &519420034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64da6019c25bad84f86f000eb49be3ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  setPreTexture: {fileID: 7200000, guid: 4165ba133e4ec574aa6a4bc57bea1a6c, type: 3}
+  setColor: {fileID: 7200000, guid: 1d079e02581ee3b46bd1cd0749188500, type: 3}
+  setCurrentTextureTopLeft: {fileID: 7200000, guid: 7eb80a3e503572f45975b7031ee440e4, type: 3}
+  setCurrentTextureTopRight: {fileID: 7200000, guid: 4adbff7a3b4d5fd41a8b715b03d5bc3f, type: 3}
+  setCurrentTextureBottomLeft: {fileID: 7200000, guid: 3e909e560b5aba340a951a74dfbb2a3b, type: 3}
+  setCurrentTextureBottomRight: {fileID: 7200000, guid: a141fbcd723f97244b039747b64b98fb, type: 3}
 --- !u!1 &1720292983
 GameObject:
   m_ObjectHideFlags: 0

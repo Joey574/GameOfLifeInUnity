@@ -41,5 +41,8 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     {
         Result[id.xy] = float4(1, 1, 0, 1);
     }
-    return;
+    else
+    {
+        Result[id.xy] = float4(0, 0, 0, 1);
+    }
 }

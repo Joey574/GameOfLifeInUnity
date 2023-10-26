@@ -8,6 +8,9 @@ using UnityEngine.UIElements;
 
 public class MainMenuScript : MonoBehaviour
 {
+    [Header("Public Scripts")]
+    public MenuBackground menu;
+
     private string x = "";
     private string y = "";
 
@@ -29,6 +32,8 @@ public class MainMenuScript : MonoBehaviour
 
     private void OnGUI()
     {
+        menu.DrawGUI();
+
         GUIStyle style = new GUIStyle(GUI.skin.button);
         GUIStyle styleText = new GUIStyle(GUI.skin.textField);
         style.fontSize = 28;
