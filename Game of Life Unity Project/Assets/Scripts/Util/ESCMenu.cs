@@ -107,7 +107,7 @@ public class ESCMenu : MonoBehaviour
         buttons.background.enableRandomWrite = true;
         buttons.background.Create();
 
-        Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.5f);
+        Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.75f);
 
         setColor.SetVector("color", backgroundColor);
         setColor.SetTexture(0, "Result", buttons.background);

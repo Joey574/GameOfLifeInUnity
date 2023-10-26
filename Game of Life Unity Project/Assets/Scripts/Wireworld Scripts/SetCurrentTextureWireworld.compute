@@ -1,0 +1,45 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+RWTexture2D<float4> PreResult;
+RWTexture2D<float4> Result;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    float b = 0;
+    
+    if (PreResult[int2(id.x, id.y)].g > 0.5)
+    {
+        b += PreResult[int2(id.x + 1, id.y + 1)].b;
+        b += PreResult[int2(id.x + 1, id.y - 1)].b;
+        b += PreResult[int2(id.x - 1, id.y + 1)].b;
+        b += PreResult[int2(id.x - 1, id.y - 1)].b;
+        b += PreResult[int2(id.x + 1, id.y)].b;
+        b += PreResult[int2(id.x - 1, id.y)].b;
+        b += PreResult[int2(id.x, id.y + 1)].b;
+        b += PreResult[int2(id.x, id.y - 1)].b;
+        
+        switch ((int) b)
+        {
+            case 1:
+                Result[id.xy] = float4(0, 0, 1, 1);
+                break;
+            case 2:
+                Result[id.xy] = float4(0, 0, 1, 1);
+                break;
+            default:
+                Result[id.xy] = PreResult[id.xy];
+                break;
+        }
+    }
+    else if (PreResult[int2(id.x, id.y)].b > 0.5)
+    {
+        Result[id.xy] = float4(1, 0, 0, 1);
+    }
+    else if (PreResult[int2(id.x, id.y)].r > 0.5)
+    {
+        Result[id.xy] = float4(1, 1, 0, 1);
+    }
+    return;
+}

@@ -104,6 +104,7 @@ public class MainMenuScript : MonoBehaviour
         if (GUI.Button(gui.thirdGame, "Neumann", style)) { game = "Neumann mode";  }
         if (GUI.Button(gui.fourthGame, "Highlife", style)) { game = "Highlife mode";  }
         if (GUI.Button(gui.fifthGame, "Battle", style)) { game = "Battle mode";  }
+        if (GUI.Button(gui.sixthGame, "Wireworld", style)) { game = "Wireworld mode";  }
 
         if (game != null)
         {

@@ -1,0 +1,44 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+bool paint;
+
+bool conduit;
+bool heads;
+bool tails;
+
+float mousePosX;
+float mousePosY;
+
+float radius;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+    radius -= 0.5f;
+    
+    if (paint)
+    {
+        if (id.x >= mousePosX - radius && id.x <= mousePosX + radius
+            && id.y >= mousePosY - radius && id.y <= mousePosY + radius)
+        {
+            if (conduit)
+            {
+                Result[id.xy] = float4(1, 1, 0, 1);
+            }
+            else if (heads)
+            {
+                Result[id.xy] = float4(0, 0, 1, 1);
+            }
+            else if (tails)
+            {
+                Result[id.xy] = float4(1, 0, 0, 1);
+            }
+            else
+            {
+                Result[id.xy] = float4(0, 0, 0, 1);
+            }
+        }
+    }
+}
