@@ -15,7 +15,7 @@ float radius;
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-    radius -= 0.5f;
+    radius -= 0.25f;
     
     if (paint)
     {

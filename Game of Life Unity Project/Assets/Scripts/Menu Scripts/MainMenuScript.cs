@@ -28,6 +28,8 @@ public class MainMenuScript : MonoBehaviour
         gui.Initialize();
 
         gameValues = GameObject.Find("gameValues").GetComponent<GameValues>();
+
+        Debug.Log(SystemInfo.maxTextureSize);
     }
 
     private void OnGUI()

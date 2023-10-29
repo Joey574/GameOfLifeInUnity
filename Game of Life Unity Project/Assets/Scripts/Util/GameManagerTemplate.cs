@@ -53,6 +53,8 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected float zoomMin = 0.01f;
     protected float zoomMax = 1.0f;
 
+    private bool shouldQuit = false;
+
     protected Thread handleAdjustmentsThread;
     protected ESCMenu escMenu;
     protected GameValues gameValues;
@@ -158,7 +160,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
     protected void handleAdjustements()
     {
-        while (true)
+        while (!shouldQuit)
         {
             if (shouldUpdate)
             {
@@ -193,5 +195,11 @@ public abstract class GameManagerTemplate : MonoBehaviour
     public void setSimSteps(int simSteps)
     {
         this.simSteps = simSteps;
+    }
+
+    private void OnDestroy()
+    {
+        shouldQuit = true;
+        handleAdjustmentsThread.Join();
     }
 }

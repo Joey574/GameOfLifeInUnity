@@ -9,8 +9,6 @@ float yPos;
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     float4 yellow = float4(1, 1, 0, 1);
-    float4 red = float4(1, 0, 0, 1);
-    float4 blue = float4(0, 0, 1, 1);
  
     // Center Block
     Result[int2(xPos, yPos)] = yellow;
@@ -24,61 +22,10 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     Result[int2(xPos + 3, yPos - 1)] = yellow;
     Result[int2(xPos + 3, yPos)] = yellow;
     
-    // End tail
-    Result[int2(xPos + 4, yPos)] = yellow;
-    Result[int2(xPos + 5, yPos)] = yellow;
-    Result[int2(xPos + 6, yPos)] = yellow;
-    Result[int2(xPos + 7, yPos)] = yellow;
-    Result[int2(xPos + 8, yPos)] = yellow;
-    
-    // Repeater upper
+    // inputs
     Result[int2(xPos + 1, yPos + 2)] = yellow;
-    Result[int2(xPos, yPos + 3)] = yellow;
-    
-    Result[int2(xPos - 1, yPos + 3)] = yellow;
-    Result[int2(xPos - 2, yPos + 3)] = yellow;
-    
-    Result[int2(xPos - 3, yPos + 4)] = blue;
-    Result[int2(xPos - 4, yPos + 4)] = red;
-    Result[int2(xPos - 5, yPos + 4)] = yellow;
-    Result[int2(xPos - 6, yPos + 4)] = yellow;
-    Result[int2(xPos - 7, yPos + 4)] = yellow;
-    Result[int2(xPos - 8, yPos + 4)] = yellow;
-    Result[int2(xPos - 9, yPos + 4)] = yellow;
-    
-    Result[int2(xPos - 3, yPos + 2)] = yellow;
-    Result[int2(xPos - 4, yPos + 2)] = yellow;
-    Result[int2(xPos - 5, yPos + 2)] = yellow;
-    Result[int2(xPos - 6, yPos + 2)] = yellow;
-    Result[int2(xPos - 7, yPos + 2)] = red;
-    Result[int2(xPos - 8, yPos + 2)] = blue;
-    Result[int2(xPos - 9, yPos + 2)] = yellow;
-    
-    Result[int2(xPos - 10, yPos + 3)] = yellow;
-    
-    // Repeater lower
-    
     Result[int2(xPos + 1, yPos - 2)] = yellow;
-    Result[int2(xPos, yPos - 3)] = yellow;
     
-    Result[int2(xPos - 1, yPos - 3)] = yellow;
-    Result[int2(xPos - 2, yPos - 3)] = yellow;
-    
-    Result[int2(xPos - 3, yPos - 4)] = yellow;
-    Result[int2(xPos - 4, yPos - 4)] = yellow;
-    Result[int2(xPos - 5, yPos - 4)] = yellow;
-    Result[int2(xPos - 6, yPos - 4)] = yellow;
-    Result[int2(xPos - 7, yPos - 4)] = yellow;
-    Result[int2(xPos - 8, yPos - 4)] = yellow;
-    Result[int2(xPos - 9, yPos - 4)] = yellow;
-    
-    Result[int2(xPos - 3, yPos - 2)] = blue;
-    Result[int2(xPos - 4, yPos - 2)] = red;
-    Result[int2(xPos - 5, yPos - 2)] = yellow;
-    Result[int2(xPos - 6, yPos - 2)] = yellow;
-    Result[int2(xPos - 7, yPos - 2)] = yellow;
-    Result[int2(xPos - 8, yPos - 2)] = yellow;
-    Result[int2(xPos - 9, yPos - 2)] = yellow;
-    
-    Result[int2(xPos - 10, yPos - 3)] = yellow;
+    // outputs
+    Result[int2(xPos + 4, yPos)] = yellow;
 }

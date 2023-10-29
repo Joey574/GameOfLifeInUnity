@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class MenuBackground : MonoBehaviour
@@ -36,9 +37,9 @@ public class MenuBackground : MonoBehaviour
     private int threadDispatchX;
     private int threadDispatchY;
 
+    private int simSteps = 5;
 
     private bool initialized = false;
-    private bool backgroundDrawn = false;
     private bool stepCalled = false;
 
     void Awake()
@@ -87,13 +88,6 @@ public class MenuBackground : MonoBehaviour
         backgroundTexture  = new RenderTexture(8, 8, 1);
         backgroundTexture.enableRandomWrite = true;
         backgroundTexture.Create();
-
-        setColor.SetVector("color", new Color(0.1f, 0.1f, 0.1f, 1));
-        setColor.SetTexture(0, "Result", backgroundTexture);
-
-        setColor.Dispatch(0, 1, 1, 1);
-
-        Brushes[0].SetTexture(0, "Result", bottomRightCurrent);
     }
 
     private void initializeLocations()
@@ -136,18 +130,103 @@ public class MenuBackground : MonoBehaviour
         setCurrentTextureBottomRight.SetTexture(0, "Result", bottomRightCurrent);
         setCurrentTextureBottomRight.SetTexture(0, "PreResult", bottomRightLast);
 
-        Brushes[0].SetFloat("xPos", gameSize.x / 2);
-        Brushes[0].SetFloat("yPos", gameSize.y / 2);
-        Brushes[0].Dispatch(0, 1, 1, 1);
+        Brushes[0].SetTexture(0, "Result", bottomRightCurrent);
+        Brushes[1].SetTexture(0, "Result", bottomRightCurrent);
+        Brushes[2].SetTexture(0, "Result", bottomRightCurrent);
+        Brushes[3].SetTexture(0, "Result", bottomRightCurrent);
 
-        Brushes[0].SetFloat("xPos", gameSize.x / 2 );
-        Brushes[0].SetFloat("yPos", gameSize.y / 2 + 15);
-        Brushes[0].Dispatch(0, 1, 1, 1);
+        initializeBackground();
+    }
 
-        Brushes[0].SetFloat("xPos", gameSize.x / 2);
-        Brushes[0].SetFloat("yPos", gameSize.y / 2 - 15);
-        Brushes[0].Dispatch(0, 1, 1, 1);
-        
+    private void initializeBackground()
+    {
+        setColor.SetVector("color", new Color(0.1f, 0.1f, 0.1f, 1));
+        setColor.SetTexture(0, "Result", backgroundTexture);
+
+        setColor.Dispatch(0, 1, 1, 1);
+
+        // Set up first 3 Nand gates
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[0].SetFloat("xPos", gameSize.x / 2);
+            Brushes[0].SetFloat("yPos", (gameSize.y / 2) + i);
+            Brushes[0].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set up 3 top repeaters for the Nand gates
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[1].SetFloat("xPos", gameSize.x / 2 - 10);
+            Brushes[1].SetFloat("yPos", (gameSize.y / 2) + i + 3);
+            Brushes[1].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set up 3 bottom repeaters for the Nand gates
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[1].SetFloat("xPos", gameSize.x / 2 - 10);
+            Brushes[1].SetFloat("yPos", (gameSize.y / 2) + i - 3);
+            Brushes[1].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set length of line for line tool
+        Brushes[2].SetInt("len", 4);
+
+        // Set up lines connecting top repeaters and Nand gates
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 3);
+            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i + 3);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set up lines connecting bottom repeaters and Nand gates
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 3);
+            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i - 3);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set length of line for line tool
+        Brushes[2].SetInt("len", 8);
+
+        // Set output lines for Nand gates
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[2].SetFloat("xPos", gameSize.x / 2 + 5);
+            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        Brushes[3].SetBool("left", false);
+
+        // Set signals
+        for (int i = -15; i < 16;i = i + 15)
+        {
+            Brushes[3].SetFloat("xPos", gameSize.x / 2 - 5);
+            Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i - 2);
+            Brushes[3].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set signals
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[3].SetFloat("xPos", gameSize.x / 2 - 5);
+            Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 4);
+            Brushes[3].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set signals
+
+        Brushes[3].SetBool("left", true);
+
+        for (int i = -15; i < 16; i = i + 15)
+        {
+            Brushes[3].SetFloat("xPos", gameSize.x / 2 - 8);
+            Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 2);
+            Brushes[3].Dispatch(0, 1, 1, 1);
+        }
     }
 
     private IEnumerator dispatchKernals(float waitTime)
@@ -195,18 +274,14 @@ public class MenuBackground : MonoBehaviour
 
     public void DrawGUI()
     {
-        if (!backgroundDrawn)
-        {
-            GUI.DrawTexture(new Rect(0, 0, screen.x, screen.y), backgroundTexture, ScaleMode.StretchToFill);
-            backgroundDrawn = true;
-        }
+        GUI.DrawTexture(new Rect(0, 0, screen.x, screen.y), backgroundTexture, ScaleMode.StretchToFill);
 
         if (initialized)
         {
             if (!stepCalled)
             {
                 stepCalled = true;
-                IEnumerator coroutine = dispatchKernals(1.0f / 8);
+                IEnumerator coroutine = dispatchKernals(1.0f / simSteps);
                 StartCoroutine(coroutine);
             }
 

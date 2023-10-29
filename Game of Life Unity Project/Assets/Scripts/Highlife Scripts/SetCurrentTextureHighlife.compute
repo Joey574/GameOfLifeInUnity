@@ -4,19 +4,21 @@
 RWTexture2D<float4> PreResult;
 RWTexture2D<float4> Result;
 
+float4 color;
+
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
     float r = 0;
     
-    r += PreResult[int2(id.x + 1, id.y + 1)].r;
-    r += PreResult[int2(id.x + 1, id.y - 1)].r;
-    r += PreResult[int2(id.x - 1, id.y + 1)].r;
-    r += PreResult[int2(id.x - 1, id.y - 1)].r;
-    r += PreResult[int2(id.x + 1, id.y)].r;
-    r += PreResult[int2(id.x - 1, id.y)].r;
-    r += PreResult[int2(id.x, id.y + 1)].r;
-    r += PreResult[int2(id.x, id.y - 1)].r;
+    r += PreResult[int2(id.x + 1, id.y + 1)].r / color.r;
+    r += PreResult[int2(id.x + 1, id.y - 1)].r / color.r;
+    r += PreResult[int2(id.x - 1, id.y + 1)].r / color.r;
+    r += PreResult[int2(id.x - 1, id.y - 1)].r / color.r;
+    r += PreResult[int2(id.x + 1, id.y)].r / color.r;
+    r += PreResult[int2(id.x - 1, id.y)].r / color.r;
+    r += PreResult[int2(id.x, id.y + 1)].r / color.r;
+    r += PreResult[int2(id.x, id.y - 1)].r / color.r;
       
     switch ((int) r)
     {
@@ -24,10 +26,10 @@ void CSMain(uint3 id : SV_DispatchThreadID)
             Result[id.xy] = PreResult[id.xy];
             break;
         case 3:
-            Result[id.xy] = float4(1, 1, 1, 1);
+            Result[id.xy] = color;
             break;
         case 6:
-            Result[id.xy] = float4(1, 1, 1, 1);
+            Result[id.xy] = color;
             break;
         default:
             Result[id.xy] = float4(0, 0, 0, 1);
