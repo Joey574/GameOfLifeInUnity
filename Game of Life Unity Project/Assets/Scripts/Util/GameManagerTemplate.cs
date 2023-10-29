@@ -83,11 +83,15 @@ public abstract class GameManagerTemplate : MonoBehaviour
         currentTexture.enableRandomWrite = true;
         currentTexture.Create();
 
-        currentTexture.filterMode = FilterMode.Point;
-
         lastTexture = new RenderTexture(textureWidth, textureHeight, 0);
         lastTexture.enableRandomWrite = true;
         lastTexture.Create();
+
+        currentTexture.filterMode = FilterMode.Point;
+        lastTexture.filterMode = FilterMode.Point;
+
+        currentTexture.antiAliasing = 1;
+        lastTexture.antiAliasing = 1;
 
         setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
         setCurrentTexture.SetTexture(0, "Result", currentTexture);

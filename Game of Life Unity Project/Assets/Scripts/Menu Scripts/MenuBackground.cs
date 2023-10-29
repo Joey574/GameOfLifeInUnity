@@ -148,7 +148,7 @@ public class MenuBackground : MonoBehaviour
         // Set up first 3 Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[0].SetFloat("xPos", gameSize.x / 2);
+            Brushes[0].SetFloat("xPos", 15);
             Brushes[0].SetFloat("yPos", (gameSize.y / 2) + i);
             Brushes[0].Dispatch(0, 1, 1, 1);
         }
@@ -156,7 +156,7 @@ public class MenuBackground : MonoBehaviour
         // Set up 3 top repeaters for the Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[1].SetFloat("xPos", gameSize.x / 2 - 10);
+            Brushes[1].SetFloat("xPos", 5);
             Brushes[1].SetFloat("yPos", (gameSize.y / 2) + i + 3);
             Brushes[1].Dispatch(0, 1, 1, 1);
         }
@@ -164,7 +164,7 @@ public class MenuBackground : MonoBehaviour
         // Set up 3 bottom repeaters for the Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[1].SetFloat("xPos", gameSize.x / 2 - 10);
+            Brushes[1].SetFloat("xPos", 5);
             Brushes[1].SetFloat("yPos", (gameSize.y / 2) + i - 3);
             Brushes[1].Dispatch(0, 1, 1, 1);
         }
@@ -175,7 +175,7 @@ public class MenuBackground : MonoBehaviour
         // Set up lines connecting top repeaters and Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 3);
+            Brushes[2].SetFloat("xPos", 12);
             Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i + 3);
             Brushes[2].Dispatch(0, 1, 1, 1);
         }
@@ -183,7 +183,7 @@ public class MenuBackground : MonoBehaviour
         // Set up lines connecting bottom repeaters and Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 3);
+            Brushes[2].SetFloat("xPos", 12);
             Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i - 3);
             Brushes[2].Dispatch(0, 1, 1, 1);
         }
@@ -194,17 +194,18 @@ public class MenuBackground : MonoBehaviour
         // Set output lines for Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[2].SetFloat("xPos", gameSize.x / 2 + 5);
+            Brushes[2].SetFloat("xPos", 20);
             Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
             Brushes[2].Dispatch(0, 1, 1, 1);
         }
 
+        // Set signal to be right
         Brushes[3].SetBool("left", false);
 
         // Set signals
         for (int i = -15; i < 16;i = i + 15)
         {
-            Brushes[3].SetFloat("xPos", gameSize.x / 2 - 5);
+            Brushes[3].SetFloat("xPos", 10);
             Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i - 2);
             Brushes[3].Dispatch(0, 1, 1, 1);
         }
@@ -212,18 +213,18 @@ public class MenuBackground : MonoBehaviour
         // Set signals
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[3].SetFloat("xPos", gameSize.x / 2 - 5);
+            Brushes[3].SetFloat("xPos", 10);
             Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 4);
             Brushes[3].Dispatch(0, 1, 1, 1);
         }
 
-        // Set signals
-
+        // Set signals to left
         Brushes[3].SetBool("left", true);
 
+        // Set signals
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[3].SetFloat("xPos", gameSize.x / 2 - 8);
+            Brushes[3].SetFloat("xPos", 7);
             Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 2);
             Brushes[3].Dispatch(0, 1, 1, 1);
         }
