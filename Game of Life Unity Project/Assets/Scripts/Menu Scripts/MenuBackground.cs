@@ -85,6 +85,9 @@ public class MenuBackground : MonoBehaviour
         topLeftCurrent.filterMode = FilterMode.Point; topRightCurrent.filterMode = FilterMode.Point; bottomLeftCurrent.filterMode = FilterMode.Point; bottomRightCurrent.filterMode = FilterMode.Point;
         topLeftLast.filterMode = FilterMode.Point; topRightLast.filterMode = FilterMode.Point; bottomLeftLast.filterMode = FilterMode.Point; bottomRightLast.filterMode = FilterMode.Point;
 
+        topLeftCurrent.antiAliasing = 1;topLeftLast.antiAliasing = 1; topRightCurrent.antiAliasing = 1; topRightLast.antiAliasing = 1;
+        bottomLeftCurrent.antiAliasing = 1;bottomRightLast.antiAliasing = 1; bottomLeftCurrent.antiAliasing= 1; bottomLeftLast.antiAliasing = 1;
+
         backgroundTexture  = new RenderTexture(8, 8, 1);
         backgroundTexture.enableRandomWrite = true;
         backgroundTexture.Create();
@@ -135,6 +138,10 @@ public class MenuBackground : MonoBehaviour
         Brushes[2].SetTexture(0, "Result", bottomRightCurrent);
         Brushes[3].SetTexture(0, "Result", bottomRightCurrent);
 
+        Brushes[4].SetTexture(0, "Result", topLeftCurrent);
+        
+        Brushes[4].SetVector("color", Color.white);
+
         initializeBackground();
     }
 
@@ -146,6 +153,16 @@ public class MenuBackground : MonoBehaviour
         setColor.Dispatch(0, 1, 1, 1);
 
         initializeWireworld();
+
+        initializeClassic();
+    }
+
+    private void initializeClassic()
+    {
+        Brushes[4].SetFloat("xPos", gameSize.x / 3);
+        Brushes[4].SetFloat("yPos", gameSize.y / 1.5f);
+
+        Brushes[4].Dispatch(0, 1, 1, 1);
     }
 
     private void initializeWireworld()
@@ -376,6 +393,48 @@ public class MenuBackground : MonoBehaviour
                 Brushes[2].Dispatch(0, 1, 1, 1);
             }
         }
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int q = 0; q < 8 + (i * 5); q++)
+            {
+                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 10 + (i * 5));
+                Brushes[2].SetFloat("yPos", gameSize.y / 2 - 1 - q);
+                Brushes[2].Dispatch(0, 1, 1, 1);
+            }
+        }
+
+        Brushes[2].SetInt("len", 17);
+
+        for (int i = 0; i < 3; i++)
+        {
+            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 7 + (i * 5));
+            Brushes[2].SetFloat("yPos", gameSize.y / 2 - 9 - (i * 5));
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        Brushes[2].SetInt("len", 1);
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int q = 0; q < 35; q++)
+            {
+                Brushes[2].SetFloat("xPos", gameSize.x / 2 - 8 + (i * 5));
+                Brushes[2].SetFloat("yPos", gameSize.y / 2 - 10 - q - (i * 5));
+                Brushes[2].Dispatch(0, 1, 1, 1);
+            }
+        }
+
+        for (int i = 0; i < 5; i++)
+        {
+            for (int q = 0; q < 35; q++)
+            {
+                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 27 + (i * 6));
+                Brushes[2].SetFloat("yPos", gameSize.y / 2 - 1 - q);
+                Brushes[2].Dispatch(0, 1, 1, 1);
+            }
+        }
+
     }
 
     private IEnumerator dispatchKernals(float waitTime)
