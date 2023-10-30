@@ -47,8 +47,8 @@ public class MenuBackground : MonoBehaviour
         screen.x = Screen.currentResolution.width;
         screen.y = Screen.currentResolution.height;
 
-        gameSize.x = screen.x / 18;
-        gameSize.y = screen.y / 18;
+        gameSize.x = 106;
+        gameSize.y = 66;
 
         initializeTextures();
 
@@ -262,13 +262,17 @@ public class MenuBackground : MonoBehaviour
         // Set length of line for line tool
         Brushes[2].SetInt("len", 1);
 
-        // Set input lines for the second set of Nand gates
-        for (int i = 3; i < 13; i = i + 9)
-        {
-            Brushes[2].SetFloat("xPos", 34);
-            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
-            Brushes[2].Dispatch(0, 1, 1, 1);
-        }
+        Brushes[2].SetFloat("xPos", 34);
+        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 3);
+        Brushes[2].Dispatch(0, 1, 1, 1);
+
+        Brushes[2].SetFloat("xPos", 35);
+        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 12);
+        Brushes[2].Dispatch(0, 1, 1, 1);
+
+        Brushes[2].SetFloat("xPos", 34);
+        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 13);
+        Brushes[2].Dispatch(0, 1, 1, 1);
 
         // Set input lines for the second set of Nand gates
         for (int i = 4; i < 12; i = i + 7)
@@ -282,6 +286,96 @@ public class MenuBackground : MonoBehaviour
         Brushes[2].SetFloat("xPos", 35);
         Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 5);
         Brushes[2].Dispatch(0, 1, 1, 1);
+
+        // Set up last Nand Gate
+        Brushes[0].SetFloat("xPos", gameSize.x / 2);
+        Brushes[0].SetFloat("yPos", gameSize.y / 2);
+        Brushes[0].Dispatch(0, 1, 1, 1);
+
+        // Set up input lines for the last Nand gate
+        for (int i = 0; i < 11; i++)
+        {
+            Brushes[2].SetFloat("xPos", 28 + i);
+            Brushes[2].SetFloat("yPos", 19 + i);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        Brushes[2].SetInt("len", 15);
+
+        // Set up input lines for the last Nand gate
+        Brushes[2].SetFloat("xPos", gameSize.x / 2 - 14);
+        Brushes[2].SetFloat("yPos", gameSize.y / 2 - 3);
+        Brushes[2].Dispatch(0, 1, 1, 1);
+
+        Brushes[2].SetInt("len", 10);
+
+        // Set up input lines for the last Nand gate
+        Brushes[2].SetFloat("xPos", gameSize.x / 2 - 9);
+        Brushes[2].SetFloat("yPos", gameSize.y / 2 + 3);
+        Brushes[2].Dispatch(0, 1, 1, 1);
+
+        Brushes[2].SetInt("len", 1);
+
+        // Set up input lines for the last Nand gate
+        for (int i = 0; i < 4; i++)
+        {
+            Brushes[2].SetFloat("xPos", 40 + i);
+            Brushes[2].SetFloat("yPos", 40 - i);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set up output lines for the last Nand gate
+        Brushes[2].SetInt("len", 48);
+
+        Brushes[2].SetFloat("xPos", gameSize.x / 2 + 5);
+        Brushes[2].SetFloat("yPos", gameSize.y / 2);
+        Brushes[2].Dispatch(0, 1, 1, 1);
+
+        // Set up vertical output lines
+        Brushes[2].SetInt("len", 1);
+        for (int i = 0; i < 4; i++)
+        {
+            for (int q = 0; q < 8 + (i * 5); q++)
+            {
+                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 18 + (i * 6));
+                Brushes[2].SetFloat("yPos", gameSize.y / 2 + 1 + q);
+                Brushes[2].Dispatch(0, 1, 1, 1);
+            }
+        }
+
+        // Horizontal output lines
+        for (int i = 0; i < 4; i++)
+        {
+            Brushes[2].SetInt("len", 23 + (i * 6) - (i * 5));
+
+            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 5 + (i * 5));
+            Brushes[2].SetFloat("yPos", gameSize.y / 2 + 9 + (i * 5));
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set up vertical output lines
+        Brushes[2].SetInt("len", 1);
+        for (int i = 0; i < 4; i++)
+        {
+            for (int q = 0; q < 25; q++)
+            {
+                Brushes[2].SetFloat("xPos", gameSize.x / 2 - 6 + (i * 5));
+                Brushes[2].SetFloat("yPos", gameSize.y / 2 + 10 + (i * 5) + q);
+                Brushes[2].Dispatch(0, 1, 1, 1);
+            }
+        }
+
+        // Set up vertical output lines
+        Brushes[2].SetInt("len", 1);
+        for (int i = 0; i < 2; i++)
+        {
+            for (int q = 0; q < 35; q++)
+            {
+                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 42 + (i * 6));
+                Brushes[2].SetFloat("yPos", gameSize.y / 2 + 1 + q);
+                Brushes[2].Dispatch(0, 1, 1, 1);
+            }
+        }
     }
 
     private IEnumerator dispatchKernals(float waitTime)
