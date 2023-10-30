@@ -145,6 +145,11 @@ public class MenuBackground : MonoBehaviour
 
         setColor.Dispatch(0, 1, 1, 1);
 
+        initializeWireworld();
+    }
+
+    private void initializeWireworld()
+    {
         // Set up first 3 Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
@@ -203,7 +208,7 @@ public class MenuBackground : MonoBehaviour
         Brushes[3].SetBool("left", false);
 
         // Set signals
-        for (int i = -15; i < 16;i = i + 15)
+        for (int i = -15; i < 16; i = i + 15)
         {
             Brushes[3].SetFloat("xPos", 10);
             Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i - 2);
@@ -228,6 +233,55 @@ public class MenuBackground : MonoBehaviour
             Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 2);
             Brushes[3].Dispatch(0, 1, 1, 1);
         }
+
+
+        // initialize next set of nand gates
+        Brushes[0].SetFloat("xPos", (gameSize.x / 3));
+        Brushes[0].SetFloat("yPos", (gameSize.y / 2) + 8);
+        Brushes[0].Dispatch(0, 1, 1, 1);
+
+        // Set length of line for line tool
+        Brushes[2].SetInt("len", 3);
+
+        // Set input lines for the second set of Nand gates
+        for (int i = 1; i < 15; i = i + 13)
+        {
+            Brushes[2].SetFloat("xPos", 28);
+            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set input lines for the second set of Nand gates
+        for (int i = 2; i < 14; i = i + 11)
+        {
+            Brushes[2].SetFloat("xPos", 31);
+            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set length of line for line tool
+        Brushes[2].SetInt("len", 1);
+
+        // Set input lines for the second set of Nand gates
+        for (int i = 3; i < 13; i = i + 9)
+        {
+            Brushes[2].SetFloat("xPos", 34);
+            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set input lines for the second set of Nand gates
+        for (int i = 4; i < 12; i = i + 7)
+        {
+            Brushes[2].SetFloat("xPos", 35);
+            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            Brushes[2].Dispatch(0, 1, 1, 1);
+        }
+
+        // Set input lines for the second set of Nand gates
+        Brushes[2].SetFloat("xPos", 35);
+        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 5);
+        Brushes[2].Dispatch(0, 1, 1, 1);
     }
 
     private IEnumerator dispatchKernals(float waitTime)
