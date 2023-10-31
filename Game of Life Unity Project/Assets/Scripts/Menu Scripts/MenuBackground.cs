@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MenuBackground : MonoBehaviour
@@ -498,5 +499,9 @@ public class MenuBackground : MonoBehaviour
             GUI.DrawTexture(BottomLeft, bottomLeftCurrent, ScaleMode.ScaleToFit);
             GUI.DrawTexture(BottomRight, bottomRightCurrent, ScaleMode.ScaleToFit);
         }
+    }
+
+    private void OnDestroy()
+    {
     }
 }
