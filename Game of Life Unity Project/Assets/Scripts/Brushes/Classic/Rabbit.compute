@@ -11,14 +11,12 @@ float4 color;
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
     Result[int2(xPos, yPos)] = color;
-    Result[int2(xPos + 2, yPos)] = color;
-    Result[int2(xPos + 1, yPos + 1)] = color;
-    Result[int2(xPos + 1, yPos + 2)] = color;
-    
-    Result[int2(xPos + 4, yPos + 1)] = color;
-    Result[int2(xPos + 5, yPos + 2)] = color;
-    Result[int2(xPos + 5, yPos + 3)] = color;
-    Result[int2(xPos + 6, yPos + 1)] = color;
-    
-    Result[int2(xPos - 1, yPos + 3)] = color;
+    Result[int2(xPos + 6, yPos)] = color;
+    Result[int2(xPos + 2, yPos - 1)] = color;
+    Result[int2(xPos + 6, yPos - 1)] = color;
+    Result[int2(xPos + 2, yPos - 2)] = color;
+    Result[int2(xPos + 5, yPos - 2)] = color;
+    Result[int2(xPos + 7, yPos - 2)] = color;
+    Result[int2(xPos + 1, yPos - 3)] = color;
+    Result[int2(xPos + 3, yPos - 3)] = color;
 }

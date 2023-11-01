@@ -38,7 +38,7 @@ public class MenuBackground : MonoBehaviour
     private int threadDispatchX;
     private int threadDispatchY;
 
-    private int simSteps = 5;
+    private int simSteps = 0;
 
     private bool initialized = false;
     private bool stepCalled = false;
@@ -160,6 +160,10 @@ public class MenuBackground : MonoBehaviour
 
     private void initializeClassic()
     {
+        setColor.SetTexture(0, "Result", topLeftCurrent);
+        setColor.SetVector("color", new Color(0,0,0, 1));
+        setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
+
         Brushes[4].SetFloat("xPos", gameSize.x / 3);
         Brushes[4].SetFloat("yPos", gameSize.y / 1.5f);
 
@@ -168,6 +172,11 @@ public class MenuBackground : MonoBehaviour
 
     private void initializeWireworld()
     {
+        // Set background to black first
+        setColor.SetTexture(0, "Result", bottomRightCurrent);
+        setColor.SetVector("color", new Color(0, 0, 0, 1));
+        setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
+
         // Set up first 3 Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
@@ -499,9 +508,5 @@ public class MenuBackground : MonoBehaviour
             GUI.DrawTexture(BottomLeft, bottomLeftCurrent, ScaleMode.ScaleToFit);
             GUI.DrawTexture(BottomRight, bottomRightCurrent, ScaleMode.ScaleToFit);
         }
-    }
-
-    private void OnDestroy()
-    {
     }
 }
