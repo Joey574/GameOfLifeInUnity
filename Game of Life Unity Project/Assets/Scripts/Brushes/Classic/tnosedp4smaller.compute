@@ -1,0 +1,41 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+float xPos;
+float yPos;
+
+float4 color;
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	Result[int2(xPos + 4, yPos)] = color;
+	Result[int2(xPos + 5, yPos)] = color;
+	Result[int2(xPos + 6, yPos)] = color;
+	Result[int2(xPos + 3, yPos - 2)] = color;
+	Result[int2(xPos + 7, yPos - 2)] = color;
+	Result[int2(xPos + 3, yPos - 4)] = color;
+	Result[int2(xPos + 6, yPos - 4)] = color;
+	Result[int2(xPos + 2, yPos - 5)] = color;
+	Result[int2(xPos + 5, yPos - 5)] = color;
+	Result[int2(xPos + 6, yPos - 5)] = color;
+	Result[int2(xPos + 1, yPos - 6)] = color;
+	Result[int2(xPos + 3, yPos - 6)] = color;
+	Result[int2(xPos + 5, yPos - 6)] = color;
+	Result[int2(xPos + 8, yPos - 6)] = color;
+	Result[int2(xPos + 1, yPos - 7)] = color;
+	Result[int2(xPos + 3, yPos - 7)] = color;
+	Result[int2(xPos + 4, yPos - 7)] = color;
+	Result[int2(xPos + 5, yPos - 7)] = color;
+	Result[int2(xPos + 9, yPos - 7)] = color;
+	Result[int2(xPos + 2, yPos - 8)] = color;
+	Result[int2(xPos + 4, yPos - 8)] = color;
+	Result[int2(xPos + 6, yPos - 8)] = color;
+	Result[int2(xPos + 8, yPos - 8)] = color;
+	Result[int2(xPos + 3, yPos - 9)] = color;
+	Result[int2(xPos, yPos - 10)] = color;
+	Result[int2(xPos + 1, yPos - 10)] = color;
+	Result[int2(xPos + 2, yPos - 10)] = color;
+	Result[int2(xPos, yPos - 11)] = color;
+}

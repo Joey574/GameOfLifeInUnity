@@ -30,6 +30,9 @@ public class MenuBackground : MonoBehaviour
 
     private RenderTexture backgroundTexture;
 
+    [Header("Public Adjustments")]
+    public int simSteps = 0;
+
     [Header("Private Variables")]
     private Vector2 gameSize;
     private Vector2 screen;
@@ -38,7 +41,6 @@ public class MenuBackground : MonoBehaviour
     private int threadDispatchX;
     private int threadDispatchY;
 
-    private int simSteps = 0;
 
     private bool initialized = false;
     private bool stepCalled = false;
@@ -164,8 +166,8 @@ public class MenuBackground : MonoBehaviour
         setColor.SetVector("color", new Color(0,0,0, 1));
         setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
 
-        Brushes[4].SetFloat("xPos", gameSize.x / 3);
-        Brushes[4].SetFloat("yPos", gameSize.y / 1.5f);
+        Brushes[4].SetFloat("xPos", gameSize.x / 2 - 40);
+        Brushes[4].SetFloat("yPos", gameSize.y / 2 - 20);
 
         Brushes[4].Dispatch(0, 1, 1, 1);
     }
@@ -499,8 +501,11 @@ public class MenuBackground : MonoBehaviour
             if (!stepCalled)
             {
                 stepCalled = true;
-                IEnumerator coroutine = dispatchKernals(1.0f / simSteps);
-                StartCoroutine(coroutine);
+                if (simSteps != 0)
+                {
+                    IEnumerator coroutine = dispatchKernals(1.0f / simSteps);
+                    StartCoroutine(coroutine);
+                }
             }
 
             GUI.DrawTexture(TopLeft, topLeftCurrent, ScaleMode.ScaleToFit);

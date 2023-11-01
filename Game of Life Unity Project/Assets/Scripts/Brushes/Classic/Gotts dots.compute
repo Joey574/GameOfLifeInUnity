@@ -1,0 +1,54 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+float xPos;
+float yPos;
+
+float4 color;
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	Result[int2(xPos, yPos)] = color;
+	Result[int2(xPos, yPos - 1)] = color;
+	Result[int2(xPos, yPos - 2)] = color;
+	Result[int2(xPos + 4, yPos - 11)] = color;
+	Result[int2(xPos + 8, yPos - 11)] = color;
+	Result[int2(xPos + 5, yPos - 12)] = color;
+	Result[int2(xPos + 7, yPos - 12)] = color;
+	Result[int2(xPos + 6, yPos - 13)] = color;
+	Result[int2(xPos + 9, yPos - 13)] = color;
+	Result[int2(xPos + 9, yPos - 14)] = color;
+	Result[int2(xPos + 9, yPos - 15)] = color;
+	Result[int2(xPos + 185, yPos - 24)] = color;
+	Result[int2(xPos + 186, yPos - 25)] = color;
+	Result[int2(xPos + 182, yPos - 26)] = color;
+	Result[int2(xPos + 186, yPos - 26)] = color;
+	Result[int2(xPos + 183, yPos - 27)] = color;
+	Result[int2(xPos + 184, yPos - 27)] = color;
+	Result[int2(xPos + 185, yPos - 27)] = color;
+	Result[int2(xPos + 186, yPos - 27)] = color;
+	Result[int2(xPos + 179, yPos - 28)] = color;
+	Result[int2(xPos + 180, yPos - 29)] = color;
+	Result[int2(xPos + 181, yPos - 29)] = color;
+	Result[int2(xPos + 179, yPos - 30)] = color;
+	Result[int2(xPos + 183, yPos - 31)] = color;
+	Result[int2(xPos + 184, yPos - 31)] = color;
+	Result[int2(xPos + 185, yPos - 31)] = color;
+	Result[int2(xPos + 186, yPos - 31)] = color;
+	Result[int2(xPos + 182, yPos - 32)] = color;
+	Result[int2(xPos + 186, yPos - 32)] = color;
+	Result[int2(xPos + 186, yPos - 33)] = color;
+	Result[int2(xPos + 185, yPos - 34)] = color;
+	Result[int2(xPos + 175, yPos - 35)] = color;
+	Result[int2(xPos + 176, yPos - 36)] = color;
+	Result[int2(xPos + 170, yPos - 37)] = color;
+	Result[int2(xPos + 176, yPos - 37)] = color;
+	Result[int2(xPos + 171, yPos - 38)] = color;
+	Result[int2(xPos + 172, yPos - 38)] = color;
+	Result[int2(xPos + 173, yPos - 38)] = color;
+	Result[int2(xPos + 174, yPos - 38)] = color;
+	Result[int2(xPos + 175, yPos - 38)] = color;
+	Result[int2(xPos + 176, yPos - 38)] = color;
+}

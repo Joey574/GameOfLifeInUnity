@@ -1,0 +1,79 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+float xPos;
+float yPos;
+
+float4 color;
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	Result[int2(xPos + 152, yPos)] = color;
+	Result[int2(xPos + 152, yPos - 1)] = color;
+	Result[int2(xPos + 152, yPos - 2)] = color;
+	Result[int2(xPos + 148, yPos - 4)] = color;
+	Result[int2(xPos + 149, yPos - 4)] = color;
+	Result[int2(xPos + 150, yPos - 4)] = color;
+	Result[int2(xPos + 154, yPos - 4)] = color;
+	Result[int2(xPos + 155, yPos - 4)] = color;
+	Result[int2(xPos + 156, yPos - 4)] = color;
+	Result[int2(xPos + 138, yPos - 6)] = color;
+	Result[int2(xPos + 152, yPos - 6)] = color;
+	Result[int2(xPos + 138, yPos - 7)] = color;
+	Result[int2(xPos + 152, yPos - 7)] = color;
+	Result[int2(xPos + 72, yPos - 8)] = color;
+	Result[int2(xPos + 74, yPos - 8)] = color;
+	Result[int2(xPos + 138, yPos - 8)] = color;
+	Result[int2(xPos + 152, yPos - 8)] = color;
+	Result[int2(xPos + 72, yPos - 9)] = color;
+	Result[int2(xPos + 73, yPos - 9)] = color;
+	Result[int2(xPos + 2, yPos - 10)] = color;
+	Result[int2(xPos + 73, yPos - 10)] = color;
+	Result[int2(xPos + 3, yPos - 11)] = color;
+	Result[int2(xPos + 58, yPos - 11)] = color;
+	Result[int2(xPos + 75, yPos - 11)] = color;
+	Result[int2(xPos + 76, yPos - 11)] = color;
+	Result[int2(xPos + 1, yPos - 12)] = color;
+	Result[int2(xPos + 2, yPos - 12)] = color;
+	Result[int2(xPos + 3, yPos - 12)] = color;
+	Result[int2(xPos + 58, yPos - 12)] = color;
+	Result[int2(xPos + 75, yPos - 12)] = color;
+	Result[int2(xPos + 77, yPos - 12)] = color;
+	Result[int2(xPos + 138, yPos - 12)] = color;
+	Result[int2(xPos + 58, yPos - 13)] = color;
+	Result[int2(xPos + 75, yPos - 13)] = color;
+	Result[int2(xPos + 133, yPos - 13)] = color;
+	Result[int2(xPos + 134, yPos - 13)] = color;
+	Result[int2(xPos + 137, yPos - 13)] = color;
+	Result[int2(xPos + 138, yPos - 13)] = color;
+	Result[int2(xPos + 132, yPos - 14)] = color;
+	Result[int2(xPos + 134, yPos - 14)] = color;
+	Result[int2(xPos + 137, yPos - 14)] = color;
+	Result[int2(xPos + 139, yPos - 14)] = color;
+	Result[int2(xPos + 134, yPos - 15)] = color;
+	Result[int2(xPos + 143, yPos - 16)] = color;
+	Result[int2(xPos + 144, yPos - 16)] = color;
+	Result[int2(xPos, yPos - 17)] = color;
+	Result[int2(xPos + 143, yPos - 17)] = color;
+	Result[int2(xPos + 144, yPos - 17)] = color;
+	Result[int2(xPos + 1, yPos - 18)] = color;
+	Result[int2(xPos + 2, yPos - 18)] = color;
+	Result[int2(xPos, yPos - 19)] = color;
+	Result[int2(xPos + 1, yPos - 19)] = color;
+	Result[int2(xPos + 63, yPos - 21)] = color;
+	Result[int2(xPos + 64, yPos - 21)] = color;
+	Result[int2(xPos + 136, yPos - 21)] = color;
+	Result[int2(xPos + 137, yPos - 21)] = color;
+	Result[int2(xPos + 138, yPos - 21)] = color;
+	Result[int2(xPos, yPos - 22)] = color;
+	Result[int2(xPos + 1, yPos - 22)] = color;
+	Result[int2(xPos + 2, yPos - 22)] = color;
+	Result[int2(xPos + 63, yPos - 22)] = color;
+	Result[int2(xPos + 64, yPos - 22)] = color;
+	Result[int2(xPos + 136, yPos - 22)] = color;
+	Result[int2(xPos + 2, yPos - 23)] = color;
+	Result[int2(xPos + 137, yPos - 23)] = color;
+	Result[int2(xPos + 1, yPos - 24)] = color;
+}

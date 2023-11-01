@@ -1,0 +1,99 @@
+#pragma kernel CSMain
+
+RWTexture2D<float4> Result;
+
+float xPos;
+float yPos;
+
+float4 color;
+
+[numthreads(1, 1, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID)
+{
+	Result[int2(xPos + 11, yPos - 1)] = color;
+	Result[int2(xPos + 12, yPos - 1)] = color;
+	Result[int2(xPos + 19, yPos - 1)] = color;
+	Result[int2(xPos + 24, yPos - 1)] = color;
+	Result[int2(xPos + 25, yPos - 1)] = color;
+	Result[int2(xPos + 34, yPos - 1)] = color;
+	Result[int2(xPos + 35, yPos - 1)] = color;
+	Result[int2(xPos + 45, yPos - 1)] = color;
+	Result[int2(xPos + 46, yPos - 1)] = color;
+	Result[int2(xPos + 11, yPos - 2)] = color;
+	Result[int2(xPos + 13, yPos - 2)] = color;
+	Result[int2(xPos + 18, yPos - 2)] = color;
+	Result[int2(xPos + 19, yPos - 2)] = color;
+	Result[int2(xPos + 24, yPos - 2)] = color;
+	Result[int2(xPos + 26, yPos - 2)] = color;
+	Result[int2(xPos + 34, yPos - 2)] = color;
+	Result[int2(xPos + 35, yPos - 2)] = color;
+	Result[int2(xPos + 45, yPos - 2)] = color;
+	Result[int2(xPos + 46, yPos - 2)] = color;
+	Result[int2(xPos + 12, yPos - 3)] = color;
+	Result[int2(xPos + 13, yPos - 3)] = color;
+	Result[int2(xPos + 18, yPos - 3)] = color;
+	Result[int2(xPos + 20, yPos - 3)] = color;
+	Result[int2(xPos + 25, yPos - 3)] = color;
+	Result[int2(xPos + 26, yPos - 3)] = color;
+	Result[int2(xPos + 39, yPos - 53)] = color;
+	Result[int2(xPos + 40, yPos - 53)] = color;
+	Result[int2(xPos + 41, yPos - 53)] = color;
+	Result[int2(xPos + 39, yPos - 54)] = color;
+	Result[int2(xPos + 42, yPos - 54)] = color;
+	Result[int2(xPos + 39, yPos - 55)] = color;
+	Result[int2(xPos + 39, yPos - 56)] = color;
+	Result[int2(xPos + 40, yPos - 57)] = color;
+	Result[int2(xPos + 42, yPos - 57)] = color;
+	Result[int2(xPos + 95, yPos - 72)] = color;
+	Result[int2(xPos + 96, yPos - 72)] = color;
+	Result[int2(xPos + 95, yPos - 73)] = color;
+	Result[int2(xPos + 97, yPos - 73)] = color;
+	Result[int2(xPos + 96, yPos - 74)] = color;
+	Result[int2(xPos + 98, yPos - 74)] = color;
+	Result[int2(xPos + 97, yPos - 75)] = color;
+	Result[int2(xPos + 98, yPos - 75)] = color;
+	Result[int2(xPos + 1, yPos - 78)] = color;
+	Result[int2(xPos + 2, yPos - 78)] = color;
+	Result[int2(xPos + 1, yPos - 79)] = color;
+	Result[int2(xPos + 3, yPos - 79)] = color;
+	Result[int2(xPos + 2, yPos - 80)] = color;
+	Result[int2(xPos + 4, yPos - 80)] = color;
+	Result[int2(xPos + 3, yPos - 81)] = color;
+	Result[int2(xPos + 4, yPos - 81)] = color;
+	Result[int2(xPos + 95, yPos - 85)] = color;
+	Result[int2(xPos + 96, yPos - 85)] = color;
+	Result[int2(xPos + 95, yPos - 86)] = color;
+	Result[int2(xPos + 97, yPos - 86)] = color;
+	Result[int2(xPos + 96, yPos - 87)] = color;
+	Result[int2(xPos + 98, yPos - 87)] = color;
+	Result[int2(xPos + 97, yPos - 88)] = color;
+	Result[int2(xPos + 98, yPos - 88)] = color;
+	Result[int2(xPos + 1, yPos - 91)] = color;
+	Result[int2(xPos + 2, yPos - 91)] = color;
+	Result[int2(xPos + 1, yPos - 92)] = color;
+	Result[int2(xPos + 3, yPos - 92)] = color;
+	Result[int2(xPos + 2, yPos - 93)] = color;
+	Result[int2(xPos + 4, yPos - 93)] = color;
+	Result[int2(xPos + 3, yPos - 94)] = color;
+	Result[int2(xPos + 4, yPos - 94)] = color;
+	Result[int2(xPos + 6, yPos - 96)] = color;
+	Result[int2(xPos + 7, yPos - 96)] = color;
+	Result[int2(xPos + 19, yPos - 96)] = color;
+	Result[int2(xPos + 20, yPos - 96)] = color;
+	Result[int2(xPos + 6, yPos - 97)] = color;
+	Result[int2(xPos + 8, yPos - 97)] = color;
+	Result[int2(xPos + 19, yPos - 97)] = color;
+	Result[int2(xPos + 21, yPos - 97)] = color;
+	Result[int2(xPos + 34, yPos - 97)] = color;
+	Result[int2(xPos + 35, yPos - 97)] = color;
+	Result[int2(xPos + 45, yPos - 97)] = color;
+	Result[int2(xPos + 46, yPos - 97)] = color;
+	Result[int2(xPos + 7, yPos - 98)] = color;
+	Result[int2(xPos + 8, yPos - 98)] = color;
+	Result[int2(xPos + 20, yPos - 98)] = color;
+	Result[int2(xPos + 21, yPos - 98)] = color;
+	Result[int2(xPos + 34, yPos - 98)] = color;
+	Result[int2(xPos + 35, yPos - 98)] = color;
+	Result[int2(xPos + 45, yPos - 98)] = color;
+	Result[int2(xPos + 46, yPos - 98)] = color;
+}
