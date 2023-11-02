@@ -146,8 +146,10 @@ public class MenuBackground : MonoBehaviour
         WireworldBrushes[3].SetTexture(0, "Result", bottomRightCurrent);
 
         ClassicBrushes[0].SetTexture(0, "Result", topLeftCurrent);
+        ClassicBrushes[1].SetTexture(0, "Result", topLeftCurrent);
 
         ClassicBrushes[0].SetVector("color", Color.white);
+        ClassicBrushes[1].SetVector("color", Color.white);
 
         initializeBackground();
     }
@@ -170,10 +172,22 @@ public class MenuBackground : MonoBehaviour
         setColor.SetVector("color", new Color(0,0,0, 1));
         setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
 
-        ClassicBrushes[0].SetFloat("xPos", gameSize.x / 2);
-        ClassicBrushes[0].SetFloat("yPos", gameSize.y / 2);
+        ClassicBrushes[0].SetBool("lr", true);
+        ClassicBrushes[0].SetFloat("xPos", 30);
 
+        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 5);
         ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+
+        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 25);
+        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+
+        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 45);
+        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+
+        ClassicBrushes[1].SetFloat("xPos", 40);
+        ClassicBrushes[1].SetFloat("yPos", gameSize.y / 2);
+
+        ClassicBrushes[1].Dispatch(0, 1, 1, 1);
     }
 
     private void initializeWireworld()

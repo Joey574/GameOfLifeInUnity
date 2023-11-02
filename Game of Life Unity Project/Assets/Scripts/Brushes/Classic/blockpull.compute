@@ -26,13 +26,13 @@ void CSMain(uint3 id : SV_DispatchThreadID)
         yMult = -1;
     }
 
-	Result[int2((xPos) * xMult), (yPos) * yMult)] = color;
-	Result[int2((xPos + 1)) * xMult), (yPos) * yMult)] = color;
-	Result[int2((xPos) * xMult), (yPos - 1)) * yMult)] = color;
-	Result[int2((xPos + 1)) * xMult), (yPos - 1)) * yMult)] = color;
-	Result[int2((xPos + 10)) * xMult), (yPos - 16)) * yMult)] = color;
-	Result[int2((xPos + 11)) * xMult), (yPos - 16)) * yMult)] = color;
-	Result[int2((xPos + 12)) * xMult), (yPos - 16)) * yMult)] = color;
-	Result[int2((xPos + 10)) * xMult), (yPos - 17)) * yMult)] = color;
-	Result[int2((xPos + 11)) * xMult), (yPos - 18)) * yMult)] = color;
+	Result[int2(xPos, yPos)] = color;
+	Result[int2(xPos + (1 * xMult), yPos)] = color;
+	Result[int2(xPos, yPos - (1 * yMult))] = color;
+	Result[int2(xPos + (1 * xMult), yPos - (1 * yMult))] = color;
+	Result[int2(xPos + (10 * xMult), yPos - (16 * yMult))] = color;
+	Result[int2(xPos + (11 * xMult), yPos - (16 * yMult))] = color;
+	Result[int2(xPos + (12 * xMult), yPos - (16 * yMult))] = color;
+	Result[int2(xPos + (10 * xMult), yPos - (17 * yMult))] = color;
+	Result[int2(xPos + (11 * xMult), yPos - (18 * yMult))] = color;
 }

@@ -241,7 +241,8 @@ MonoBehaviour:
   setCurrentTextureBottomLeft: {fileID: 7200000, guid: 3e909e560b5aba340a951a74dfbb2a3b, type: 3}
   setCurrentTextureBottomRight: {fileID: 7200000, guid: a141fbcd723f97244b039747b64b98fb, type: 3}
   ClassicBrushes:
-  - {fileID: 7200000, guid: 6d809a3ca0fac054d97e56a12d85557f, type: 3}
+  - {fileID: 7200000, guid: 701fffc846f72b744a2d09302b9e35d3, type: 3}
+  - {fileID: 7200000, guid: 90cba1209d601144cae8abea5c13ebd5, type: 3}
   InfectionBrushes: []
   BattleBrushes: []
   WireworldBrushes:
