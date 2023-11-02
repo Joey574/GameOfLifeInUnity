@@ -7,8 +7,24 @@ float yPos;
 
 float4 color;
 
+bool lr;
+bool ud;
+
 [numthreads(1, 1, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-	Result[int2(xPos, yPos)] = color;
+    float xMult = 1;
+    float yMult = 1;
+	
+    if (lr)
+    {
+        xMult = -1;
+    }
+	
+    if (ud)
+    {
+        yMult = -1;
+    }
+
+	Result[int2((xPos) * xMult), (yPos) * yMult)] = color;
 }

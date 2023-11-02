@@ -7,33 +7,49 @@ float yPos;
 
 float4 color;
 
+bool lr;
+bool ud;
+
 [numthreads(1, 1, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-	Result[int2(xPos + 1, yPos)] = color;
-	Result[int2(xPos + 2, yPos)] = color;
-	Result[int2(xPos, yPos - 1)] = color;
-	Result[int2(xPos + 1, yPos - 1)] = color;
-	Result[int2(xPos + 1, yPos - 2)] = color;
-	Result[int2(xPos + 16, yPos - 31)] = color;
-	Result[int2(xPos + 15, yPos - 32)] = color;
-	Result[int2(xPos + 17, yPos - 32)] = color;
-	Result[int2(xPos + 15, yPos - 33)] = color;
-	Result[int2(xPos + 14, yPos - 34)] = color;
-	Result[int2(xPos + 16187, yPos - 15058)] = color;
-	Result[int2(xPos + 16191, yPos - 15058)] = color;
-	Result[int2(xPos + 16188, yPos - 15059)] = color;
-	Result[int2(xPos + 16190, yPos - 15059)] = color;
-	Result[int2(xPos + 16189, yPos - 15060)] = color;
-	Result[int2(xPos + 16192, yPos - 15060)] = color;
-	Result[int2(xPos + 16192, yPos - 15061)] = color;
-	Result[int2(xPos + 16192, yPos - 15062)] = color;
-	Result[int2(xPos + 16159, yPos - 15083)] = color;
-	Result[int2(xPos + 16160, yPos - 15084)] = color;
-	Result[int2(xPos + 16161, yPos - 15085)] = color;
-	Result[int2(xPos + 16160, yPos - 15086)] = color;
-	Result[int2(xPos + 16159, yPos - 15087)] = color;
-	Result[int2(xPos + 16161, yPos - 15088)] = color;
-	Result[int2(xPos + 16162, yPos - 15088)] = color;
-	Result[int2(xPos + 16163, yPos - 15088)] = color;
+    float xMult = 1;
+    float yMult = 1;
+	
+    if (lr)
+    {
+        xMult = -1;
+    }
+	
+    if (ud)
+    {
+        yMult = -1;
+    }
+
+	Result[int2((xPos + 1)) * xMult), (yPos) * yMult)] = color;
+	Result[int2((xPos + 2)) * xMult), (yPos) * yMult)] = color;
+	Result[int2((xPos) * xMult), (yPos - 1)) * yMult)] = color;
+	Result[int2((xPos + 1)) * xMult), (yPos - 1)) * yMult)] = color;
+	Result[int2((xPos + 1)) * xMult), (yPos - 2)) * yMult)] = color;
+	Result[int2((xPos + 16)) * xMult), (yPos - 31)) * yMult)] = color;
+	Result[int2((xPos + 15)) * xMult), (yPos - 32)) * yMult)] = color;
+	Result[int2((xPos + 17)) * xMult), (yPos - 32)) * yMult)] = color;
+	Result[int2((xPos + 15)) * xMult), (yPos - 33)) * yMult)] = color;
+	Result[int2((xPos + 14)) * xMult), (yPos - 34)) * yMult)] = color;
+	Result[int2((xPos + 16187)) * xMult), (yPos - 15058)) * yMult)] = color;
+	Result[int2((xPos + 16191)) * xMult), (yPos - 15058)) * yMult)] = color;
+	Result[int2((xPos + 16188)) * xMult), (yPos - 15059)) * yMult)] = color;
+	Result[int2((xPos + 16190)) * xMult), (yPos - 15059)) * yMult)] = color;
+	Result[int2((xPos + 16189)) * xMult), (yPos - 15060)) * yMult)] = color;
+	Result[int2((xPos + 16192)) * xMult), (yPos - 15060)) * yMult)] = color;
+	Result[int2((xPos + 16192)) * xMult), (yPos - 15061)) * yMult)] = color;
+	Result[int2((xPos + 16192)) * xMult), (yPos - 15062)) * yMult)] = color;
+	Result[int2((xPos + 16159)) * xMult), (yPos - 15083)) * yMult)] = color;
+	Result[int2((xPos + 16160)) * xMult), (yPos - 15084)) * yMult)] = color;
+	Result[int2((xPos + 16161)) * xMult), (yPos - 15085)) * yMult)] = color;
+	Result[int2((xPos + 16160)) * xMult), (yPos - 15086)) * yMult)] = color;
+	Result[int2((xPos + 16159)) * xMult), (yPos - 15087)) * yMult)] = color;
+	Result[int2((xPos + 16161)) * xMult), (yPos - 15088)) * yMult)] = color;
+	Result[int2((xPos + 16162)) * xMult), (yPos - 15088)) * yMult)] = color;
+	Result[int2((xPos + 16163)) * xMult), (yPos - 15088)) * yMult)] = color;
 }

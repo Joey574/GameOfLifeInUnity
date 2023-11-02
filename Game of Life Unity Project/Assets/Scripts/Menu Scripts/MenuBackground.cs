@@ -15,7 +15,11 @@ public class MenuBackground : MonoBehaviour
     public ComputeShader setCurrentTextureBottomLeft;
     public ComputeShader setCurrentTextureBottomRight;
 
-    public List<ComputeShader> Brushes;
+    public List<ComputeShader> ClassicBrushes;
+    public List<ComputeShader> InfectionBrushes;
+    public List<ComputeShader> BattleBrushes;
+    public List<ComputeShader> WireworldBrushes;
+
 
     [Header("Render Textures")]
     private RenderTexture topLeftCurrent;
@@ -136,14 +140,14 @@ public class MenuBackground : MonoBehaviour
         setCurrentTextureBottomRight.SetTexture(0, "Result", bottomRightCurrent);
         setCurrentTextureBottomRight.SetTexture(0, "PreResult", bottomRightLast);
 
-        Brushes[0].SetTexture(0, "Result", bottomRightCurrent);
-        Brushes[1].SetTexture(0, "Result", bottomRightCurrent);
-        Brushes[2].SetTexture(0, "Result", bottomRightCurrent);
-        Brushes[3].SetTexture(0, "Result", bottomRightCurrent);
+        WireworldBrushes[0].SetTexture(0, "Result", bottomRightCurrent);
+        WireworldBrushes[1].SetTexture(0, "Result", bottomRightCurrent);
+        WireworldBrushes[2].SetTexture(0, "Result", bottomRightCurrent);
+        WireworldBrushes[3].SetTexture(0, "Result", bottomRightCurrent);
 
-        Brushes[4].SetTexture(0, "Result", topLeftCurrent);
-        
-        Brushes[4].SetVector("color", Color.white);
+        ClassicBrushes[0].SetTexture(0, "Result", topLeftCurrent);
+
+        ClassicBrushes[0].SetVector("color", Color.white);
 
         initializeBackground();
     }
@@ -166,10 +170,10 @@ public class MenuBackground : MonoBehaviour
         setColor.SetVector("color", new Color(0,0,0, 1));
         setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
 
-        Brushes[4].SetFloat("xPos", gameSize.x / 2 - 40);
-        Brushes[4].SetFloat("yPos", gameSize.y / 2 - 20);
+        ClassicBrushes[0].SetFloat("xPos", gameSize.x / 2);
+        ClassicBrushes[0].SetFloat("yPos", gameSize.y / 2);
 
-        Brushes[4].Dispatch(0, 1, 1, 1);
+        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
     }
 
     private void initializeWireworld()
@@ -182,227 +186,227 @@ public class MenuBackground : MonoBehaviour
         // Set up first 3 Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[0].SetFloat("xPos", 15);
-            Brushes[0].SetFloat("yPos", (gameSize.y / 2) + i);
-            Brushes[0].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[0].SetFloat("xPos", 15);
+            WireworldBrushes[0].SetFloat("yPos", (gameSize.y / 2) + i);
+            WireworldBrushes[0].Dispatch(0, 1, 1, 1);
         }
 
         // Set up 3 top repeaters for the Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[1].SetFloat("xPos", 5);
-            Brushes[1].SetFloat("yPos", (gameSize.y / 2) + i + 3);
-            Brushes[1].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[1].SetFloat("xPos", 5);
+            WireworldBrushes[1].SetFloat("yPos", (gameSize.y / 2) + i + 3);
+            WireworldBrushes[1].Dispatch(0, 1, 1, 1);
         }
 
         // Set up 3 bottom repeaters for the Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[1].SetFloat("xPos", 5);
-            Brushes[1].SetFloat("yPos", (gameSize.y / 2) + i - 3);
-            Brushes[1].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[1].SetFloat("xPos", 5);
+            WireworldBrushes[1].SetFloat("yPos", (gameSize.y / 2) + i - 3);
+            WireworldBrushes[1].Dispatch(0, 1, 1, 1);
         }
 
         // Set length of line for line tool
-        Brushes[2].SetInt("len", 4);
+        WireworldBrushes[2].SetInt("len", 4);
 
         // Set up lines connecting top repeaters and Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[2].SetFloat("xPos", 12);
-            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i + 3);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 12);
+            WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + i + 3);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set up lines connecting bottom repeaters and Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[2].SetFloat("xPos", 12);
-            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i - 3);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 12);
+            WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + i - 3);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set length of line for line tool
-        Brushes[2].SetInt("len", 8);
+        WireworldBrushes[2].SetInt("len", 8);
 
         // Set output lines for Nand gates
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[2].SetFloat("xPos", 20);
-            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 20);
+            WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set signal to be right
-        Brushes[3].SetBool("left", false);
+        WireworldBrushes[3].SetBool("left", false);
 
         // Set signals
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[3].SetFloat("xPos", 10);
-            Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i - 2);
-            Brushes[3].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[3].SetFloat("xPos", 10);
+            WireworldBrushes[3].SetFloat("yPos", (gameSize.y / 2) + i - 2);
+            WireworldBrushes[3].Dispatch(0, 1, 1, 1);
         }
 
         // Set signals
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[3].SetFloat("xPos", 10);
-            Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 4);
-            Brushes[3].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[3].SetFloat("xPos", 10);
+            WireworldBrushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 4);
+            WireworldBrushes[3].Dispatch(0, 1, 1, 1);
         }
 
         // Set signals to left
-        Brushes[3].SetBool("left", true);
+        WireworldBrushes[3].SetBool("left", true);
 
         // Set signals
         for (int i = -15; i < 16; i = i + 15)
         {
-            Brushes[3].SetFloat("xPos", 7);
-            Brushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 2);
-            Brushes[3].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[3].SetFloat("xPos", 7);
+            WireworldBrushes[3].SetFloat("yPos", (gameSize.y / 2) + i + 2);
+            WireworldBrushes[3].Dispatch(0, 1, 1, 1);
         }
 
 
         // initialize next set of nand gates
-        Brushes[0].SetFloat("xPos", (gameSize.x / 3));
-        Brushes[0].SetFloat("yPos", (gameSize.y / 2) + 8);
-        Brushes[0].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[0].SetFloat("xPos", (gameSize.x / 3));
+        WireworldBrushes[0].SetFloat("yPos", (gameSize.y / 2) + 8);
+        WireworldBrushes[0].Dispatch(0, 1, 1, 1);
 
         // Set length of line for line tool
-        Brushes[2].SetInt("len", 3);
+        WireworldBrushes[2].SetInt("len", 3);
 
         // Set input lines for the second set of Nand gates
         for (int i = 1; i < 15; i = i + 13)
         {
-            Brushes[2].SetFloat("xPos", 28);
-            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 28);
+            WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set input lines for the second set of Nand gates
         for (int i = 2; i < 14; i = i + 11)
         {
-            Brushes[2].SetFloat("xPos", 31);
-            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 31);
+            WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set length of line for line tool
-        Brushes[2].SetInt("len", 1);
+        WireworldBrushes[2].SetInt("len", 1);
 
-        Brushes[2].SetFloat("xPos", 34);
-        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 3);
-        Brushes[2].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[2].SetFloat("xPos", 34);
+        WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + 3);
+        WireworldBrushes[2].Dispatch(0, 1, 1, 1);
 
-        Brushes[2].SetFloat("xPos", 35);
-        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 12);
-        Brushes[2].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[2].SetFloat("xPos", 35);
+        WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + 12);
+        WireworldBrushes[2].Dispatch(0, 1, 1, 1);
 
-        Brushes[2].SetFloat("xPos", 34);
-        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 13);
-        Brushes[2].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[2].SetFloat("xPos", 34);
+        WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + 13);
+        WireworldBrushes[2].Dispatch(0, 1, 1, 1);
 
         // Set input lines for the second set of Nand gates
         for (int i = 4; i < 12; i = i + 7)
         {
-            Brushes[2].SetFloat("xPos", 35);
-            Brushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 35);
+            WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + i);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set input lines for the second set of Nand gates
-        Brushes[2].SetFloat("xPos", 35);
-        Brushes[2].SetFloat("yPos", (gameSize.y / 2) + 5);
-        Brushes[2].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[2].SetFloat("xPos", 35);
+        WireworldBrushes[2].SetFloat("yPos", (gameSize.y / 2) + 5);
+        WireworldBrushes[2].Dispatch(0, 1, 1, 1);
 
         // Set up last Nand Gate
-        Brushes[0].SetFloat("xPos", gameSize.x / 2);
-        Brushes[0].SetFloat("yPos", gameSize.y / 2);
-        Brushes[0].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[0].SetFloat("xPos", gameSize.x / 2);
+        WireworldBrushes[0].SetFloat("yPos", gameSize.y / 2);
+        WireworldBrushes[0].Dispatch(0, 1, 1, 1);
 
         // Set up input lines for the last Nand gate
         for (int i = 0; i < 11; i++)
         {
-            Brushes[2].SetFloat("xPos", 28 + i);
-            Brushes[2].SetFloat("yPos", 19 + i);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 28 + i);
+            WireworldBrushes[2].SetFloat("yPos", 19 + i);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
-        Brushes[2].SetInt("len", 15);
+        WireworldBrushes[2].SetInt("len", 15);
 
         // Set up input lines for the last Nand gate
-        Brushes[2].SetFloat("xPos", gameSize.x / 2 - 14);
-        Brushes[2].SetFloat("yPos", gameSize.y / 2 - 3);
-        Brushes[2].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 - 14);
+        WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 - 3);
+        WireworldBrushes[2].Dispatch(0, 1, 1, 1);
 
-        Brushes[2].SetInt("len", 10);
+        WireworldBrushes[2].SetInt("len", 10);
 
         // Set up input lines for the last Nand gate
-        Brushes[2].SetFloat("xPos", gameSize.x / 2 - 9);
-        Brushes[2].SetFloat("yPos", gameSize.y / 2 + 3);
-        Brushes[2].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 - 9);
+        WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 + 3);
+        WireworldBrushes[2].Dispatch(0, 1, 1, 1);
 
-        Brushes[2].SetInt("len", 1);
+        WireworldBrushes[2].SetInt("len", 1);
 
         // Set up input lines for the last Nand gate
         for (int i = 0; i < 4; i++)
         {
-            Brushes[2].SetFloat("xPos", 40 + i);
-            Brushes[2].SetFloat("yPos", 40 - i);
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", 40 + i);
+            WireworldBrushes[2].SetFloat("yPos", 40 - i);
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set up output lines for the last Nand gate
-        Brushes[2].SetInt("len", 48);
+        WireworldBrushes[2].SetInt("len", 48);
 
-        Brushes[2].SetFloat("xPos", gameSize.x / 2 + 5);
-        Brushes[2].SetFloat("yPos", gameSize.y / 2);
-        Brushes[2].Dispatch(0, 1, 1, 1);
+        WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 + 5);
+        WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2);
+        WireworldBrushes[2].Dispatch(0, 1, 1, 1);
 
         // Set up vertical output lines
-        Brushes[2].SetInt("len", 1);
+        WireworldBrushes[2].SetInt("len", 1);
         for (int i = 0; i < 4; i++)
         {
             for (int q = 0; q < 8 + (i * 5); q++)
             {
-                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 18 + (i * 6));
-                Brushes[2].SetFloat("yPos", gameSize.y / 2 + 1 + q);
-                Brushes[2].Dispatch(0, 1, 1, 1);
+                WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 + 18 + (i * 6));
+                WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 + 1 + q);
+                WireworldBrushes[2].Dispatch(0, 1, 1, 1);
             }
         }
 
         // Horizontal output lines
         for (int i = 0; i < 4; i++)
         {
-            Brushes[2].SetInt("len", 23 + (i * 6) - (i * 5));
+            WireworldBrushes[2].SetInt("len", 23 + (i * 6) - (i * 5));
 
-            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 5 + (i * 5));
-            Brushes[2].SetFloat("yPos", gameSize.y / 2 + 9 + (i * 5));
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 - 5 + (i * 5));
+            WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 + 9 + (i * 5));
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
         // Set up vertical output lines
-        Brushes[2].SetInt("len", 1);
+        WireworldBrushes[2].SetInt("len", 1);
         for (int i = 0; i < 4; i++)
         {
             for (int q = 0; q < 25; q++)
             {
-                Brushes[2].SetFloat("xPos", gameSize.x / 2 - 6 + (i * 5));
-                Brushes[2].SetFloat("yPos", gameSize.y / 2 + 10 + (i * 5) + q);
-                Brushes[2].Dispatch(0, 1, 1, 1);
+                WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 - 6 + (i * 5));
+                WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 + 10 + (i * 5) + q);
+                WireworldBrushes[2].Dispatch(0, 1, 1, 1);
             }
         }
 
         // Set up vertical output lines
-        Brushes[2].SetInt("len", 1);
+        WireworldBrushes[2].SetInt("len", 1);
         for (int i = 0; i < 2; i++)
         {
             for (int q = 0; q < 35; q++)
             {
-                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 42 + (i * 6));
-                Brushes[2].SetFloat("yPos", gameSize.y / 2 + 1 + q);
-                Brushes[2].Dispatch(0, 1, 1, 1);
+                WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 + 42 + (i * 6));
+                WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 + 1 + q);
+                WireworldBrushes[2].Dispatch(0, 1, 1, 1);
             }
         }
 
@@ -410,30 +414,30 @@ public class MenuBackground : MonoBehaviour
         {
             for (int q = 0; q < 8 + (i * 5); q++)
             {
-                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 10 + (i * 5));
-                Brushes[2].SetFloat("yPos", gameSize.y / 2 - 1 - q);
-                Brushes[2].Dispatch(0, 1, 1, 1);
+                WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 + 10 + (i * 5));
+                WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 - 1 - q);
+                WireworldBrushes[2].Dispatch(0, 1, 1, 1);
             }
         }
 
-        Brushes[2].SetInt("len", 17);
+        WireworldBrushes[2].SetInt("len", 17);
 
         for (int i = 0; i < 3; i++)
         {
-            Brushes[2].SetFloat("xPos", gameSize.x / 2 - 7 + (i * 5));
-            Brushes[2].SetFloat("yPos", gameSize.y / 2 - 9 - (i * 5));
-            Brushes[2].Dispatch(0, 1, 1, 1);
+            WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 - 7 + (i * 5));
+            WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 - 9 - (i * 5));
+            WireworldBrushes[2].Dispatch(0, 1, 1, 1);
         }
 
-        Brushes[2].SetInt("len", 1);
+        WireworldBrushes[2].SetInt("len", 1);
 
         for (int i = 0; i < 3; i++)
         {
             for (int q = 0; q < 35; q++)
             {
-                Brushes[2].SetFloat("xPos", gameSize.x / 2 - 8 + (i * 5));
-                Brushes[2].SetFloat("yPos", gameSize.y / 2 - 10 - q - (i * 5));
-                Brushes[2].Dispatch(0, 1, 1, 1);
+                WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 - 8 + (i * 5));
+                WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 - 10 - q - (i * 5));
+                WireworldBrushes[2].Dispatch(0, 1, 1, 1);
             }
         }
 
@@ -441,9 +445,9 @@ public class MenuBackground : MonoBehaviour
         {
             for (int q = 0; q < 35; q++)
             {
-                Brushes[2].SetFloat("xPos", gameSize.x / 2 + 27 + (i * 6));
-                Brushes[2].SetFloat("yPos", gameSize.y / 2 - 1 - q);
-                Brushes[2].Dispatch(0, 1, 1, 1);
+                WireworldBrushes[2].SetFloat("xPos", gameSize.x / 2 + 27 + (i * 6));
+                WireworldBrushes[2].SetFloat("yPos", gameSize.y / 2 - 1 - q);
+                WireworldBrushes[2].Dispatch(0, 1, 1, 1);
             }
         }
 
