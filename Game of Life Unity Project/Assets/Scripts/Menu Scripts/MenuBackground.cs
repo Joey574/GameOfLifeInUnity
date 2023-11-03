@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
 
 public class MenuBackground : MonoBehaviour
 {
@@ -47,7 +48,6 @@ public class MenuBackground : MonoBehaviour
     private int threadDispatchX;
     private int threadDispatchY;
 
-
     private bool initialized = false;
     private bool stepCalled = false;
 
@@ -70,7 +70,7 @@ public class MenuBackground : MonoBehaviour
 
         initialized = true;
 
-        IEnumerator coroutine = dispatchSquare(130f / simSteps);
+        IEnumerator coroutine = dispatchSquare(127f / simSteps);
         StartCoroutine(coroutine);
     }
 
@@ -146,13 +146,16 @@ public class MenuBackground : MonoBehaviour
         setCurrentTextureBottomRight.SetTexture(0, "Result", bottomRightCurrent);
         setCurrentTextureBottomRight.SetTexture(0, "PreResult", bottomRightLast);
 
+        ClassicBrushes[0].SetTexture(0, "Result", topLeftCurrent);
+        ClassicBrushes[0].SetVector("color", Color.white);
+
+        InfectionBrushes[0].SetTexture(0, "Result", topRightCurrent);
+        InfectionBrushes[1].SetTexture(0, "Result", topRightCurrent);
+
         WireworldBrushes[0].SetTexture(0, "Result", bottomRightCurrent);
         WireworldBrushes[1].SetTexture(0, "Result", bottomRightCurrent);
         WireworldBrushes[2].SetTexture(0, "Result", bottomRightCurrent);
         WireworldBrushes[3].SetTexture(0, "Result", bottomRightCurrent);
-
-        ClassicBrushes[0].SetTexture(0, "Result", topLeftCurrent);
-        ClassicBrushes[0].SetVector("color", Color.white);
 
         initializeBackground();
     }
@@ -164,13 +167,16 @@ public class MenuBackground : MonoBehaviour
 
         setColor.Dispatch(0, 1, 1, 1);
 
-        initializeWireworld();
-
         initializeClassic();
+
+        initializeInfection();
+
+        initializeWireworld();
     }
 
     private void initializeClassic()
     {
+        // Set background to black first
         setColor.SetTexture(0, "Result", topLeftCurrent);
         setColor.SetVector("color", new Color(0,0,0, 1));
         setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
@@ -200,6 +206,56 @@ public class MenuBackground : MonoBehaviour
 
         ClassicBrushes[0].SetFloat("yPos", gameSize.y - 45);
         ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+    }
+
+    private void initializeInfection()
+    {
+        // Set background to black first
+        setColor.SetTexture(0, "Result", topRightCurrent);
+        setColor.SetVector("color", new Color(0, 0, 0, 1));
+        setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
+
+
+        Color live = new Color(1, 1, 1, 1);
+        Color infected = new Color(0, 1, 0, 1);
+
+        // Initialize Space rake
+        InfectionBrushes[0].SetBool("lr", false);
+        InfectionBrushes[0].SetBool("ud", true);
+
+        InfectionBrushes[0].SetVector("color", infected);
+
+        InfectionBrushes[0].SetFloat("xPos", 2);
+        InfectionBrushes[0].SetFloat("yPos", gameSize.y / 2 + 10);
+
+        InfectionBrushes[0].Dispatch(0, 1, 1, 1);
+
+        InfectionBrushes[0].SetFloat("yPos", gameSize.y / 2 - 10);
+
+        InfectionBrushes[0].SetBool("ud", false);
+        InfectionBrushes[0].Dispatch(0, 1, 1, 1);
+
+        // Initialize bunnies
+        InfectionBrushes[1].SetBool("lr", false);
+        InfectionBrushes[1].SetBool("ud", false);
+
+        InfectionBrushes[1].SetVector("color", live);
+
+        Unity.Mathematics.Random rn = new Unity.Mathematics.Random();
+        rn.state = (uint)DateTime.Now.Ticks;
+
+        int num = rn.NextInt(3, 8);
+
+        for (int i = 0; i < num; i++)
+        {
+            int x = rn.NextInt((int)gameSize.x / 2, (int)gameSize.x - 10);
+            int y = rn.NextInt(10, (int)gameSize.y - 10);
+
+            InfectionBrushes[1].SetFloat("xPos", x);
+            InfectionBrushes[1].SetFloat("yPos", y);
+
+            InfectionBrushes[1].Dispatch(0, 1, 1, 1);
+        }
     }
 
     private void initializeWireworld()
@@ -526,7 +582,25 @@ public class MenuBackground : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
 
+        Unity.Mathematics.Random rn = new Unity.Mathematics.Random();
+        rn.state = (uint)DateTime.Now.Ticks;
+
         Shapes[0].SetTexture(0, "Result", topLeftCurrent);
+        Shapes[0].SetVector("color", Color.white);
+        Shapes[0].SetInt("radius", 3);
+
+        int num = rn.NextInt(15, 35);
+
+       for (int i = 0; i < num; i++)
+       {
+            int x = rn.NextInt((int)gameSize.x);
+            int y = rn.NextInt((int)gameSize.y);
+
+            Shapes[0].SetFloat("xPos", x);
+            Shapes[0].SetFloat("yPos", y);
+
+            Shapes[0].Dispatch(0, 1, 1, 1);
+       }
     }
 
     public void DrawGUI()
