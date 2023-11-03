@@ -20,6 +20,7 @@ public class MenuBackground : MonoBehaviour
     public List<ComputeShader> BattleBrushes;
     public List<ComputeShader> WireworldBrushes;
 
+    public List<ComputeShader> Shapes;
 
     [Header("Render Textures")]
     private RenderTexture topLeftCurrent;
@@ -36,6 +37,7 @@ public class MenuBackground : MonoBehaviour
 
     [Header("Public Adjustments")]
     public int simSteps = 0;
+    public int gen;
 
     [Header("Private Variables")]
     private Vector2 gameSize;
@@ -67,8 +69,12 @@ public class MenuBackground : MonoBehaviour
         threadDispatchY = Mathf.CeilToInt(TopLeft.height / threadGroup);
 
         initialized = true;
+
+        IEnumerator coroutine = dispatchSquare(130f / simSteps);
+        StartCoroutine(coroutine);
     }
 
+   
     private void initializeTextures()
     {
         topLeftCurrent = new RenderTexture((int)gameSize.x, (int)gameSize.y, 0);
@@ -146,10 +152,7 @@ public class MenuBackground : MonoBehaviour
         WireworldBrushes[3].SetTexture(0, "Result", bottomRightCurrent);
 
         ClassicBrushes[0].SetTexture(0, "Result", topLeftCurrent);
-        ClassicBrushes[1].SetTexture(0, "Result", topLeftCurrent);
-
         ClassicBrushes[0].SetVector("color", Color.white);
-        ClassicBrushes[1].SetVector("color", Color.white);
 
         initializeBackground();
     }
@@ -172,6 +175,7 @@ public class MenuBackground : MonoBehaviour
         setColor.SetVector("color", new Color(0,0,0, 1));
         setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
 
+        // left to right ships
         ClassicBrushes[0].SetBool("lr", true);
         ClassicBrushes[0].SetFloat("xPos", 30);
 
@@ -184,10 +188,18 @@ public class MenuBackground : MonoBehaviour
         ClassicBrushes[0].SetFloat("yPos", gameSize.y - 45);
         ClassicBrushes[0].Dispatch(0, 1, 1, 1);
 
-        ClassicBrushes[1].SetFloat("xPos", 40);
-        ClassicBrushes[1].SetFloat("yPos", gameSize.y / 2);
+        // right to left ships
+        ClassicBrushes[0].SetBool("lr", false);
+        ClassicBrushes[0].SetFloat("xPos", gameSize.x - 35);
 
-        ClassicBrushes[1].Dispatch(0, 1, 1, 1);
+        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 5);
+        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+
+        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 25);
+        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+
+        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 45);
+        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
     }
 
     private void initializeWireworld()
@@ -510,6 +522,13 @@ public class MenuBackground : MonoBehaviour
         stepCalled = false;
     }
 
+    private IEnumerator dispatchSquare(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+        Shapes[0].SetTexture(0, "Result", topLeftCurrent);
+    }
+
     public void DrawGUI()
     {
         GUI.DrawTexture(new Rect(0, 0, screen.x, screen.y), backgroundTexture, ScaleMode.StretchToFill);
@@ -519,11 +538,9 @@ public class MenuBackground : MonoBehaviour
             if (!stepCalled)
             {
                 stepCalled = true;
-                if (simSteps != 0)
-                {
-                    IEnumerator coroutine = dispatchKernals(1.0f / simSteps);
-                    StartCoroutine(coroutine);
-                }
+
+                IEnumerator coroutine = dispatchKernals(1.0f / simSteps);
+                StartCoroutine(coroutine);
             }
 
             GUI.DrawTexture(TopLeft, topLeftCurrent, ScaleMode.ScaleToFit);
