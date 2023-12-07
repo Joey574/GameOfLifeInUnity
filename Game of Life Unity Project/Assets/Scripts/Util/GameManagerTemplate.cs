@@ -96,9 +96,6 @@ public abstract class GameManagerTemplate : MonoBehaviour
         setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
         setCurrentTexture.SetTexture(0, "Result", currentTexture);
 
-        setPreTexture.SetTexture(0, "PreResult", lastTexture);
-        setPreTexture.SetTexture(0, "Result", currentTexture);
-
         toggleCellState.SetTexture(0, "Result", currentTexture);
 
         handleAdjustmentsThread = new Thread(() => handleAdjustements());
@@ -141,9 +138,6 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected IEnumerator dispatchKernals(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-
-        setPreTexture.Dispatch(0, threadDispatchX,
-            threadDispatchY, 1);
 
         setCurrentTexture.Dispatch(0, threadDispatchX,
             threadDispatchY, 1);

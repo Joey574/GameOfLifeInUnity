@@ -2,7 +2,6 @@
 
 RWTexture2D<float4> Result;
 
-bool paint;
 bool alive;
 bool infected;
 
@@ -16,23 +15,20 @@ void CSMain(uint3 id : SV_DispatchThreadID)
 {
     radius -= 0.25f;
     
-    if (paint)
+    if (id.x >= mousePosX - radius && id.x <= mousePosX + radius
+        && id.y >= mousePosY - radius && id.y <= mousePosY + radius)
     {
-        if (id.x >= mousePosX - radius && id.x <= mousePosX + radius
-            && id.y >= mousePosY - radius && id.y <= mousePosY + radius)
+        if (alive)
         {
-            if (alive)
-            {
-                Result[id.xy] = float4(1, 1, 1, 1);
-            }
-            else if (infected)
-            {
-                Result[id.xy] = float4(0, 1, 0, 1);
-            }
-            else
-            {
-                Result[id.xy] = float4(0, 0, 0, 1);
-            }
+            Result[id.xy] = float4(1, 1, 1, 1);
+        }
+        else if (infected)
+        {
+            Result[id.xy] = float4(0, 1, 0, 1);
+        }
+        else
+        {
+            Result[id.xy] = float4(0, 0, 0, 1);
         }
     }
 }

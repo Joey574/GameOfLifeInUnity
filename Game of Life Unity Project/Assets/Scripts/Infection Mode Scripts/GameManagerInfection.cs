@@ -88,7 +88,6 @@ public class GameManagerInfection : GameManagerTemplate
                 float mouseX = Input.mousePosition.x * screenAdjustX * scale.x + (offset.x * textureWidth);
                 float mouseY = Input.mousePosition.y * screenAdjustY * scale.y + (offset.y * textureHeight);
 
-                toggleCellState.SetBool("paint", paint);
                 toggleCellState.SetBool("alive", alive);
                 toggleCellState.SetBool("infected", infected);
                 toggleCellState.SetFloat("radius", radius);

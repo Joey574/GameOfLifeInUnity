@@ -10,6 +10,8 @@ void CSMain (uint3 id : SV_DispatchThreadID)
 {
     float r = 0;
     
+    PreResult = Result;    
+    
     r += PreResult[int2(id.x, id.y)].r / color.r;
     r += PreResult[int2(id.x + 1, id.y)].r / color.r;
     r += PreResult[int2(id.x - 1, id.y)].r / color.r;
