@@ -8,13 +8,14 @@ using System;
 public class MenuBackground : MonoBehaviour
 {
     [Header("Public Scripts")]
-    public ComputeShader setPreTexture;
     public ComputeShader setColor;
 
     public ComputeShader setCurrentTextureTopLeft;
     public ComputeShader setCurrentTextureTopRight;
     public ComputeShader setCurrentTextureBottomLeft;
     public ComputeShader setCurrentTextureBottomRight;
+
+    public ComputeShader setLastTexture;
 
     public List<ComputeShader> ClassicBrushes;
     public List<ComputeShader> InfectionBrushes;
@@ -38,7 +39,6 @@ public class MenuBackground : MonoBehaviour
 
     [Header("Public Adjustments")]
     public int simSteps = 0;
-    public int gen;
 
     [Header("Private Variables")]
     private Vector2 gameSize;
@@ -53,8 +53,8 @@ public class MenuBackground : MonoBehaviour
 
     void Awake()
     {
-        screen.x = Screen.currentResolution.width;
-        screen.y = Screen.currentResolution.height;
+        screen.x = Screen.width;
+        screen.y = Screen.height;
 
         gameSize.x = 106;
         gameSize.y = 66;
@@ -73,34 +73,40 @@ public class MenuBackground : MonoBehaviour
         IEnumerator coroutine = dispatchSquare(127f / simSteps);
         StartCoroutine(coroutine);
     }
-
    
     private void initializeTextures()
     {
+        // Top textures, x, y, width and height
         topLeftCurrent = new RenderTexture((int)gameSize.x, (int)gameSize.y, 0);
         topRightCurrent = new RenderTexture((int)gameSize.x, (int)gameSize.y, 0);
         topLeftLast = new RenderTexture(topLeftCurrent.width, topRightCurrent.height, 0);
         topRightLast = new RenderTexture(topRightCurrent.width, topRightCurrent.height, 0);
 
+        // Bottom textures, x, y, width and height
         bottomLeftCurrent = new RenderTexture((int)gameSize.x, (int)gameSize.y, 0);
         bottomRightCurrent = new RenderTexture((int)gameSize.x, (int)gameSize.y, 0);
         bottomLeftLast = new RenderTexture(bottomLeftCurrent.width, bottomLeftCurrent.height, 0);
         bottomRightLast = new RenderTexture(bottomRightCurrent.width, bottomRightCurrent.height, 0);
 
+        // Enable random write
         topLeftCurrent.enableRandomWrite = true; topRightCurrent.enableRandomWrite = true;
         bottomLeftCurrent.enableRandomWrite = true; bottomRightCurrent.enableRandomWrite = true;
         topLeftLast.enableRandomWrite = true; topRightLast.enableRandomWrite = true;
         bottomLeftLast.enableRandomWrite = true; bottomRightLast.enableRandomWrite = true;
 
+        // Create textures
         topLeftCurrent.Create(); topRightCurrent.Create(); bottomLeftCurrent.Create(); bottomRightCurrent.Create();
         topLeftLast.Create(); topRightLast.Create();bottomLeftLast.Create(); bottomRightLast.Create();
 
+        // Change filter mode
         topLeftCurrent.filterMode = FilterMode.Point; topRightCurrent.filterMode = FilterMode.Point; bottomLeftCurrent.filterMode = FilterMode.Point; bottomRightCurrent.filterMode = FilterMode.Point;
         topLeftLast.filterMode = FilterMode.Point; topRightLast.filterMode = FilterMode.Point; bottomLeftLast.filterMode = FilterMode.Point; bottomRightLast.filterMode = FilterMode.Point;
 
+        // Change antiAliasing
         topLeftCurrent.antiAliasing = 1;topLeftLast.antiAliasing = 1; topRightCurrent.antiAliasing = 1; topRightLast.antiAliasing = 1;
         bottomLeftCurrent.antiAliasing = 1;bottomRightLast.antiAliasing = 1; bottomLeftCurrent.antiAliasing= 1; bottomLeftLast.antiAliasing = 1;
 
+        // Default background texture
         backgroundTexture  = new RenderTexture(8, 8, 1);
         backgroundTexture.enableRandomWrite = true;
         backgroundTexture.Create();
@@ -112,7 +118,7 @@ public class MenuBackground : MonoBehaviour
 
         // Top left values
         TopLeft.x = 1; TopLeft.y = 1; 
-        TopLeft.width = screen.x / 2 - 2; 
+        TopLeft.width = screen.x / 2 - 2;
         TopLeft.height = screen.y / 2 - 2;
 
         // Top right values
@@ -539,39 +545,39 @@ public class MenuBackground : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
 
-        setPreTexture.SetTexture(0, "Result", topLeftCurrent);
-        setPreTexture.SetTexture(0, "PreResult", topLeftLast);
+        // Update last
+        setLastTexture.SetTexture(0, "PreResult", topLeftLast);
+        setLastTexture.SetTexture(0, "Result", topLeftCurrent);
+        setLastTexture.Dispatch(0, threadDispatchX, threadDispatchY, 1);
 
-        setPreTexture.Dispatch(0, threadDispatchX,
-           threadDispatchY, 1);
+        setLastTexture.SetTexture(0, "PreResult", topRightLast);
+        setLastTexture.SetTexture(0, "Result", topRightCurrent);
+        setLastTexture.Dispatch(0, threadDispatchX, threadDispatchY, 1);
+
+        setLastTexture.SetTexture(0, "PreResult", bottomLeftLast);
+        setLastTexture.SetTexture(0, "Result", bottomLeftCurrent);
+        setLastTexture.Dispatch(0, threadDispatchX, threadDispatchY, 1);
+
+        setLastTexture.SetTexture(0, "PreResult", bottomRightLast);
+        setLastTexture.SetTexture(0, "Result", bottomRightCurrent);
+        setLastTexture.Dispatch(0, threadDispatchX, threadDispatchY, 1);
+
+        // Clasic Gamemode
+        setCurrentTextureTopLeft.Dispatch(0, threadDispatchX,
+          threadDispatchY, 1);
 
         setCurrentTextureTopLeft.Dispatch(0, threadDispatchX,
            threadDispatchY, 1);
 
-        setPreTexture.SetTexture(0, "Result", topRightCurrent);
-        setPreTexture.SetTexture(0, "PreResult", topRightLast);
-
-        setPreTexture.Dispatch(0, threadDispatchX,
-           threadDispatchY, 1);
-
+        // Infection Gamemode
         setCurrentTextureTopRight.Dispatch(0, threadDispatchX,
            threadDispatchY, 1);
 
-        setPreTexture.SetTexture(0, "Result", bottomLeftCurrent);
-        setPreTexture.SetTexture(0, "PreResult", bottomLeftLast);
-
-        setPreTexture.Dispatch(0, threadDispatchX,
-           threadDispatchY, 1);
-
+        // Battle Gamemode
         setCurrentTextureBottomLeft.Dispatch(0, threadDispatchX,
           threadDispatchY, 1);
 
-        setPreTexture.SetTexture(0, "Result", bottomRightCurrent);
-        setPreTexture.SetTexture(0, "PreResult", bottomRightLast);
-
-        setPreTexture.Dispatch(0, threadDispatchX,
-           threadDispatchY, 1);
-
+        // Wireworld Gamemode
         setCurrentTextureBottomRight.Dispatch(0, threadDispatchX,
            threadDispatchY, 1);
 
@@ -617,10 +623,10 @@ public class MenuBackground : MonoBehaviour
                 StartCoroutine(coroutine);
             }
 
-            GUI.DrawTexture(TopLeft, topLeftCurrent, ScaleMode.ScaleToFit);
-            GUI.DrawTexture(TopRight, topRightCurrent, ScaleMode.ScaleToFit);
-            GUI.DrawTexture(BottomLeft, bottomLeftCurrent, ScaleMode.ScaleToFit);
-            GUI.DrawTexture(BottomRight, bottomRightCurrent, ScaleMode.ScaleToFit);
+            GUI.DrawTexture(TopLeft, topLeftCurrent, ScaleMode.ScaleAndCrop);
+            GUI.DrawTexture(TopRight, topRightCurrent, ScaleMode.ScaleAndCrop);
+            GUI.DrawTexture(BottomLeft, bottomLeftCurrent, ScaleMode.ScaleAndCrop);
+            GUI.DrawTexture(BottomRight, bottomRightCurrent, ScaleMode.ScaleAndCrop);
         }
     }
 }

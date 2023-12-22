@@ -10,8 +10,6 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     float r = 0;
     float g = 0;
     
-    PreResult = Result;
-    
     g += PreResult[int2(id.x + 1, id.y + 1)].g;
     g += PreResult[int2(id.x + 1, id.y - 1)].g;
     g += PreResult[int2(id.x - 1, id.y + 1)].g;

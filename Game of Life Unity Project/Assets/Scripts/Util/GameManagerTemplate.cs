@@ -1,14 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
-using Unity.Mathematics;
 using UnityEngine;
 
 public abstract class GameManagerTemplate : MonoBehaviour
 {
     [Header("Public Scripts")]
     public ComputeShader setCurrentTexture;
-    public ComputeShader setPreTexture;
+    public ComputeShader setLastTexture;
     public ComputeShader toggleCellState;
     public ComputeShader setColor;
 
@@ -22,7 +20,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
     public float radius;
 
     [Header("Game Data")]
-    public int simSteps;
+    public int simSteps = 0;
     protected Color liveCell;
 
     [Header("Private states")]
@@ -31,15 +29,20 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected float screenAdjustX;
     protected float screenAdjustY;
 
+    [Header("Kernal Values")]
     protected int threadGroupSize = 8;
     protected int threadDispatchX;
     protected int threadDispatchY;
 
+    [Header("Internal States")]
     protected bool beginSim;
     protected bool stepCalled;
-    protected bool menuCalled = false;
     protected bool shouldUpdate;
+    protected bool menuCalled = false;
 
+    private bool shouldQuit = false;
+
+    [Header("GUI Adjustments")]
     protected Vector2 scale;
     protected Vector2 offset;
 
@@ -53,8 +56,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected float zoomMin = 0.01f;
     protected float zoomMax = 1.0f;
 
-    private bool shouldQuit = false;
-
+    [Header("Multithreading Values")]
     protected Thread handleAdjustmentsThread;
     protected ESCMenu escMenu;
     protected GameValues gameValues;
@@ -96,6 +98,9 @@ public abstract class GameManagerTemplate : MonoBehaviour
         setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
         setCurrentTexture.SetTexture(0, "Result", currentTexture);
 
+        setLastTexture.SetTexture(0, "PreResult", lastTexture);
+        setLastTexture.SetTexture(0, "Result", currentTexture);
+
         toggleCellState.SetTexture(0, "Result", currentTexture);
 
         handleAdjustmentsThread = new Thread(() => handleAdjustements());
@@ -119,7 +124,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
             shouldUpdate = true;
 
-            if (beginSim && !stepCalled)
+            if (beginSim && !stepCalled && simSteps > 0)
             {
                 stepCalled = true;
                 simStep();
@@ -138,6 +143,9 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected IEnumerator dispatchKernals(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
+
+        setLastTexture.Dispatch(0, threadDispatchX,
+         threadDispatchY, 1);
 
         setCurrentTexture.Dispatch(0, threadDispatchX,
             threadDispatchY, 1);
