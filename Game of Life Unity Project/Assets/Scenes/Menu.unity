@@ -240,6 +240,7 @@ MonoBehaviour:
   setCurrentTextureBottomLeft: {fileID: 7200000, guid: 3e909e560b5aba340a951a74dfbb2a3b, type: 3}
   setCurrentTextureBottomRight: {fileID: 7200000, guid: a141fbcd723f97244b039747b64b98fb, type: 3}
   setLastTexture: {fileID: 7200000, guid: 4165ba133e4ec574aa6a4bc57bea1a6c, type: 3}
+  rleWrite: {fileID: 7200000, guid: 57642086cf038024a9d972ede78c7537, type: 3}
   ClassicBrushes:
   - {fileID: 7200000, guid: 701fffc846f72b744a2d09302b9e35d3, type: 3}
   InfectionBrushes:

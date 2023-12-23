@@ -16,6 +16,7 @@ public class MenuBackground : MonoBehaviour
     public ComputeShader setCurrentTextureBottomRight;
 
     public ComputeShader setLastTexture;
+    public ComputeShader rleWrite;
 
     public List<ComputeShader> ClassicBrushes;
     public List<ComputeShader> InfectionBrushes;
@@ -23,6 +24,8 @@ public class MenuBackground : MonoBehaviour
     public List<ComputeShader> WireworldBrushes;
 
     public List<ComputeShader> Shapes;
+
+    public RLEDispatch rleDispatch = new RLEDispatch();
 
     [Header("Render Textures")]
     private RenderTexture topLeftCurrent;
@@ -50,6 +53,9 @@ public class MenuBackground : MonoBehaviour
 
     private bool initialized = false;
     private bool stepCalled = false;
+
+    public RenderTexture before;
+    public RenderTexture after;
 
     void Awake()
     {
@@ -152,12 +158,6 @@ public class MenuBackground : MonoBehaviour
         setCurrentTextureBottomRight.SetTexture(0, "Result", bottomRightCurrent);
         setCurrentTextureBottomRight.SetTexture(0, "PreResult", bottomRightLast);
 
-        ClassicBrushes[0].SetTexture(0, "Result", topLeftCurrent);
-        ClassicBrushes[0].SetVector("color", Color.white);
-
-        InfectionBrushes[0].SetTexture(0, "Result", topRightCurrent);
-        InfectionBrushes[1].SetTexture(0, "Result", topRightCurrent);
-
         WireworldBrushes[0].SetTexture(0, "Result", bottomRightCurrent);
         WireworldBrushes[1].SetTexture(0, "Result", bottomRightCurrent);
         WireworldBrushes[2].SetTexture(0, "Result", bottomRightCurrent);
@@ -184,34 +184,31 @@ public class MenuBackground : MonoBehaviour
     {
         // Set background to black first
         setColor.SetTexture(0, "Result", topLeftCurrent);
-        setColor.SetVector("color", new Color(0,0,0, 1));
+        setColor.SetVector("color", new Color(0, 0, 0, 1));
         setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
 
         // left to right ships
-        ClassicBrushes[0].SetBool("lr", true);
-        ClassicBrushes[0].SetFloat("xPos", 30);
 
-        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 5);
-        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
 
-        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 25);
-        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 5), new bool2(true, false));
 
-        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 45);
-        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 25), new bool2(true, false));
+
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 45), new bool2(true, false));
 
         // right to left ships
-        ClassicBrushes[0].SetBool("lr", false);
-        ClassicBrushes[0].SetFloat("xPos", gameSize.x - 35);
 
-        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 5);
-        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 5), new bool2(false, false));
 
-        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 25);
-        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 25), new bool2(true, false));
 
-        ClassicBrushes[0].SetFloat("yPos", gameSize.y - 45);
-        ClassicBrushes[0].Dispatch(0, 1, 1, 1);
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 45), new bool2(true, false));
     }
 
     private void initializeInfection()
@@ -219,33 +216,17 @@ public class MenuBackground : MonoBehaviour
         // Set background to black first
         setColor.SetTexture(0, "Result", topRightCurrent);
         setColor.SetVector("color", new Color(0, 0, 0, 1));
-        setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topLeftCurrent.height / threadGroup, 1);
+        setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topRightCurrent.height / threadGroup, 1);
 
+        // Initialize Space rakes
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, gameSize.y / 2 + 10), new bool2(false, true));
 
-        Color live = new Color(1, 1, 1, 1);
-        Color infected = new Color(0, 1, 0, 1);
-
-        // Initialize Space rake
-        InfectionBrushes[0].SetBool("lr", false);
-        InfectionBrushes[0].SetBool("ud", true);
-
-        InfectionBrushes[0].SetVector("color", infected);
-
-        InfectionBrushes[0].SetFloat("xPos", 2);
-        InfectionBrushes[0].SetFloat("yPos", gameSize.y / 2 + 10);
-
-        InfectionBrushes[0].Dispatch(0, 1, 1, 1);
-
-        InfectionBrushes[0].SetFloat("yPos", gameSize.y / 2 - 10);
-
-        InfectionBrushes[0].SetBool("ud", false);
-        InfectionBrushes[0].Dispatch(0, 1, 1, 1);
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, gameSize.y / 2 - 10), new bool2(false, false));
 
         // Initialize bunnies
-        InfectionBrushes[1].SetBool("lr", false);
-        InfectionBrushes[1].SetBool("ud", false);
-
-        InfectionBrushes[1].SetVector("color", live);
+        rleDispatch.CreateArray("RLEPatterns/1beacon");
 
         Unity.Mathematics.Random rn = new Unity.Mathematics.Random();
         rn.state = (uint)DateTime.Now.Ticks;
@@ -257,10 +238,7 @@ public class MenuBackground : MonoBehaviour
             int x = rn.NextInt((int)gameSize.x / 2, (int)gameSize.x - 10);
             int y = rn.NextInt(10, (int)gameSize.y - 10);
 
-            InfectionBrushes[1].SetFloat("xPos", x);
-            InfectionBrushes[1].SetFloat("yPos", y);
-
-            InfectionBrushes[1].Dispatch(0, 1, 1, 1);
+            topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.white, new Vector2(x, y), new bool2(false, false));
         }
     }
 
