@@ -54,9 +54,6 @@ public class MenuBackground : MonoBehaviour
     private bool initialized = false;
     private bool stepCalled = false;
 
-    public RenderTexture before;
-    public RenderTexture after;
-
     void Awake()
     {
         screen.x = Screen.width;
@@ -191,25 +188,25 @@ public class MenuBackground : MonoBehaviour
 
         // left to right ships
 
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
 
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 5), new bool2(true, false));
 
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 25), new bool2(true, false));
 
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 45), new bool2(true, false));
 
         // right to left ships
 
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 5), new bool2(false, false));
 
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 25), new bool2(true, false));
 
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 45), new bool2(true, false));
     }
 
@@ -221,14 +218,13 @@ public class MenuBackground : MonoBehaviour
         setColor.Dispatch(0, topLeftCurrent.width / threadGroup, topRightCurrent.height / threadGroup, 1);
 
         // Initialize Space rakes
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
-        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, gameSize.y / 2 + 10), new bool2(false, true));
+        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
+        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, 22), new bool2(false, true));
 
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
-        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, gameSize.y / 2 - 10), new bool2(false, false));
+        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, gameSize.y - 22), new bool2(false, false));
 
         // Initialize bunnies
-        rleDispatch.CreateArray("RLEPatterns/1beacon");
+        rleDispatch.CreateArray("RLEPatterns/Misc/bunnies");
 
         Unity.Mathematics.Random rn = new Unity.Mathematics.Random();
         rn.state = (uint)DateTime.Now.Ticks;

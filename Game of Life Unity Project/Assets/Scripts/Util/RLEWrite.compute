@@ -36,32 +36,24 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     int x = xLoc;
     int y = yLoc;
     
-    Result[id.xy] = float4(1, 0, 0, 1);
-    
     for (int i = 0; i < len; i++)
     {
         if (rle.Load(i) == -1)
         {
             for (int q = 0; q < count; q++)
             {
-                Result[int2(x * xMult, y * yMult)] = color;
-                x++;
+                Result[int2(x, y)] = color;
+                x += 1 * xMult;
             }
         }
         else if (rle.Load(i) == -2)
         {
-            for (int q = 0; q < count; q++)
-            {
-                y++;
-            }
+            y += count * yMult;
             x = xLoc;
         }
         else if (rle.Load(i) == 0)
         {
-            for (int q = 0; q < count; q++)
-            {
-                x++;
-            }
+           x += count * xMult;
         }
         else if (rle.Load(i) > 0)
         {
