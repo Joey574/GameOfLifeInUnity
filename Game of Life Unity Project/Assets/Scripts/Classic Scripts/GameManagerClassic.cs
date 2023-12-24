@@ -79,6 +79,4 @@ public class GameManagerClassic : GameManagerTemplate
             Graphics.Blit(currentTexture, destination, scale, offset);
         }
     }
-
-   
 }

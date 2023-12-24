@@ -25,8 +25,8 @@ public class RLEDispatch
         rleWrite.SetTexture(0, "Result", renderTexture);
         rleWrite.SetVector("color", color);
 
-        rleWrite.SetFloat("xLoc", loc.x);
-        rleWrite.SetFloat("yLoc", loc.y);
+        rleWrite.SetInt("xLoc", (int)loc.x);
+        rleWrite.SetInt("yLoc", (int)loc.y);
 
         rleWrite.SetBool("lr", lrud.x);
         rleWrite.SetBool("ud", lrud.y);
@@ -34,14 +34,8 @@ public class RLEDispatch
         ComputeBuffer buffer = new ComputeBuffer(rleArray.Count, sizeof(int));
         buffer.SetData(rleArray);
 
-
-        int[] arr = new int[rleArray.Count];
+        int[] arr = new int [rleArray.Count];
         buffer.GetData(arr);
-
-        for (int i = 0; i < rleArray.Count; i++)
-        {
-            Debug.Log("Source: " + rleArray[i] + " Buffer: " + arr[i]);
-        }
 
         rleWrite.SetBuffer(0, "rle", buffer);
 
@@ -70,7 +64,7 @@ public class RLEDispatch
         }
 
         // adjust
-        rle = rle.Remove(0, rle.IndexOf("\n"));
+        rle = rle.Remove(0, rle.IndexOf("\n") + 1);
 
         int count = -1;
 
@@ -113,7 +107,6 @@ public class RLEDispatch
             count *= 10;
             count += val;
         }
-
         return count;
     } 
 

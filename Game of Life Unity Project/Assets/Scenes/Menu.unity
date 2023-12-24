@@ -256,6 +256,8 @@ MonoBehaviour:
   - {fileID: 7200000, guid: e595d28e19d75604681e7b04b9599e7a, type: 3}
   - {fileID: 7200000, guid: 1e141e97eec0369458a8f66238aad0dd, type: 3}
   simSteps: 5
+  before: {fileID: 0}
+  after: {fileID: 0}
 --- !u!1 &1720292983
 GameObject:
   m_ObjectHideFlags: 0

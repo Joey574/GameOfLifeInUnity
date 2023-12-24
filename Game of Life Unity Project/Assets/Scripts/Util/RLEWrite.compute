@@ -5,8 +5,8 @@ StructuredBuffer<int> rle;
 
 int len;
 
-float xLoc;
-float yLoc;
+int xLoc;
+int yLoc;
 
 bool lr;
 bool ud;
@@ -16,32 +16,35 @@ float4 color;
 [numthreads(1,1,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    // 0 = dead; -1 = alive; -2 = newline; # 1 - infinity = count
+    // 0 = dead; -1 = alive; -2 = newline; #s 1 - infinity = count
     
-    int count;
+    int count = 1;
+    
+    int xMult = 1;
+    int yMult = 1;
+    
+    if (ud)
+    {
+        yMult = -1;
+    }
+    
+    if (lr)
+    {
+        xMult = -1;
+    }    
     
     int x = xLoc;
     int y = yLoc;
     
+    Result[id.xy] = float4(1, 0, 0, 1);
+    
     for (int i = 0; i < len; i++)
     {
-        
         if (rle.Load(i) == -1)
         {
             for (int q = 0; q < count; q++)
             {
-                if (lr && ud)
-                {
-                    Result[int2(-x, -y)] = color;
-                }
-                else if (lr)
-                {
-                    Result[int2(-x, y)] = color;
-                }
-                else if (ud)
-                {
-                    Result[int2(x, -y)] = color;
-                }
+                Result[int2(x * xMult, y * yMult)] = color;
                 x++;
             }
         }
@@ -65,5 +68,4 @@ void CSMain (uint3 id : SV_DispatchThreadID)
             count = rle.Load(i);
         }
     }
-
 }

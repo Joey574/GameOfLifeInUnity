@@ -25,7 +25,7 @@ public class MenuBackground : MonoBehaviour
 
     public List<ComputeShader> Shapes;
 
-    public RLEDispatch rleDispatch = new RLEDispatch();
+    public RLEDispatch rleDispatch;
 
     [Header("Render Textures")]
     private RenderTexture topLeftCurrent;
@@ -64,6 +64,8 @@ public class MenuBackground : MonoBehaviour
 
         gameSize.x = 106;
         gameSize.y = 66;
+
+        rleDispatch = new RLEDispatch();
 
         initializeTextures();
 
