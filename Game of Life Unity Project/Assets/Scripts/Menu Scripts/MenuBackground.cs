@@ -75,7 +75,7 @@ public class MenuBackground : MonoBehaviour
 
         initialized = true;
 
-        IEnumerator coroutine = dispatchSquare(127f / simSteps);
+        IEnumerator coroutine = dispatchSquare(122f / simSteps);
         StartCoroutine(coroutine);
     }
    
@@ -188,26 +188,21 @@ public class MenuBackground : MonoBehaviour
 
         // left to right ships
 
-        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
+        rleDispatch.CreateArray("RLEPatterns/Tagalong/sparky");
 
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 5), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(32, gameSize.y - 20), new bool2(true, false));
 
-        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 25), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(32, gameSize.y - 40), new bool2(true, false));
 
-        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(30, gameSize.y - 45), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(32, gameSize.y - 60), new bool2(true, false));
 
         // right to left ships
 
-        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 5), new bool2(false, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 20), new bool2(false, false));
 
-        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 25), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 40), new bool2(false, false));
 
-        rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 45), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 60), new bool2(false, false));
     }
 
     private void initializeInfection()
