@@ -114,8 +114,8 @@ public class ESCMenu : MonoBehaviour
 
         setColor.Dispatch(0, 1, 1, 1);
 
-        buttons.simStepContent.tooltip = "The number of times the board is updated per second, your fps limits how high this value will effectively be.";
-        buttons.simStepContent.text = "Sim steps / second";
+        buttons.simStepContent.tooltip = "The number of times the screen is updated per second, your fps limits how high this value will effectively be.";
+        buttons.simStepContent.text = "Sim steps / Second";
     }
 
     public void begin(GameManagerTemplate gameManager, Texture current, Vector2 scale, Vector2 offset, ComputeShader setColor, int simSteps)
@@ -142,13 +142,14 @@ public class ESCMenu : MonoBehaviour
             GUIStyle style = new GUIStyle(GUI.skin.button);
             style.fontSize = 28;
 
+            GUIStyle toolTipStyle = new GUIStyle(GUI.skin.button);
+            toolTipStyle.fontSize = 12;
+
             GUI.color = Color.white;
-            GUI.backgroundColor = new Color(256, 0, 0);
+            GUI.backgroundColor = Color.red;
             GUI.contentColor = Color.white;
 
             GUI.DrawTexture(buttons.backgroundPos, buttons.background, ScaleMode.StretchToFill);
-
-            GUI.Label(new Rect(Input.mousePosition.x, (Screen.currentResolution.height) - Input.mousePosition.y, 500, 400), GUI.tooltip, style);
 
             if (GUI.tooltip.Length > 0 )
             {
@@ -168,6 +169,11 @@ public class ESCMenu : MonoBehaviour
             {
                 StartCoroutine(returnToGame());
             }
+
+            if (GUI.tooltip.Length != 0)
+            {
+                GUI.Label(new Rect(Input.mousePosition.x + 30, (Screen.currentResolution.height) - Input.mousePosition.y + 10, GUI.tooltip.Length * 5.5f, 25), GUI.tooltip, toolTipStyle);
+            }
         }
     }
 
@@ -179,10 +185,9 @@ public class ESCMenu : MonoBehaviour
 
         GUI.Box(buttons.simStep, buttons.simStepContent);
 
-        simSteps = (int)GUI.HorizontalSlider(buttons.simStepSlider, simSteps, 1, 1000);
+        simSteps = (int)GUI.HorizontalSlider(buttons.simStepSlider, simSteps, 1, 1500);
 
         simString = simSteps.ToString();
-
         simString = GUI.TextField(buttons.simStepBox, simString);
 
         try
@@ -194,7 +199,7 @@ public class ESCMenu : MonoBehaviour
             simSteps = 1;
         }
 
-        simSteps = Mathf.Clamp(simSteps, 1, 1000);
+        simSteps = Mathf.Clamp(simSteps, 1, 1500);
     }
 
     private void escMenu(GUIStyle style)
