@@ -49,7 +49,7 @@ public class ESCMenu : MonoBehaviour
 
     private GameManagerTemplate gameManager;
 
-    private void initialize ()
+    private void initializeLocations()
     {
         buttons = new buttonPos();
 
@@ -102,12 +102,15 @@ public class ESCMenu : MonoBehaviour
         buttons.backgroundPos.y = buttons.fistPos.y - 15;
         buttons.backgroundPos.width = buttonWidth + 30;
         buttons.backgroundPos.height = ((buttonHeight + 1) * 4) + 30;
+    }
 
+    private void initialize()
+    {
         buttons.background = new RenderTexture(8, 8, 1);
         buttons.background.enableRandomWrite = true;
         buttons.background.Create();
 
-        Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.75f);
+        Color backgroundColor = new Color(0.1f, 0.1f, 0.1f, 0.85f);
 
         setColor.SetVector("color", backgroundColor);
         setColor.SetTexture(0, "Result", buttons.background);
@@ -130,6 +133,8 @@ public class ESCMenu : MonoBehaviour
         this.scale = scale;
         this.offset = offset;
 
+        initializeLocations();
+
         initialize();
 
         render = true;
@@ -151,11 +156,6 @@ public class ESCMenu : MonoBehaviour
 
             GUI.DrawTexture(buttons.backgroundPos, buttons.background, ScaleMode.StretchToFill);
 
-            if (GUI.tooltip.Length > 0 )
-            {
-                Application.Quit();
-            }
-
             if (settings)
             {
                 settingsMenu(style);
@@ -172,6 +172,7 @@ public class ESCMenu : MonoBehaviour
 
             if (GUI.tooltip.Length != 0)
             {
+                GUI.DrawTexture(new Rect(Input.mousePosition.x + 30, (Screen.currentResolution.height) - Input.mousePosition.y + 10, GUI.tooltip.Length * 5.5f, 25), buttons.background, ScaleMode.StretchToFill);
                 GUI.Label(new Rect(Input.mousePosition.x + 30, (Screen.currentResolution.height) - Input.mousePosition.y + 10, GUI.tooltip.Length * 5.5f, 25), GUI.tooltip, toolTipStyle);
             }
         }
@@ -179,22 +180,17 @@ public class ESCMenu : MonoBehaviour
 
     private void settingsMenu(GUIStyle style)
     {
-        string simString;
-
         if (GUI.Button(buttons.fourthPos, "Back", style)) { settings = false; }
 
         GUI.Box(buttons.simStep, buttons.simStepContent);
 
         simSteps = (int)GUI.HorizontalSlider(buttons.simStepSlider, simSteps, 1, 1500);
 
-        simString = simSteps.ToString();
-        simString = GUI.TextField(buttons.simStepBox, simString);
-
         try
         {
-            simSteps = Int32.Parse(simString);
+            simSteps = Int32.Parse(GUI.TextField(buttons.simStepBox, simSteps.ToString()));
         }
-        catch 
+        catch
         {
             simSteps = 1;
         }

@@ -6,6 +6,7 @@ public class MainMenuScript : MonoBehaviour
 {
     [Header("Public Scripts")]
     public MenuBackground menu;
+    public ComputeShader setColor;
 
     private string x = "";
     private string y = "";
@@ -93,7 +94,6 @@ public class MainMenuScript : MonoBehaviour
 
     }
 
-
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
         string game = null;
@@ -109,10 +109,25 @@ public class MainMenuScript : MonoBehaviour
 
         if (game != null)
         {
-            startGame(game);
+            LoadPreview(game);
         }
 
         GUI.EndScrollView();
+    }
+
+    private void LoadPreview(string gameMode)
+    {
+        GameAttributes gameAttributes = null;
+        if (gameMode.Equals("Classic mode")) { gameAttributes = new Classic(); }
+        if (gameMode.Equals("Infection mode")) { gameAttributes = new Classic(); }
+        if (gameMode.Equals("Neumann mode")) { gameAttributes = new Classic(); }
+        if (gameMode.Equals("Highlife mode")) { gameAttributes = new Classic(); }
+        if (gameMode.Equals("Battle mode")) { gameAttributes = new Classic(); }
+        if (gameMode.Equals("Wireworld mode")) { gameAttributes = new Classic(); }
+
+        GameSelectionGUI gameSelectionGUI = gameObject.AddComponent<GameSelectionGUI>();
+
+        gameSelectionGUI.Begin(gameAttributes, new Rect(50, 50, 100, 100), setColor);
     }
 
     private void startGame(string gameMode)

@@ -63,6 +63,12 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
     protected IEnumerator coroutine;
 
+    protected abstract void setCellColor();
+
+    protected abstract void inputHandler();
+
+    protected abstract void OnRenderImage(RenderTexture source, RenderTexture destination);
+
     void Awake()
     {
         gameValues = GameObject.Find("gameValues").GetComponent<GameValues>();
@@ -114,8 +120,6 @@ public abstract class GameManagerTemplate : MonoBehaviour
         Destroy(GameObject.Find("gameValues"));
     }
 
-    protected abstract void setCellColor();
-
     void Update()
     {
         if (!menuCalled)
@@ -131,8 +135,6 @@ public abstract class GameManagerTemplate : MonoBehaviour
             }
         }
     }
-
-    abstract protected void inputHandler();
 
     protected void simStep()
     {
@@ -190,8 +192,6 @@ public abstract class GameManagerTemplate : MonoBehaviour
             }
         }
     }
-
-    protected abstract void OnRenderImage(RenderTexture source, RenderTexture destination);
 
     public void setMenuCalled(bool menuCalled)
     {
