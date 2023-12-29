@@ -6,7 +6,12 @@ public class MainMenuScript : MonoBehaviour
 {
     [Header("Public Scripts")]
     public MenuBackground menu;
-    public ComputeShader setColor;
+    public GameSelectionGUI gameSelectionGUI;
+    public GameValues gameValues;
+
+    private MainMenuGUIData gui;
+    private GameAttributes gameAttributes = null;
+    
 
     private string x = "";
     private string y = "";
@@ -15,16 +20,10 @@ public class MainMenuScript : MonoBehaviour
     private bool inStart;
     private bool inInfo;
 
-    private GameValues gameValues;
-
-    private MainMenuGUIData gui;
-
     private void Awake()
     {
         gui = new MainMenuGUIData();
         gui.Initialize();
-
-        gameValues = GameObject.Find("gameValues").GetComponent<GameValues>();
     }
 
     private void OnGUI()
@@ -48,6 +47,7 @@ public class MainMenuScript : MonoBehaviour
         else if (inSettings)
         {
             settingsMenu(styleText, style);
+
         }
         else if (inInfo)
         {
@@ -57,7 +57,6 @@ public class MainMenuScript : MonoBehaviour
         {
             startMenu(styleText, style);
         }
-
         GUI.EndGroup();
     }
 
@@ -88,7 +87,6 @@ public class MainMenuScript : MonoBehaviour
         if (GUI.Button(gui.exit, "Back", style)) { inSettings = false; }
     }
 
-
     private void infoMenu()
     {
 
@@ -96,38 +94,21 @@ public class MainMenuScript : MonoBehaviour
 
     private void startMenu(GUIStyle styleText, GUIStyle style)
     {
-        string game = null;
-
         gui.scroller = GUI.BeginScrollView(gui.scrollView, gui.scroller, gui.viewRect);
 
-        if (GUI.Button(gui.firstGame, "Classic", style)) { game = "Classic mode";  }
-        if (GUI.Button(gui.secondGame, "Infection", style)) { game = "Infection mode";  }
-        if (GUI.Button(gui.thirdGame, "Neumann", style)) { game = "Neumann mode";  }
-        if (GUI.Button(gui.fourthGame, "Highlife", style)) { game = "Highlife mode";  }
-        if (GUI.Button(gui.fifthGame, "Battle", style)) { game = "Battle mode";  }
-        if (GUI.Button(gui.sixthGame, "Wireworld", style)) { game = "Wireworld mode";  }
-
-        if (game != null)
-        {
-            LoadPreview(game);
-        }
+        if (GUI.Button(gui.firstGame, "Classic", style)) { gameAttributes = new Classic(); }
+        if (GUI.Button(gui.secondGame, "Infection", style)) { gameAttributes = new Classic(); }
+        if (GUI.Button(gui.thirdGame, "Neumann", style)) { gameAttributes = new Classic(); }
+        if (GUI.Button(gui.fourthGame, "Highlife", style)) { gameAttributes = new Classic(); }
+        if (GUI.Button(gui.fifthGame, "Battle", style)) { gameAttributes = new Classic(); }
+        if (GUI.Button(gui.sixthGame, "Wireworld", style)) { gameAttributes = new Classic(); }
 
         GUI.EndScrollView();
-    }
 
-    private void LoadPreview(string gameMode)
-    {
-        GameAttributes gameAttributes = null;
-        if (gameMode.Equals("Classic mode")) { gameAttributes = new Classic(); }
-        if (gameMode.Equals("Infection mode")) { gameAttributes = new Classic(); }
-        if (gameMode.Equals("Neumann mode")) { gameAttributes = new Classic(); }
-        if (gameMode.Equals("Highlife mode")) { gameAttributes = new Classic(); }
-        if (gameMode.Equals("Battle mode")) { gameAttributes = new Classic(); }
-        if (gameMode.Equals("Wireworld mode")) { gameAttributes = new Classic(); }
-
-        GameSelectionGUI gameSelectionGUI = gameObject.AddComponent<GameSelectionGUI>();
-
-        gameSelectionGUI.Begin(gameAttributes, new Rect(50, 50, 100, 100), setColor);
+        if (gameAttributes != null)
+        {
+            gameSelectionGUI.DrawGUI(gameAttributes);
+        }
     }
 
     private void startGame(string gameMode)
