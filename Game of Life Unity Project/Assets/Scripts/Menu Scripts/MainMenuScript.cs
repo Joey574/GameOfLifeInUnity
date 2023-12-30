@@ -107,7 +107,8 @@ public class MainMenuScript : MonoBehaviour
 
         if (gameAttributes != null)
         {
-            gameSelectionGUI.DrawGUI(gameAttributes);
+            startGame("Classic Mode");
+            //gameSelectionGUI.DrawGUI(gameAttributes);
         }
     }
 
