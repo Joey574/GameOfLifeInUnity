@@ -124,6 +124,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
             {
                 stepCalled = true;
                 current = !current;
+
                 simStep();
             }
         }
