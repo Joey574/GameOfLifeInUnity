@@ -6,12 +6,12 @@ public abstract class GameManagerTemplate : MonoBehaviour
 {
     [Header("Public Scripts")]
     public ComputeShader setCurrentTexture;
-    public ComputeShader setLastTexture;
     public ComputeShader toggleCellState;
     public ComputeShader setColor;
 
     public RenderTexture currentTexture;
     public RenderTexture lastTexture;
+    protected bool current = true;
 
     [Header("Player Interactions")]
     public bool paint;
@@ -101,14 +101,6 @@ public abstract class GameManagerTemplate : MonoBehaviour
         currentTexture.antiAliasing = 1;
         lastTexture.antiAliasing = 1;
 
-        setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
-        setCurrentTexture.SetTexture(0, "Result", currentTexture);
-
-        setLastTexture.SetTexture(0, "PreResult", lastTexture);
-        setLastTexture.SetTexture(0, "Result", currentTexture);
-
-        toggleCellState.SetTexture(0, "Result", currentTexture);
-
         handleAdjustmentsThread = new Thread(() => handleAdjustements());
         handleAdjustmentsThread.Start();
 
@@ -131,6 +123,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
             if (beginSim && !stepCalled && simSteps > 0)
             {
                 stepCalled = true;
+                current = !current;
                 simStep();
             }
         }
@@ -146,9 +139,17 @@ public abstract class GameManagerTemplate : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
 
-        setLastTexture.Dispatch(0, threadDispatchX,
-         threadDispatchY, 1);
-
+        if (current)
+        {
+            setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
+            setCurrentTexture.SetTexture(0, "Result", currentTexture);
+        }
+        else
+        {
+            setCurrentTexture.SetTexture(0, "PreResult", currentTexture);
+            setCurrentTexture.SetTexture(0, "Result", lastTexture);
+        }
+        
         setCurrentTexture.Dispatch(0, threadDispatchX,
             threadDispatchY, 1);
 
