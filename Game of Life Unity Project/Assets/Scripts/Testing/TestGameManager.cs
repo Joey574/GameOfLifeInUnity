@@ -13,6 +13,7 @@ public class TestGameManager : MonoBehaviour
 
     public RenderTexture currentTexture;
     public RenderTexture lastTexture;
+    protected bool current = true;
 
     [Header("Player Interactions")]
     public bool paint;
@@ -138,7 +139,15 @@ public class TestGameManager : MonoBehaviour
 
                 toggleCellState.Dispatch(0, threadDispatchX, threadDispatchY, 1);
             }
-            Graphics.Blit(currentTexture, destination, scale, offset);
+
+            if (current)
+            {
+                Graphics.Blit(currentTexture, destination, scale, offset);
+            }
+            else
+            {
+                Graphics.Blit(lastTexture, destination, scale, offset);
+            }
         }
     }
 
@@ -197,7 +206,7 @@ public class TestGameManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log(Time.frameCount / Time.time);
+        //Debug.Log(Time.frameCount / Time.time);
 
         if (!menuCalled)
         {
@@ -208,6 +217,8 @@ public class TestGameManager : MonoBehaviour
             if (beginSim && !stepCalled && simSteps > 0)
             {
                 stepCalled = true;
+                current = !current;
+
                 simStep();
             }
         }
@@ -223,8 +234,16 @@ public class TestGameManager : MonoBehaviour
     {
         yield return new WaitForSeconds(waitTime);
 
-        setLastTexture.Dispatch(0, threadDispatchX,
-         threadDispatchY, 1);
+        if (current)
+        {
+            setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
+            setCurrentTexture.SetTexture(0, "Result", currentTexture);
+        }
+        else
+        {
+            setCurrentTexture.SetTexture(0, "PreResult", currentTexture);
+            setCurrentTexture.SetTexture(0, "Result", lastTexture);
+        }
 
         setCurrentTexture.Dispatch(0, threadDispatchX,
             threadDispatchY, 1);
