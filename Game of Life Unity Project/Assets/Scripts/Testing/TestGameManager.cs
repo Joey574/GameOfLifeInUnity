@@ -6,7 +6,6 @@ public class TestGameManager : MonoBehaviour
 {
     [Header("Public Scripts")]
     public ComputeShader setCurrentTexture;
-    public ComputeShader setLastTexture;
     public ComputeShader toggleCellState;
     public ComputeShader setColor;
     public ComputeShader randFill;
@@ -184,9 +183,6 @@ public class TestGameManager : MonoBehaviour
         setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
         setCurrentTexture.SetTexture(0, "Result", currentTexture);
 
-        setLastTexture.SetTexture(0, "PreResult", lastTexture);
-        setLastTexture.SetTexture(0, "Result", currentTexture);
-
         toggleCellState.SetTexture(0, "Result", currentTexture);
 
         randFill.SetTexture(0, "Result", currentTexture);
@@ -194,12 +190,17 @@ public class TestGameManager : MonoBehaviour
         handleAdjustmentsThread = new Thread(() => handleAdjustements());
         handleAdjustmentsThread.Start();
 
-        threadDispatchX = Mathf.CeilToInt((float)currentTexture.width / (float)threadGroupSize);
+        int times = 32;
+
+        threadDispatchX = (Mathf.CeilToInt((float)currentTexture.width / (float)threadGroupSize)) / times;
         threadDispatchY = Mathf.CeilToInt((float)currentTexture.height / (float)threadGroupSize);
+
+        setCurrentTexture.SetInt("scale", threadDispatchX * threadGroupSize);
+        setCurrentTexture.SetInt("times", times);
 
         setCellColor();
 
-        randFill.Dispatch(0, threadDispatchX, threadDispatchY, 1);
+        randFill.Dispatch(0, threadDispatchX * times, threadDispatchY, 1);
 
         beginSim = true;
     }
