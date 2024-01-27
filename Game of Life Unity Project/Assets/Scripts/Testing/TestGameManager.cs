@@ -190,7 +190,7 @@ public class TestGameManager : MonoBehaviour
         handleAdjustmentsThread = new Thread(() => handleAdjustements());
         handleAdjustmentsThread.Start();
 
-        int times = 32;
+        int times = 8;
 
         threadDispatchX = (Mathf.CeilToInt((float)currentTexture.width / (float)threadGroupSize)) / times;
         threadDispatchY = Mathf.CeilToInt((float)currentTexture.height / (float)threadGroupSize);

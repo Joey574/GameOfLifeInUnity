@@ -189,19 +189,19 @@ public class MenuBackground : MonoBehaviour
 
         rleDispatch.CreateArray("RLEPatterns/Tagalong/sparky");
 
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(32, gameSize.y - 20), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2(32, (int)gameSize.y - 20), new bool2(true, false));
 
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(32, gameSize.y - 40), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2(32, (int)gameSize.y - 40), new bool2(true, false));
 
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(32, gameSize.y - 60), new bool2(true, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2(32, (int)gameSize.y - 60), new bool2(true, false));
 
         // right to left ships
 
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 20), new bool2(false, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2((int)gameSize.x - 35, (int)gameSize.y - 20), new bool2(false, false));
 
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 40), new bool2(false, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2((int)gameSize.x - 35, (int)gameSize.y - 40), new bool2(false, false));
 
-        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new Vector2(gameSize.x - 35, gameSize.y - 60), new bool2(false, false));
+        topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2((int)gameSize.x - 35, (int)gameSize.y - 60), new bool2(false, false));
     }
 
     private void initializeInfection()
@@ -213,9 +213,9 @@ public class MenuBackground : MonoBehaviour
 
         // Initialize Space rakes
         rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
-        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, 22), new bool2(false, true));
+        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new int2(2, 22), new bool2(false, true));
 
-        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new Vector2(2, gameSize.y - 22), new bool2(false, false));
+        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new int2(2, (int)gameSize.y - 22), new bool2(false, false));
 
         // Initialize bunnies
         rleDispatch.CreateArray("RLEPatterns/Misc/bunnies");
@@ -230,7 +230,7 @@ public class MenuBackground : MonoBehaviour
             int x = rn.NextInt((int)gameSize.x / 2, (int)gameSize.x - 10);
             int y = rn.NextInt(10, (int)gameSize.y - 10);
 
-            topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.white, new Vector2(x, y), new bool2(false, false));
+            topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.white, new int2(x, y), new bool2(false, false));
         }
     }
 

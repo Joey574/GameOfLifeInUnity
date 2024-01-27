@@ -13,11 +13,8 @@ public class GameValues : MonoBehaviour
 
     private void Awake()
     {
-        //gameBoardSize.x = Screen.currentResolution.width;
-        //gameBoardSize.y = Screen.currentResolution.height;
-
-        gameBoardSize.x = 16384;
-        gameBoardSize.y = 9216;
+        gameBoardSize.x = Screen.currentResolution.width;
+        gameBoardSize.y = Screen.currentResolution.height;
 
         liveCell = Color.white;
 

@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -14,28 +12,24 @@ public class RLEDispatch
    {
         this.fileName = fileName;
 
-        // clear array
         rleArray = new List<int>();
 
         readFile();
    }
 
-    public RenderTexture DispatchKernal(ComputeShader rleWrite, RenderTexture renderTexture, Color color, Vector2 loc, bool2 lrud)
+    public RenderTexture DispatchKernal(ComputeShader rleWrite, RenderTexture renderTexture, Color color, int2 loc, bool2 lrud)
     {
         rleWrite.SetTexture(0, "Result", renderTexture);
         rleWrite.SetVector("color", color);
 
-        rleWrite.SetInt("xLoc", (int)loc.x);
-        rleWrite.SetInt("yLoc", (int)loc.y);
+        rleWrite.SetInt("xLoc", loc.x);
+        rleWrite.SetInt("yLoc", loc.y);
 
         rleWrite.SetBool("lr", lrud.x);
         rleWrite.SetBool("ud", lrud.y);
 
         ComputeBuffer buffer = new ComputeBuffer(rleArray.Count, sizeof(int));
         buffer.SetData(rleArray);
-
-        int[] arr = new int [rleArray.Count];
-        buffer.GetData(arr);
 
         rleWrite.SetBuffer(0, "rle", buffer);
 

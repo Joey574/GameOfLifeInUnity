@@ -100,18 +100,18 @@ public class MainMenuScript : MonoBehaviour
         gui.scroller = GUI.BeginScrollView(gui.scrollView, gui.scroller, gui.viewRect);
 
         if (GUI.Button(gui.firstGame, "Classic", style)) { gameAttributes = new Classic(); }
-        if (GUI.Button(gui.secondGame, "Infection", style)) { gameAttributes = new Classic(); }
-        if (GUI.Button(gui.thirdGame, "Neumann", style)) { gameAttributes = new Classic(); }
-        if (GUI.Button(gui.fourthGame, "Highlife", style)) { gameAttributes = new Classic(); }
-        if (GUI.Button(gui.fifthGame, "Battle", style)) { gameAttributes = new Classic(); }
-        if (GUI.Button(gui.sixthGame, "Wireworld", style)) { gameAttributes = new Classic(); }
+        if (GUI.Button(gui.secondGame, "Infection", style)) { gameAttributes = new Infection(); }
+        if (GUI.Button(gui.thirdGame, "Neumann", style)) { gameAttributes = new Neumann(); }
+        if (GUI.Button(gui.fourthGame, "Highlife", style)) { gameAttributes = new Highlife(); }
+        if (GUI.Button(gui.fifthGame, "Battle", style)) { gameAttributes = new Battle(); }
+        if (GUI.Button(gui.sixthGame, "Wireworld", style)) { gameAttributes = new Wireworld(); }
 
         GUI.EndScrollView();
 
         if (gameAttributes != null)
         {
-            startGame("Classic Mode");
-            //gameSelectionGUI.DrawGUI(gameAttributes);
+            //startGame("Classic Mode");
+            gameSelectionGUI.DrawGUI(gameAttributes, gui);
         }
     }
 
