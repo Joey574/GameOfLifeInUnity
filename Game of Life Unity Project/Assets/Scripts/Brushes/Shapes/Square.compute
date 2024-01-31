@@ -8,14 +8,23 @@ float yPos;
 float4 color;
 int radius;
 
-[numthreads(1, 1, 1)]
-void CSMain(uint3 id : SV_DispatchThreadID)
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_GroupThreadID)
 {
-    for (int x = xPos - radius; x <= xPos + radius; x++)
+    for (int y = id.y + (int) yPos - radius; y < (int) yPos + radius;
+    y += 8)
     {
-        for (int y = yPos - radius; y <= yPos + radius; y++)
+        for (int x = id.x + (int) xPos - radius; x < (int) xPos + radius; x += 8)
         {
             Result[int2(x, y)] = color;
         }
     }
+    
+    //for (int x = xPos - radius; x <= xPos + radius; x++)
+    //{
+    //    for (int y = yPos - radius; y <= yPos + radius; y++)
+    //    {
+    //        Result[int2(x, y)] = color;
+    //    }
+    //}
 }

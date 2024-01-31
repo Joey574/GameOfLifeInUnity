@@ -1,6 +1,7 @@
 #pragma kernel CSMain
 
 RWTexture2D<float4> Result;
+RWTexture2D<float4> PreResult;
 
 bool alive;
 
@@ -22,10 +23,12 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         if (alive)
         {
             Result[id.xy] = color;
+            PreResult[id.xy] = color;
         }
         else
         {
             Result[id.xy] = float4(0, 0, 0, 1);
+            PreResult[id.xy] = float4(0, 0, 0, 1);
         }
     }
 }

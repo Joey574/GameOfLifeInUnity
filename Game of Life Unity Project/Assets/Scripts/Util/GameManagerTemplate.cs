@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Threading;
 using UnityEngine;
@@ -41,6 +42,10 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected bool menuCalled = false;
 
     private bool shouldQuit = false;
+
+    private ComputeBuffer buffer;
+
+    int[] numberAlive;
 
     [Header("GUI Adjustments")]
     protected Vector2 scale;
@@ -108,6 +113,14 @@ public abstract class GameManagerTemplate : MonoBehaviour
         threadDispatchY = Mathf.CeilToInt((float)currentTexture.height / (float)threadGroupSize);
 
         setCellColor();
+
+        numberAlive = new int[Mathf.CeilToInt(currentTexture.width / 8)];
+        Array.Fill(numberAlive, 1);
+
+        buffer = new ComputeBuffer(numberAlive.Length, sizeof(int));
+        buffer.SetData(numberAlive);
+        setCurrentTexture.SetBuffer(0, "numAlive", buffer);
+
 
         Destroy(GameObject.Find("gameValues"));
     }
@@ -209,5 +222,6 @@ public abstract class GameManagerTemplate : MonoBehaviour
     {
         shouldQuit = true;
         handleAdjustmentsThread.Join();
+        buffer.Release();
     }
 }

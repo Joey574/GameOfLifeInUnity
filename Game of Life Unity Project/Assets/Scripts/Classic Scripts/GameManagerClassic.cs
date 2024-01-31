@@ -69,20 +69,13 @@ public class GameManagerClassic : GameManagerTemplate
                 float mouseX = Input.mousePosition.x * screenAdjustX * scale.x + (offset.x * textureWidth);
                 float mouseY = Input.mousePosition.y * screenAdjustY * scale.y + (offset.y * textureHeight);
 
-                if (current)
-                {
-                    toggleCellState.SetTexture(0, "Result", currentTexture);
-                }
-                else
-                {
-                    toggleCellState.SetTexture(0, "Result", lastTexture);
-                }
-
                 toggleCellState.SetBool("alive", alive);
                 toggleCellState.SetFloat("radius", radius);
                 toggleCellState.SetFloat("mousePosX", mouseX);
                 toggleCellState.SetFloat("mousePosY", mouseY);
 
+                toggleCellState.SetTexture(0, "Result", currentTexture);
+                toggleCellState.SetTexture(0, "PreResult", lastTexture);
                 toggleCellState.Dispatch(0, threadDispatchX, threadDispatchY, 1);
             }
 

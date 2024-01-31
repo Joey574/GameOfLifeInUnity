@@ -11,6 +11,7 @@ int times; // 2
 static const int countA[9] = { 0, 0, 1, 0, 0, 0, 0, 0, 0 };
 static const int countB[9] = { 0, 0, 0, 1, 0, 0, 0, 0, 0 };
 
+
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {

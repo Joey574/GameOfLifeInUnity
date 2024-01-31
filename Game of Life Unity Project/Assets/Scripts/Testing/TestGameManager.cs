@@ -43,6 +43,8 @@ public class TestGameManager : MonoBehaviour
 
     private bool shouldQuit = false;
 
+    int times = 8;
+
     [Header("GUI Adjustments")]
     protected Vector2 scale;
     protected Vector2 offset;
@@ -131,12 +133,23 @@ public class TestGameManager : MonoBehaviour
                 float mouseX = Input.mousePosition.x * screenAdjustX * scale.x + (offset.x * textureWidth);
                 float mouseY = Input.mousePosition.y * screenAdjustY * scale.y + (offset.y * textureHeight);
 
-                toggleCellState.SetBool("alive", alive);
+                if (current)
+                {
+                    toggleCellState.SetTexture(0, "Result", currentTexture);
+                }
+                else
+                {
+                    toggleCellState.SetTexture(0, "Result", lastTexture);
+                }
+
                 toggleCellState.SetFloat("radius", radius);
+                toggleCellState.Dispatch(0, threadDispatchX * times, threadDispatchY, 1);
                 toggleCellState.SetFloat("mousePosX", mouseX);
                 toggleCellState.SetFloat("mousePosY", mouseY);
 
-                toggleCellState.Dispatch(0, threadDispatchX, threadDispatchY, 1);
+                //toggleCellState.SetFloat("xPos", mouseX);
+                //toggleCellState.SetFloat("yPos", mouseY);
+                //toggleCellState.Dispatch(0, 1, 1, 1);
             }
 
             if (current)
@@ -152,8 +165,8 @@ public class TestGameManager : MonoBehaviour
 
     void Awake()
     {
-        textureWidth = 16384;
-        textureHeight = 9216;
+        textureWidth = 1920;
+        textureHeight = 1200;
 
         liveCell = Color.white;
 
@@ -183,14 +196,10 @@ public class TestGameManager : MonoBehaviour
         setCurrentTexture.SetTexture(0, "PreResult", lastTexture);
         setCurrentTexture.SetTexture(0, "Result", currentTexture);
 
-        toggleCellState.SetTexture(0, "Result", currentTexture);
-
         randFill.SetTexture(0, "Result", currentTexture);
 
         handleAdjustmentsThread = new Thread(() => handleAdjustements());
         handleAdjustmentsThread.Start();
-
-        int times = 8;
 
         threadDispatchX = (Mathf.CeilToInt((float)currentTexture.width / (float)threadGroupSize)) / times;
         threadDispatchY = Mathf.CeilToInt((float)currentTexture.height / (float)threadGroupSize);
@@ -201,6 +210,7 @@ public class TestGameManager : MonoBehaviour
         setCellColor();
 
         randFill.Dispatch(0, threadDispatchX * times, threadDispatchY, 1);
+
 
         beginSim = true;
     }
