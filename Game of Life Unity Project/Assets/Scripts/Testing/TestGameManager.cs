@@ -21,12 +21,13 @@ public class TestGameManager : MonoBehaviour
     public float radius;
 
     [Header("Game Data")]
+    public int textureWidth;
+    public int textureHeight;
     public int simSteps = 0;
     protected Color liveCell;
 
     [Header("Private states")]
-    protected int textureWidth;
-    protected int textureHeight;
+    
     protected float screenAdjustX;
     protected float screenAdjustY;
 
@@ -142,14 +143,13 @@ public class TestGameManager : MonoBehaviour
                     toggleCellState.SetTexture(0, "Result", lastTexture);
                 }
 
-                toggleCellState.SetFloat("radius", radius);
-                toggleCellState.Dispatch(0, threadDispatchX * times, threadDispatchY, 1);
-                toggleCellState.SetFloat("mousePosX", mouseX);
-                toggleCellState.SetFloat("mousePosY", mouseY);
+                toggleCellState.SetInt("radius", (int)radius);
+                toggleCellState.SetFloat("xPos", mouseX);
+                toggleCellState.SetFloat("yPos", mouseY);
 
-                //toggleCellState.SetFloat("xPos", mouseX);
-                //toggleCellState.SetFloat("yPos", mouseY);
-                //toggleCellState.Dispatch(0, 1, 1, 1);
+                //Debug.Log("xPos: " + mouseX + "  yPos: " + mouseY);
+
+                toggleCellState.Dispatch(0, 1, 1, 1);
             }
 
             if (current)
@@ -165,9 +165,6 @@ public class TestGameManager : MonoBehaviour
 
     void Awake()
     {
-        textureWidth = 1920;
-        textureHeight = 1200;
-
         liveCell = Color.white;
 
         lastOffset.x = 0;

@@ -8,34 +8,23 @@ float4 color;
 static const int countA[9] = { 0, 0, 1, 0, 0, 0, 0, 0, 0 };
 static const int countB[9] = { 0, 0, 0, 1, 0, 0, 0, 0, 0 };
 
-RWBuffer<int> numAlive;
-
 [numthreads(8,8,1)]
-void CSMain (uint3 id : SV_DispatchThreadID, uint3 localId : SV_GroupThreadID)
+void CSMain (uint3 id : SV_DispatchThreadID)
 {
-    if (localId.x == 0 && localId.y == 0)
-    {
-        numAlive[(uint) (id.x / 8)] = 0;
-    }
+    float r = 0;
     
-    if (numAlive[(int) (id.x / 8)] > 0)
-    {
-        float r = 0;
+    r += PreResult[int2(id.x + 1, id.y + 1)].r / color.r;
+    r += PreResult[int2(id.x + 1, id.y - 1)].r / color.r;
+    r += PreResult[int2(id.x - 1, id.y + 1)].r / color.r;
+    r += PreResult[int2(id.x - 1, id.y - 1)].r / color.r;
+    r += PreResult[int2(id.x + 1, id.y)].r / color.r;
+    r += PreResult[int2(id.x - 1, id.y)].r / color.r;
+    r += PreResult[int2(id.x, id.y + 1)].r / color.r;
+    r += PreResult[int2(id.x, id.y - 1)].r / color.r;
     
-        r += PreResult[int2(id.x + 1, id.y + 1)].r / color.r;
-        r += PreResult[int2(id.x + 1, id.y - 1)].r / color.r;
-        r += PreResult[int2(id.x - 1, id.y + 1)].r / color.r;
-        r += PreResult[int2(id.x - 1, id.y - 1)].r / color.r;
-        r += PreResult[int2(id.x + 1, id.y)].r / color.r;
-        r += PreResult[int2(id.x - 1, id.y)].r / color.r;
-        r += PreResult[int2(id.x, id.y + 1)].r / color.r;
-        r += PreResult[int2(id.x, id.y - 1)].r / color.r;
-    
-        Result[id.xy] = ((PreResult[id.xy] * countA[int(r)]) + (color * countB[int(r)])) + float4(0, 0, 0, 1);
+    Result[id.xy] = ((PreResult[id.xy] * countA[int(r)]) + (color * countB[int(r)])) + float4(0, 0, 0, 1);
         
-        InterlockedAdd(numAlive[(uint) id.xy / 8], 1);
-    }      
-    
+        
     //switch ((int) r)
     //{
     //    case 2:
