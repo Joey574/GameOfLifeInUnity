@@ -11,11 +11,11 @@ uint radius;
 [numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_GroupThreadID)
 {
-    for (uint y = (uint) (id.y + yPos - radius); y < (uint) (yPos + radius); y += 8)
+    for (int y = (int) (id.y + yPos - radius); y < (int) (yPos + radius); y += 8)
     {
-        for (uint x = (uint) (id.x + xPos - radius); x < (uint) (xPos + radius); x += 8)
+        for (int x = (int) (id.x + xPos - radius); x < (int) (xPos + radius); x += 8)
         {
-            Result[uint2(x, y)] = color;
+            Result[int2(x, y)] = color;
         }
     }
     

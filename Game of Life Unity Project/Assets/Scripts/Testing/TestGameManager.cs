@@ -147,8 +147,6 @@ public class TestGameManager : MonoBehaviour
                 toggleCellState.SetFloat("xPos", mouseX);
                 toggleCellState.SetFloat("yPos", mouseY);
 
-                //Debug.Log("xPos: " + mouseX + "  yPos: " + mouseY);
-
                 toggleCellState.Dispatch(0, 1, 1, 1);
             }
 
@@ -208,6 +206,8 @@ public class TestGameManager : MonoBehaviour
 
         randFill.Dispatch(0, threadDispatchX * times, threadDispatchY, 1);
 
+        toggleCellState.SetTexture(0, "Result", lastTexture);
+        toggleCellState.SetTexture(0, "PreResult", lastTexture);
 
         beginSim = true;
     }
