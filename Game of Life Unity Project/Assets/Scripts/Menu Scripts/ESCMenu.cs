@@ -222,14 +222,14 @@ public class ESCMenu : MonoBehaviour
     {
         yield return new WaitForSeconds(0);
 
-        gameManager.setSimSteps(simSteps);
+        gameManager.SetSimSteps(simSteps);
         render = false;
-        gameManager.setMenuCalled(false);
+        gameManager.SetMenuCalled(false);
         Destroy(gameObject.GetComponent<ESCMenu>());
     }
 
     public void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        Graphics.Blit(current, destination, scale, offset);
+        //Graphics.Blit(current, destination, scale, offset);
     }
 }

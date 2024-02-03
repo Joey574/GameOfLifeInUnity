@@ -227,7 +227,7 @@ MonoBehaviour:
   currentTexture: {fileID: 0}
   lastTexture: {fileID: 0}
   paint: 0
-  alive: 0
+  alive: 1
   radius: 50
   textureWidth: 16384
   textureHeight: 9216

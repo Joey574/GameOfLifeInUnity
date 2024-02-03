@@ -187,7 +187,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 1
-  m_AllowMSAA: 1
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -225,7 +225,7 @@ MonoBehaviour:
   setColor: {fileID: 7200000, guid: 1d079e02581ee3b46bd1cd0749188500, type: 3}
   currentTexture: {fileID: 0}
   lastTexture: {fileID: 0}
-  paint: 1
+  paint: 0
   alive: 1
   radius: 50
   simSteps: 1000

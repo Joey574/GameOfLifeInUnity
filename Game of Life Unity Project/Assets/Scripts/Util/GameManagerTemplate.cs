@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Drawing;
 using System.Threading;
 using UnityEngine;
 
@@ -18,11 +19,11 @@ public abstract class GameManagerTemplate : MonoBehaviour
     public bool paint;
     public bool alive;
 
-    public float radius;
+    public int radius;
 
     [Header("Game Data")]
     public int simSteps = 0;
-    protected Color liveCell;
+    protected UnityEngine.Color liveCell;
 
     [Header("Private states")]
     protected int textureWidth;
@@ -40,6 +41,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
     protected bool stepCalled;
     protected bool shouldUpdate;
     protected bool menuCalled = false;
+    protected UnityEngine.Color newColor;
 
     private bool shouldQuit = false;
 
@@ -52,7 +54,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
     protected float offsetInc = 0.5f;
     protected float zoomSensitivity = 0.05f;
-    protected float radiusInc = 5;
+    protected int radiusInc = 5;
 
     protected float zoomMin = 0.01f;
     protected float zoomMax = 1.0f;
@@ -64,11 +66,9 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
     protected IEnumerator coroutine;
 
-    protected abstract void setCellColor();
+    protected abstract void SetCellColor();
 
-    protected abstract void inputHandler();
-
-    protected abstract void OnRenderImage(RenderTexture source, RenderTexture destination);
+    protected abstract void ToggleDrawState();
 
     void Awake()
     {
@@ -102,13 +102,15 @@ public abstract class GameManagerTemplate : MonoBehaviour
         currentTexture.antiAliasing = 1;
         lastTexture.antiAliasing = 1;
 
-        handleAdjustmentsThread = new Thread(() => handleAdjustements());
+        handleAdjustmentsThread = new Thread(() => HandleAdjustements());
         handleAdjustmentsThread.Start();
 
         threadDispatchX = Mathf.CeilToInt((float)currentTexture.width / (float)threadGroupSize);
         threadDispatchY = Mathf.CeilToInt((float)currentTexture.height / (float)threadGroupSize);
 
-        setCellColor();
+        SetCellColor();
+
+        toggleCellState.SetInt("radius", radius);
 
         Destroy(GameObject.Find("gameValues"));
     }
@@ -117,7 +119,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
     {
         if (!menuCalled)
         {
-            inputHandler();
+            InputHandler();
 
             shouldUpdate = true;
 
@@ -126,18 +128,18 @@ public abstract class GameManagerTemplate : MonoBehaviour
                 stepCalled = true;
                 current = !current;
 
-                simStep();
+                SimStep();
             }
         }
     }
 
-    protected void simStep()
+    protected void SimStep()
     {
-        coroutine = dispatchKernals(1.0f / simSteps);
+        coroutine = DispatchKernals(1.0f / simSteps);
         StartCoroutine(coroutine);
     }
 
-    protected IEnumerator dispatchKernals(float waitTime)
+    protected IEnumerator DispatchKernals(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
 
@@ -158,7 +160,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
         stepCalled = false;  
     }
 
-    protected IEnumerator callMenu()
+    protected IEnumerator CallMenu()
     {
         yield return new WaitForSeconds(0);
 
@@ -169,7 +171,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
         escMenu.begin(gameObject.GetComponent<GameManagerTemplate>(), currentTexture, scale, offset, setColor, simSteps);
     }
 
-    protected void handleAdjustements()
+    protected void HandleAdjustements()
     {
         while (!shouldQuit)
         {
@@ -196,12 +198,95 @@ public abstract class GameManagerTemplate : MonoBehaviour
         }
     }
 
-    public void setMenuCalled(bool menuCalled)
+    protected void InputHandler()
+    {
+        if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftShift))
+        {
+            radius = Input.mouseScrollDelta.y > 0 ? radius += radiusInc : radius -= radiusInc;
+            radius = Mathf.Clamp(radius, 0, radius + 1);
+
+            toggleCellState.SetInt("radius", radius);
+        }
+        else if (Input.mouseScrollDelta.y != 0)
+        {
+            scale.y = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
+            scale.x = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
+        }
+
+        if (Input.GetKey(KeyCode.A))
+        {
+            offset.x = lastOffset.x - (offsetInc * scale.x) * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            offset.x = lastOffset.x + (offsetInc * scale.x) * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.W))
+        {
+            offset.y = lastOffset.y + (offsetInc * scale.y) * Time.deltaTime;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            offset.y = lastOffset.y - (offsetInc * scale.y) * Time.deltaTime;
+        }
+
+        paint = Input.GetMouseButton(0);
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            StartCoroutine(CallMenu());
+        }
+
+        if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            ToggleDrawState();
+            toggleCellState.SetVector("color", newColor);
+        }
+    }
+
+    protected void OnRenderImage(RenderTexture source, RenderTexture destination)
+    {
+        if (!menuCalled)
+        {
+            if (paint)
+            {
+                float mouseX = Input.mousePosition.x * screenAdjustX * scale.x + (offset.x * textureWidth);
+                float mouseY = Input.mousePosition.y * screenAdjustY * scale.y + (offset.y * textureHeight);
+
+                if (current)
+                {
+                    toggleCellState.SetTexture(0, "Result", currentTexture);
+                }
+                else
+                {
+                    toggleCellState.SetTexture(0, "Result", lastTexture);
+                }
+
+                toggleCellState.SetInt("xPos", (int)mouseX);
+                toggleCellState.SetInt("yPos", (int)mouseY);
+
+                toggleCellState.Dispatch(0, 1, 1, 1);
+            }
+
+            if (current)
+            {
+                Graphics.Blit(currentTexture, destination, scale, offset);
+            }
+            else
+            {
+                Graphics.Blit(lastTexture, destination, scale, offset);
+            }
+        }
+    }
+
+    public void SetMenuCalled(bool menuCalled)
     {
         this.menuCalled = menuCalled;
     }
 
-    public void setSimSteps(int simSteps)
+    public void SetSimSteps(int simSteps)
     {
         this.simSteps = simSteps;
     }

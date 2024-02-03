@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TestGameManager : MonoBehaviour
 {
@@ -114,7 +115,7 @@ public class TestGameManager : MonoBehaviour
         {
             StartCoroutine(callMenu());
         }
-        if (Input.GetMouseButtonDown(1)) { alive = !alive; }
+        if (Input.GetMouseButtonDown(1)) { alive = !alive; Color color = alive ? liveCell : Color.black; toggleCellState.SetVector("color", color);}
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
     }
 

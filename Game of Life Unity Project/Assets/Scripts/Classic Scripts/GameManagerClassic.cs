@@ -2,97 +2,14 @@ using UnityEngine;
 
 public class GameManagerClassic : GameManagerTemplate
 {
-    protected override void setCellColor()
+    protected override void SetCellColor()
     {
         setCurrentTexture.SetVector("color", liveCell);
         toggleCellState.SetVector("color", liveCell);
     }
 
-    protected override void inputHandler()
+    protected override void ToggleDrawState()
     {
-        if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftShift))
-        {
-            if (Input.mouseScrollDelta.y > 0)
-            {
-                radius += radiusInc;
-            }
-            else
-            {
-                radius -= radiusInc;
-            }
-
-            if (radius <= 0)
-            {
-                radius = 1;
-            }
-
-        }
-        else if (Input.mouseScrollDelta.y != 0)
-        {
-            scale.y = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
-            scale.x = lastScale - (Input.mouseScrollDelta.y * zoomSensitivity);
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            offset.x = lastOffset.x - (offsetInc * scale.x) * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            offset.x = lastOffset.x + (offsetInc * scale.x) * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.W))
-        {
-            offset.y = lastOffset.y + (offsetInc * scale.y) * Time.deltaTime;
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            offset.y = lastOffset.y - (offsetInc * scale.y) * Time.deltaTime;
-        }
-
-        paint = Input.GetMouseButton(0);
-
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            StartCoroutine(callMenu());
-        }
-        if (Input.GetMouseButtonDown(1)) { alive = !alive; }
-        if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
-    }
-
-    protected override void OnRenderImage(RenderTexture source, RenderTexture destination)
-    {
-        if (!menuCalled)
-        {
-            if (paint)
-            {
-                float mouseX = Input.mousePosition.x * screenAdjustX * scale.x + (offset.x * textureWidth);
-                float mouseY = Input.mousePosition.y * screenAdjustY * scale.y + (offset.y * textureHeight);
-
-                if (current)
-                {
-                    toggleCellState.SetTexture(0, "Result", currentTexture);
-                }
-                else
-                {
-                    toggleCellState.SetTexture(0, "Result", lastTexture);
-                }
-
-                toggleCellState.SetInt("radius", (int)radius);
-                toggleCellState.SetFloat("xPos", mouseX);
-                toggleCellState.SetFloat("yPos", mouseY);
-
-                toggleCellState.Dispatch(0, 1, 1, 1);
-            }
-
-            if (current)
-            {
-                Graphics.Blit(currentTexture, destination, scale, offset);
-            }
-            else
-            {
-                Graphics.Blit(lastTexture, destination, scale, offset);
-            }
-        }
+        alive = !alive; newColor = alive ? liveCell : Color.black; 
     }
 }
