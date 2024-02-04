@@ -22,8 +22,8 @@ public class MainMenuScript : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Graphics compute buffer inputs: " + SystemInfo.maxComputeBufferInputsCompute);
-        Debug.Log("Graphics compute work size: " + SystemInfo.maxComputeWorkGroupSize);
+        //Debug.Log("Graphics compute buffer inputs: " + SystemInfo.maxComputeBufferInputsCompute);
+        //Debug.Log("Graphics compute work size: " + SystemInfo.maxComputeWorkGroupSize);
 
         gui = new MainMenuGUIData();
         gui.Initialize();

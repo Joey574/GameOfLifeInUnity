@@ -21,4 +21,3 @@ void CSMain (uint3 id : SV_DispatchThreadID)
         Result[id.xy] = color;
     }
 }
-

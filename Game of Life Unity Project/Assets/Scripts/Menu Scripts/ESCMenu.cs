@@ -12,11 +12,6 @@ public class ESCMenu : MonoBehaviour
     public bool render = false;
     private bool settings = false;
 
-    private Texture current;
-
-    private Vector2 scale;
-    private Vector2 offset;
-
     private int buttonWidth;
     private int buttonHeight;
 
@@ -121,17 +116,11 @@ public class ESCMenu : MonoBehaviour
         buttons.simStepContent.text = "Sim steps / Second";
     }
 
-    public void begin(GameManagerTemplate gameManager, Texture current, Vector2 scale, Vector2 offset, ComputeShader setColor, int simSteps)
+    public void begin(GameManagerTemplate gameManager, ComputeShader setColor, int simSteps)
     {
-        this.setColor = setColor;
-
         this.gameManager = gameManager;
-        this.current = current;
-
+        this.setColor = setColor;
         this.simSteps = simSteps; 
-
-        this.scale = scale;
-        this.offset = offset;
 
         initializeLocations();
 
@@ -226,10 +215,5 @@ public class ESCMenu : MonoBehaviour
         render = false;
         gameManager.SetMenuCalled(false);
         Destroy(gameObject.GetComponent<ESCMenu>());
-    }
-
-    public void OnRenderImage(RenderTexture source, RenderTexture destination)
-    {
-        //Graphics.Blit(current, destination, scale, offset);
     }
 }

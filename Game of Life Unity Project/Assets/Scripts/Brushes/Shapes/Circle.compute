@@ -1,15 +1,27 @@
 #pragma kernel CSMain
 
 RWTexture2D<float4> Result;
+RWTexture2D<float4> PreResult;
 
-float xPos;
-float yPos;
+int xPos;
+int yPos;
 
-float4 color;
 int radius;
 
-[numthreads(1, 1, 1)]
+float4 color;
+
+[numthreads(8, 8, 1)]
 void CSMain(uint3 id : SV_DispatchThreadID)
 {
-    
+    for (int y = (int) (id.y + yPos - radius); y < (int) (yPos + radius); y += 8)
+    {
+        for (int x = (int) (id.x + xPos - radius); x < (int) (xPos + radius); x += 8)
+        {
+            if (sqrt(pow(xPos - x, 2) + pow(yPos - y, 2)) < (float) radius)
+            {
+                Result[int2(x, y)] = color;
+                PreResult[int2(x, y)] = color;
+            }
+        }
+    }
 }

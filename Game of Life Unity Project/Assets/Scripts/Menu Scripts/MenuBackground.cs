@@ -40,7 +40,7 @@ public class MenuBackground : MonoBehaviour
     private RenderTexture backgroundTexture;
 
     [Header("Public Adjustments")]
-    public int simSteps = 0;
+    public int simSteps = 5;
 
     [Header("Private Variables")]
     private Vector2 gameSize;
@@ -190,17 +190,13 @@ public class MenuBackground : MonoBehaviour
         rleDispatch.CreateArray("RLEPatterns/Tagalong/sparky");
 
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2(32, (int)gameSize.y - 20), new bool2(true, false));
-
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2(32, (int)gameSize.y - 40), new bool2(true, false));
-
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2(32, (int)gameSize.y - 60), new bool2(true, false));
 
         // right to left ships
 
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2((int)gameSize.x - 35, (int)gameSize.y - 20), new bool2(false, false));
-
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2((int)gameSize.x - 35, (int)gameSize.y - 40), new bool2(false, false));
-
         topLeftCurrent = rleDispatch.DispatchKernal(rleWrite, topLeftCurrent, Color.white, new int2((int)gameSize.x - 35, (int)gameSize.y - 60), new bool2(false, false));
     }
 
@@ -213,8 +209,8 @@ public class MenuBackground : MonoBehaviour
 
         // Initialize Space rakes
         rleDispatch.CreateArray("RLEPatterns/Misc/spacerake");
-        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new int2(2, 22), new bool2(false, true));
 
+        topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new int2(2, 22), new bool2(false, true));
         topRightCurrent = rleDispatch.DispatchKernal(rleWrite, topRightCurrent, Color.green, new int2(2, (int)gameSize.y - 22), new bool2(false, false));
 
         // Initialize bunnies
@@ -572,8 +568,8 @@ public class MenuBackground : MonoBehaviour
             int x = rn.NextInt((int)gameSize.x);
             int y = rn.NextInt((int)gameSize.y);
 
-            Shapes[0].SetFloat("xPos", x);
-            Shapes[0].SetFloat("yPos", y);
+            Shapes[0].SetInt("xPos", x);
+            Shapes[0].SetInt("yPos", y);
 
             Shapes[0].Dispatch(0, 1, 1, 1);
        }

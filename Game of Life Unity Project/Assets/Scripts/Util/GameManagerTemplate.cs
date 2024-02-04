@@ -112,6 +112,9 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
         toggleCellState.SetInt("radius", radius);
 
+        toggleCellState.SetTexture(0, "Result", currentTexture);
+        toggleCellState.SetTexture(0, "PreResult", lastTexture);
+
         Destroy(GameObject.Find("gameValues"));
     }
 
@@ -168,7 +171,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
         beginSim = false;
         menuCalled = true;
-        escMenu.begin(gameObject.GetComponent<GameManagerTemplate>(), currentTexture, scale, offset, setColor, simSteps);
+        escMenu.begin(gameObject.GetComponent<GameManagerTemplate>(), setColor, simSteps);
     }
 
     protected void HandleAdjustements()
@@ -255,29 +258,19 @@ public abstract class GameManagerTemplate : MonoBehaviour
                 float mouseX = Input.mousePosition.x * screenAdjustX * scale.x + (offset.x * textureWidth);
                 float mouseY = Input.mousePosition.y * screenAdjustY * scale.y + (offset.y * textureHeight);
 
-                if (current)
-                {
-                    toggleCellState.SetTexture(0, "Result", currentTexture);
-                }
-                else
-                {
-                    toggleCellState.SetTexture(0, "Result", lastTexture);
-                }
-
                 toggleCellState.SetInt("xPos", (int)mouseX);
                 toggleCellState.SetInt("yPos", (int)mouseY);
 
-                toggleCellState.Dispatch(0, 1, 1, 1);
+                toggleCellState.Dispatch(0, 1, 1, 1);              
             }
-
-            if (current)
-            {
-                Graphics.Blit(currentTexture, destination, scale, offset);
-            }
-            else
-            {
-                Graphics.Blit(lastTexture, destination, scale, offset);
-            }
+        }
+        if (current)
+        {
+            Graphics.Blit(currentTexture, destination, scale, offset);
+        }
+        else
+        {
+            Graphics.Blit(lastTexture, destination, scale, offset);
         }
     }
 

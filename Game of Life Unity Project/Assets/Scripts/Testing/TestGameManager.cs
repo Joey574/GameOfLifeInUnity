@@ -268,7 +268,7 @@ public class TestGameManager : MonoBehaviour
 
         beginSim = false;
         menuCalled = true;
-        escMenu.begin(gameObject.GetComponent<GameManagerTemplate>(), currentTexture, scale, offset, setColor, simSteps);
+        escMenu.begin(gameObject.GetComponent<GameManagerTemplate>(), setColor, simSteps);
     }
 
     protected void handleAdjustements()
