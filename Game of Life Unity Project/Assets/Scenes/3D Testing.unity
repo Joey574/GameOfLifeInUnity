@@ -123,7 +123,7 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1495103208
+--- !u!1 &1820510400
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -131,10 +131,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1495103211}
-  - component: {fileID: 1495103210}
-  - component: {fileID: 1495103209}
-  - component: {fileID: 1495103212}
+  - component: {fileID: 1820510403}
+  - component: {fileID: 1820510402}
+  - component: {fileID: 1820510401}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -142,21 +141,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &1495103209
+--- !u!81 &1820510401
 AudioListener:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495103208}
+  m_GameObject: {fileID: 1820510400}
   m_Enabled: 1
---- !u!20 &1495103210
+--- !u!20 &1820510402
 Camera:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495103208}
+  m_GameObject: {fileID: 1820510400}
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
@@ -193,13 +192,13 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!4 &1495103211
+--- !u!4 &1820510403
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495103208}
+  m_GameObject: {fileID: 1820510400}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -208,24 +207,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1495103212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1495103208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37aafd665f9b1034cb2e43e7e0bc4314, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  setCurrentTexture: {fileID: 7200000, guid: 2d40792454f049248b6d74251f5cb079, type: 3}
-  toggleCellState: {fileID: 7200000, guid: e595d28e19d75604681e7b04b9599e7a, type: 3}
-  setColor: {fileID: 7200000, guid: 1d079e02581ee3b46bd1cd0749188500, type: 3}
-  currentTexture: {fileID: 0}
-  lastTexture: {fileID: 0}
-  paint: 0
-  alive: 1
-  radius: 50
-  simSteps: 1000
