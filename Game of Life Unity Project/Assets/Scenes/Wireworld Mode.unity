@@ -221,15 +221,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   setCurrentTexture: {fileID: 7200000, guid: a141fbcd723f97244b039747b64b98fb, type: 3}
-  setPreTexture: {fileID: 7200000, guid: 4165ba133e4ec574aa6a4bc57bea1a6c, type: 3}
-  toggleCellState: {fileID: 7200000, guid: 1d0d246698971a7489f281c56eca68c5, type: 3}
+  toggleCellState: {fileID: 7200000, guid: e595d28e19d75604681e7b04b9599e7a, type: 3}
   setColor: {fileID: 7200000, guid: 1d079e02581ee3b46bd1cd0749188500, type: 3}
-  currentTexture: {fileID: 0}
-  lastTexture: {fileID: 0}
   paint: 0
   alive: 0
   radius: 1
-  simSteps: 1000
   conduit: 1
   heads: 0
   tails: 0

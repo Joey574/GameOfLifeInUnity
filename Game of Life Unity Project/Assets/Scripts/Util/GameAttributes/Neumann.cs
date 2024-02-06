@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Neumann : GameAttributes
 {
-    public override string Name => "Neumann";
+    public override string Name => "Neumann mode";
 
     public override string Description => "TODO";
 

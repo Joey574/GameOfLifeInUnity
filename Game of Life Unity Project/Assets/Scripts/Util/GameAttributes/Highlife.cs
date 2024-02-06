@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Highlife : GameAttributes
 {
-    public override string Name => "Highlife";
+    public override string Name => "Highlife mode";
 
     public override string Description => "TODO";
 

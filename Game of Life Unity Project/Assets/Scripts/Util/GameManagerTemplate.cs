@@ -16,8 +16,9 @@ public abstract class GameManagerTemplate : MonoBehaviour
     private bool current = true;
 
     [Header("Player Interactions")]
+    public bool alive = true;
+
     public bool paint;
-    public bool alive;
     public int radius;
 
     [Header("Game Data")]

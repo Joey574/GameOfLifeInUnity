@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Infection : GameAttributes
 {
-    public override string Name => "Infection";
+    public override string Name => "Infection mode";
 
     public override string Description => "TODO";
 

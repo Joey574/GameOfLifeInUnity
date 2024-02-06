@@ -10,6 +10,7 @@ public class GameManagerInfection : GameManagerTemplate
 
     protected override void SetCellColor()
     {
+        toggleCellState.SetVector("color", liveCell);
     }
 
     protected override void ToggleDrawState()

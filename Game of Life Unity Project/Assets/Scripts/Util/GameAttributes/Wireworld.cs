@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Wireworld : GameAttributes
 {
-    public override string Name => "Wireworld";
+    public override string Name => "Wireworld mode";
 
     public override string Description => "TODO";
 
