@@ -19,7 +19,11 @@ void CSMain(uint3 id : SV_DispatchThreadID)
     {
         for (int x = (int) (id.x + xPos - radius); x <= (int) (xPos + radius); x += dispatchSize)
         {
-            if (sqrt(pow(xPos - x, 2) + pow(yPos - y, 2)) < (float) radius)
+            int xPow = pow(x - xPos, 2);
+            int yPow = pow(y - yPos, 2);
+            int rPow = pow(radius, 2);
+            
+            if (xPow + yPow >= rPow - radius && xPow + yPow <= rPow + radius)
             {
                 Result[int2(x, y)] = color;
                 PreResult[int2(x, y)] = color;

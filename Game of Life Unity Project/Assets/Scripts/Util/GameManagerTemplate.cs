@@ -11,58 +11,60 @@ public abstract class GameManagerTemplate : MonoBehaviour
     public ComputeShader toggleCellState;
     public ComputeShader setColor;
 
-    public RenderTexture currentTexture;
-    public RenderTexture lastTexture;
-    protected bool current = true;
+    private RenderTexture currentTexture;
+    private RenderTexture lastTexture;
+    private bool current = true;
 
     [Header("Player Interactions")]
     public bool paint;
     public bool alive;
-
     public int radius;
 
     [Header("Game Data")]
-    public int simSteps = 0;
+    private int simSteps = 0;
+
     protected UnityEngine.Color liveCell;
+    protected UnityEngine.Color newColor;
 
     [Header("Private states")]
-    protected int textureWidth;
-    protected int textureHeight;
-    protected float screenAdjustX;
-    protected float screenAdjustY;
+    private int textureWidth;
+    private int textureHeight;
+    private float screenAdjustX;
+    private float screenAdjustY;
 
     [Header("Kernal Values")]
-    protected int threadGroupSize = 8;
-    protected int threadDispatchX;
-    protected int threadDispatchY;
+    private int threadGroupSize = 8;
+    private int threadDispatchX;
+    private int threadDispatchY;
+
+    private int toggleCellDispatch = 1;
 
     [Header("Internal States")]
-    protected bool beginSim;
-    protected bool stepCalled;
-    protected bool shouldUpdate;
-    protected bool menuCalled = false;
-    protected UnityEngine.Color newColor;
+    private bool beginSim;
+    private bool stepCalled;
+    private bool shouldUpdate;
+    private bool menuCalled = false;
 
     private bool shouldQuit = false;
 
     [Header("GUI Adjustments")]
-    protected Vector2 scale;
-    protected Vector2 offset;
+    private Vector2 scale;
+    private Vector2 offset;
 
-    protected float lastScale = 1;
-    protected Vector2 lastOffset;
+    private float lastScale = 1;
+    private Vector2 lastOffset;
 
-    protected float offsetInc = 0.5f;
-    protected float zoomSensitivity = 0.05f;
-    protected int radiusInc = 5;
+    private float offsetInc = 0.5f;
+    private float zoomSensitivity = 0.05f;
+    private int radiusInc = 5;
 
-    protected float zoomMin = 0.01f;
-    protected float zoomMax = 1.0f;
+    private float zoomMin = 0.01f;
+    private float zoomMax = 1.0f;
 
     [Header("Multithreading Values")]
-    protected Thread handleAdjustmentsThread;
-    protected ESCMenu escMenu;
-    protected GameValues gameValues;
+    private Thread handleAdjustmentsThread;
+    private ESCMenu escMenu;
+    private GameValues gameValues;
 
     protected IEnumerator coroutine;
 
@@ -78,6 +80,8 @@ public abstract class GameManagerTemplate : MonoBehaviour
         textureHeight = (int)gameValues.gameBoardSize.y;
 
         liveCell = gameValues.liveCell;
+
+        simSteps = gameValues.simSteps;
 
         lastOffset.x = 0;
         lastOffset.y = 0;
@@ -206,9 +210,11 @@ public abstract class GameManagerTemplate : MonoBehaviour
         if (Input.mouseScrollDelta.y != 0 && Input.GetKey(KeyCode.LeftShift))
         {
             radius = Input.mouseScrollDelta.y > 0 ? radius += radiusInc : radius -= radiusInc;
-            radius = Mathf.Clamp(radius, 0, radius + 1);
+            radius = Mathf.Clamp(radius, 0, Mathf.Max(textureHeight, textureWidth) * 2);            
 
             toggleCellState.SetInt("radius", radius);
+
+            toggleCellDispatch = Math.Max(1, radius / 500);
         }
         else if (Input.mouseScrollDelta.y != 0)
         {
@@ -261,7 +267,9 @@ public abstract class GameManagerTemplate : MonoBehaviour
                 toggleCellState.SetInt("xPos", (int)mouseX);
                 toggleCellState.SetInt("yPos", (int)mouseY);
 
-                toggleCellState.Dispatch(0, 1, 1, 1);              
+                toggleCellState.SetInt("dispatchSize", toggleCellDispatch * 8);
+
+                toggleCellState.Dispatch(0, toggleCellDispatch, toggleCellDispatch, 1);              
             }
         }
         if (current)

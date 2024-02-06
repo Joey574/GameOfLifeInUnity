@@ -11,6 +11,8 @@ public class GameValues : MonoBehaviour
     public bool rand;
     public float randFil;
 
+    public int simSteps = 1000;
+
     private void Awake()
     {
         gameBoardSize.x = Screen.currentResolution.width;

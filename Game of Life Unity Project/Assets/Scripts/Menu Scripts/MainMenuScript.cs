@@ -110,7 +110,7 @@ public class MainMenuScript : MonoBehaviour
 
         if (gameAttributes != null)
         {
-            startGame("Classic Mode");
+            startGame("Wireworld Mode");
             //gameSelectionGUI.DrawGUI(gameAttributes, gui);
         }
     }

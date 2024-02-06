@@ -558,8 +558,10 @@ public class MenuBackground : MonoBehaviour
         rn.state = (uint)DateTime.Now.Ticks;
 
         Shapes[0].SetTexture(0, "Result", topLeftCurrent);
+        Shapes[0].SetTexture(0, "PreResult", topLeftLast);
         Shapes[0].SetVector("color", Color.white);
         Shapes[0].SetInt("radius", 3);
+        Shapes[0].SetInt("dispatchSize", 8);
 
         int num = rn.NextInt(15, 35);
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class TestGameManager : MonoBehaviour
 {
@@ -10,8 +11,8 @@ public class TestGameManager : MonoBehaviour
     public ComputeShader setColor;
     public ComputeShader randFill;
 
-    public RenderTexture currentTexture;
-    public RenderTexture lastTexture;
+    private RenderTexture currentTexture;
+    private RenderTexture lastTexture;
     protected bool current = true;
 
     [Header("Player Interactions")]
@@ -27,7 +28,7 @@ public class TestGameManager : MonoBehaviour
     protected Color liveCell;
 
     [Header("Private states")]
-    
+
     protected float screenAdjustX;
     protected float screenAdjustY;
 
@@ -114,7 +115,7 @@ public class TestGameManager : MonoBehaviour
         {
             StartCoroutine(callMenu());
         }
-        if (Input.GetMouseButtonDown(1)) { alive = !alive; }
+        if (Input.GetMouseButtonDown(1)) { alive = !alive; Color color = alive ? liveCell : Color.black; toggleCellState.SetVector("color", color); }
         if (Input.GetKeyDown(KeyCode.Q)) { beginSim = !beginSim; }
     }
 
@@ -214,8 +215,6 @@ public class TestGameManager : MonoBehaviour
 
     void Update()
     {
-        //Debug.Log(Time.frameCount / Time.time);
-
         if (!menuCalled)
         {
             inputHandler();
@@ -267,7 +266,7 @@ public class TestGameManager : MonoBehaviour
 
         beginSim = false;
         menuCalled = true;
-        escMenu.begin(gameObject.GetComponent<GameManagerTemplate>(), currentTexture, scale, offset, setColor, simSteps);
+        escMenu.begin(gameObject.GetComponent<GameManagerTemplate>(), setColor, simSteps);
     }
 
     protected void handleAdjustements()
