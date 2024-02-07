@@ -38,6 +38,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
     private int threadDispatchX;
     private int threadDispatchY;
 
+    private int toggleCellThreshhold = 250;
     private int toggleCellDispatch = 1;
 
     [Header("Internal States")]
@@ -215,7 +216,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
 
             toggleCellState.SetInt("radius", radius);
 
-            toggleCellDispatch = Math.Max(1, radius / 500);
+            toggleCellDispatch = Math.Max(1, radius / toggleCellThreshhold);
         }
         else if (Input.mouseScrollDelta.y != 0)
         {
