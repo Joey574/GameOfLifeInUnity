@@ -22,7 +22,7 @@ void CSMain (uint3 id : SV_DispatchThreadID)
     r += PreResult[int2(id.x, id.y + 1)].r / color.r;
     r += PreResult[int2(id.x, id.y - 1)].r / color.r;
     
-    Result[id.xy] = ((PreResult[id.xy] * countA[int(r)]) + (color * countB[int(r)])) + float4(0, 0, 0, 1);        
+    Result[id.xy] = ((PreResult[id.xy] * countA[int(r)]) + (color * countB[int(r)])) + float4(0, 0, 0, 1);
         
     //switch ((int) r)
     //{

@@ -119,4 +119,4 @@ public class MainMenuScript : MonoBehaviour
     {
         SceneManager.LoadScene(gameMode, LoadSceneMode.Single);
     }
-}  
+}

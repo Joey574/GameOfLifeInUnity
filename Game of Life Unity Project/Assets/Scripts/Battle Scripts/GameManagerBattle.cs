@@ -18,20 +18,6 @@ public class GameManagerBattle : GameManagerTemplate
         red = !red && !blue ? true : false;
         blue = !red && !blue ? true : false;
 
-        //if (red)
-        //{
-        //    red = false;
-        //    blue = true;
-        //}
-        //else if (blue)
-        //{
-        //    blue = false;
-        //}
-        //else
-        //{
-        //    red = true;
-        //}
-
         newColor = blue ? Color.blue : red ? Color.red : Color.black;
     }
 }
