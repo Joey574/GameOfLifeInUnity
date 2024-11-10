@@ -163,8 +163,7 @@ public abstract class GameManagerTemplate : MonoBehaviour
             setCurrentTexture.SetTexture(0, "Result", lastTexture);
         }
         
-        setCurrentTexture.Dispatch(0, threadDispatchX,
-            threadDispatchY, 1);
+        setCurrentTexture.Dispatch(0, threadDispatchX, threadDispatchY, 1);
 
         stepCalled = false;  
     }
@@ -199,8 +198,8 @@ public abstract class GameManagerTemplate : MonoBehaviour
                 offset.y = Mathf.Clamp(offset.y, 0, (-scale.y + 1));
 
                 lastScale = scale.y;
-                lastOffset.x = offset.x;
-                lastOffset.y = offset.y;
+                lastOffset = offset;
+                //lastOffset.y = offset.y;
 
                 shouldUpdate = false;
             }
